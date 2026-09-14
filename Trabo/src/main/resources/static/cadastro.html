@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trabio — Cadastro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+    body {
+      background-color: #1a3b2b;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .split-container {
+      display: flex;
+      width: 100%;
+      max-width: 1100px;
+      min-height: 700px;
+      background: #2b4f3c;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Left Side: White with illustration */
+    .left-side {
+      flex: 1;
+      background-color: #ffffff;
+      position: relative;
+      padding: 40px;
+      border-top-right-radius: 120px 400px;
+      border-bottom-right-radius: 80px 200px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #1a3b2b;
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-decoration: none;
+    }
+    .logo-container span { color: #52b788; }
+
+    /* Abstract shapes */
+    .illustration-wrapper {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .blob {
+      position: absolute;
+      width: 300px; height: 300px;
+      background: #e1ede8;
+      border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+      z-index: 1;
+    }
+    .illustration-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    .illustration-content h2 { color: #1a3b2b; font-size: 1.8rem; margin-bottom: 10px; }
+    .illustration-content p { color: #40916c; font-size: 1rem; padding: 0 20px;}
+
+    /* Right Side: Form */
+    .right-side {
+      flex: 1.2;
+      padding: 40px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: #ffffff;
+      overflow-y: auto;
+    }
+    
+    /* Scrollbar for right side if it overflows */
+    .right-side::-webkit-scrollbar { width: 8px; }
+    .right-side::-webkit-scrollbar-thumb { background-color: #74a57f; border-radius: 4px; }
+    
+    .right-side h1 { font-size: 2.2rem; margin-bottom: 24px; font-weight: 600; }
+
+    .profile-selector { display: flex; gap: 10px; margin-bottom: 24px; }
+    .profile-btn {
+      flex: 1;
+      padding: 12px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid transparent;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #e0e0e0;
+      transition: all 0.3s;
+    }
+    .profile-btn.active {
+      background: #74a57f;
+      color: #fff;
+    }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      color: #e0e0e0;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 14px 20px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid transparent;
+      border-radius: 12px; /* Less rounded for textarea and multiple fields */
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.3s;
+    }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: #a0a0a0; }
+    .form-group input:focus, .form-group textarea:focus { border-color: #74a57f; background: rgba(0, 0, 0, 0.4); }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: #74a57f;
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: background 0.3s;
+    }
+    .btn-submit:hover { background: #5a8a65; }
+
+    .hidden { display: none; }
+
+    .register-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #e0e0e0;
+    }
+    .register-link a {
+      color: #74a57f;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .register-link a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .split-container { flex-direction: column; }
+      .left-side { border-radius: 0; border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; padding-bottom: 40px;}
+      .right-side { padding: 40px 20px; }
+      .blob { width: 200px; height: 200px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="split-container">
+    <div class="left-side">
+      <a href="/" class="logo-container">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2D6A4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 9.36l-7.1 7.1a2.12 2.12 0 0 1-3-3l7.1-7.1a6 6 0 0 1 9.36-7.94l-3.6 3.6z"></path></svg>
+        TRABIO<span>.</span>
+      </a>
+      
+      <div class="illustration-wrapper">
+        <div class="blob"></div>
+        <div class="illustration-content">
+          <h2>Crie sua conta</h2>
+          <p>Junte-se a milhares de clientes e profissionais da sua região.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-side">
+      <h1>Register</h1>
+      
+      <div class="profile-selector">
+        <button type="button" class="profile-btn active" data-type="CLIENTE">Sou Cliente</button>
+        <button type="button" class="profile-btn" data-type="PRESTADOR">Sou Profissional</button>
+      </div>
+
+      <form id="registro-form">
+        <!-- Campos comuns -->
+        <div class="form-group">
+          <label>Nome Completo</label>
+          <input type="text" id="nome" required placeholder="Digite seu nome" />
+        </div>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" id="email" required placeholder="seu@email.com" />
+        </div>
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="password" id="senha" required placeholder="Mínimo 6 caracteres" />
+        </div>
+
+        <!-- Campos do prestador (escondidos por padrão) -->
+        <div id="prestador-fields" class="hidden">
+          <div class="form-group">
+            <label>Cidade</label>
+            <input type="text" id="cidade" placeholder="Ex: São Paulo" />
+          </div>
+          <div class="form-group">
+            <label>WhatsApp</label>
+            <input type="text" id="whatsapp" placeholder="(11) 99999-9999" />
+          </div>
+          <div class="form-group">
+            <label>Sobre seu trabalho</label>
+            <textarea id="descricao" rows="3" placeholder="Descreva seus serviços..."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Criar conta</button>
+      </form>
+
+      <div class="register-link">
+        Já tem uma conta? <a href="/login.html">Faça login</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let isPrestador = false;
+    const prestadorFields = document.getElementById('prestador-fields');
+
+    document.querySelectorAll('.profile-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.profile-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        isPrestador = btn.dataset.type === 'PRESTADOR';
+        if (isPrestador) {
+          prestadorFields.classList.remove('hidden');
+        } else {
+          prestadorFields.classList.add('hidden');
+        }
+      });
+    });
+
+    document.getElementById('registro-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const nome = document.getElementById('nome').value;
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+      const btnSubmit = document.querySelector('.btn-submit');
+
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = 'Carregando...';
+      
+      let payload;
+      let endpoint;
+
+      if (isPrestador) {
+        endpoint = '/api/auth/registro/prestador';
+        payload = {
+          nome, email, senha,
+          cidade: document.getElementById('cidade').value,
+          whatsapp: document.getElementById('whatsapp').value,
+          telefone: document.getElementById('whatsapp').value,
+          bairro: '',
+          descricao: document.getElementById('descricao').value
+        };
+      } else {
+        endpoint = '/api/auth/registro/usuario';
+        payload = { nome, email, senha };
+      }
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          alert('Conta criada com sucesso! Faça login para continuar.');
+          window.location.href = '/login.html';
+        } else {
+          const msg = await response.text();
+          alert('Erro ao cadastrar: ' + msg);
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Erro de conexão com o servidor.');
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = 'Criar conta';
+      }
+    });
+  </script>
+</body>
+</html>

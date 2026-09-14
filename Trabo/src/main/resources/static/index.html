@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trabio — Encontre profissionais autônomos de confiança na sua cidade</title>
+  <meta name="description"
+    content="Trabio conecta você a eletricistas, pedreiros, encanadores, pintores e outros profissionais autônomos da sua cidade. Busca gratuita, avaliações reais." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+
+  <!-- ── NAV ──────────────────────────────────────────── -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo" id="nav-logo">
+        <span class="logo-icon"></span>
+        <span>Trabio</span>
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#como-funciona">Como funciona</a></li>
+        <li><a href="#categorias">Categorias</a></li>
+        <li><a href="#destaques">Profissionais</a></li>
+        <li><a href="#avaliacoes">Avaliações</a></li>
+      </ul>
+      <div class="nav-actions" id="nav-actions-logged-out">
+        <a href="/login.html" class="btn-ghost" id="btn-login">Entrar</a>
+        <a href="/cadastro.html" class="btn-primary" id="btn-cadastro">Cadastre-se</a>
+      </div>
+      <div class="nav-actions" id="nav-actions-logged-in" style="display: none; position: relative; margin-left: 10px;">
+        <button class="profile-btn" id="profile-dropdown-btn" aria-label="Menu de perfil">
+          <div class="profile-avatar" id="nav-profile-avatar">U</div>
+        </button>
+        <div class="profile-dropdown" id="profile-dropdown">
+          <a href="/painel.html#dados">Meus dados</a>
+          <a href="/painel.html#servicos" id="nav-link-servicos" style="display: none;">Meus serviços</a>
+          <a href="/painel.html#favoritos">Meus favoritos</a>
+          <a href="/painel.html#agendamentos">Meus agendamentos</a>
+          <a href="/painel.html#pagamentos">Meus pagamentos</a>
+          <hr>
+          <a href="#" id="btn-logout">Sair</a>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── HERO ─────────────────────────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <img src="/images/hero.jpg" alt="Profissional autônomo trabalhando" class="hero-img" />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Mais de 500 profissionais cadastrados
+      </div>
+      <h1 class="hero-title">
+        Encontre o profissional<br />
+        <span class="highlight">certo para o seu lar</span>
+      </h1>
+      <p class="hero-subtitle">
+        Eletricistas, pedreiros, encanadores, pintores e muito mais —<br />
+        profissionais avaliados e verificados, na sua cidade.
+      </p>
+
+      <!-- Search bar -->
+      <div class="search-bar" id="search-bar">
+        <div class="search-field" id="search-categoria">
+          <span class="search-icon"></span>
+          <select id="select-categoria" aria-label="Categoria de serviço">
+            <option value="">Qual serviço você precisa?</option>
+            <option value="eletricista"> Eletricista</option>
+            <option value="encanador"> Encanador</option>
+            <option value="pedreiro"> Pedreiro</option>
+            <option value="pintor"> Pintor</option>
+            <option value="jardineiro"> Jardineiro</option>
+            <option value="diarista"> Diarista</option>
+            <option value="marceneiro"> Marceneiro</option>
+          </select>
+        </div>
+        <div class="search-divider"></div>
+        <div class="search-field" id="search-cidade">
+          <span class="search-icon"></span>
+          <input type="text" id="input-cidade" placeholder="Sua cidade..." aria-label="Cidade" />
+        </div>
+        <button class="btn-search" id="btn-search" aria-label="Buscar profissional">
+          Buscar profissional
+        </button>
+      </div>
+
+      <div class="hero-tags">
+        <span class="tag" data-cat="eletricista"> Eletricista</span>
+        <span class="tag" data-cat="encanador"> Encanador</span>
+        <span class="tag" data-cat="pintor"> Pintor</span>
+        <span class="tag" data-cat="pedreiro"> Pedreiro</span>
+        <span class="tag" data-cat="diarista"> Diarista</span>
+      </div>
+    </div>
+
+    <div class="hero-scroll-hint">
+      <div class="scroll-dot"></div>
+    </div>
+  </section>
+
+  <!-- ── STATS ─────────────────────────────────────────── -->
+  <section class="stats-bar" id="stats-bar">
+    <div class="stats-container">
+      <div class="stat-item">
+        <span class="stat-number" data-target="500">0</span><span class="stat-plus">+</span>
+        <span class="stat-label">Profissionais</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="50">0</span><span class="stat-plus">+</span>
+        <span class="stat-label">Cidades</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="1200">0</span><span class="stat-plus">+</span>
+        <span class="stat-label">Serviços realizados</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="4">0</span><span class="stat-decimal">.8</span>
+        <span class="stat-label">Avaliação média </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── COMO FUNCIONA ─────────────────────────────────── -->
+  <section class="section" id="como-funciona">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-chip">Simples assim</span>
+        <h2 class="section-title">Como o Trabio funciona?</h2>
+        <p class="section-subtitle">Em 3 passos você já tem um profissional a caminho</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card" id="step-1">
+          <div class="step-icon"></div>
+          <div class="step-number">01</div>
+          <h3>Busque pelo serviço</h3>
+          <p>Escolha a categoria de serviço e informe a sua cidade. Nossa busca é 100% gratuita e sem necessidade de
+            cadastro.</p>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-card" id="step-2">
+          <div class="step-icon"></div>
+          <div class="step-number">02</div>
+          <h3>Veja os perfis</h3>
+          <p>Explore os perfis dos profissionais, veja fotos dos trabalhos anteriores e avaliações reais de outros
+            clientes.</p>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-card" id="step-3">
+          <div class="step-icon"></div>
+          <div class="step-number">03</div>
+          <h3>Contate pelo WhatsApp</h3>
+          <p>Entrou em contato? Clique em "Chamar no WhatsApp" e fale diretamente com o profissional. Rápido e sem
+            intermediários.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CATEGORIAS ────────────────────────────────────── -->
+  <section class="section section-alt" id="categorias">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-chip">Serviços disponíveis</span>
+        <h2 class="section-title">Explore por categoria</h2>
+        <p class="section-subtitle">Temos profissionais para todas as necessidades do seu lar</p>
+      </div>
+      <div class="categories-grid" id="categories-grid">
+        <a href="#" class="cat-card" data-cat="eletricista" id="cat-eletricista">
+          <div class="cat-icon"></div>
+          <span class="cat-name">Eletricista</span>
+          <span class="cat-count">128 profissionais</span>
+        </a>
+        <a href="#" class="cat-card" data-cat="encanador" id="cat-encanador">
+          <div class="cat-icon"></div>
+          <span class="cat-name">Encanador</span>
+          <span class="cat-count">94 profissionais</span>
+        </a>
+        <a href="#" class="cat-card" data-cat="pedreiro" id="cat-pedreiro">
+          <div class="cat-icon"></div>
+          <span class="cat-name">Pedreiro</span>
+          <span class="cat-count">76 profissionais</span>
+        </a>
+        <a href="#" class="cat-card" data-cat="pintor" id="cat-pintor">
+          <div class="cat-icon"></div>
+          <span class="cat-name">Pintor</span>
+          <span class="cat-count">65 profissionais</span>
+        </a>
+        <a href="#" class="cat-card" data-cat="jardineiro" id="cat-jardineiro">
+          <div class="cat-icon"></div>
+          <span class="cat-name">Jardineiro</span>
+          <span class="cat-count">43 profissionais</span>
+        </a>
+        <a href="#" class="cat-card" data-cat="diarista" id="cat-diarista">
+          <div class="cat-icon"></div>
+          <span class="cat-name">Diarista</span>
+          <span class="cat-count">112 profissionais</span>
+        </a>
+        <a href="#" class="cat-card" data-cat="marceneiro" id="cat-marceneiro">
+          <div class="cat-icon"></div>
+          <span class="cat-name">Marceneiro</span>
+          <span class="cat-count">38 profissionais</span>
+        </a>
+        <a href="#" class="cat-card cat-card--more" id="cat-mais">
+          <div class="cat-icon"></div>
+          <span class="cat-name">Ver todas</span>
+          <span class="cat-count">e muito mais...</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DESTAQUES ─────────────────────────────────────── -->
+  <section class="section" id="destaques">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-chip">Profissionais verificados</span>
+        <h2 class="section-title">Destaques da plataforma</h2>
+        <p class="section-subtitle">Profissionais com as melhores avaliações da semana</p>
+      </div>
+      <div class="professionals-grid" id="professionals-grid">
+
+        <div class="pro-card" id="pro-1">
+          <div class="pro-badge-top"> Destaque</div>
+          <div class="pro-avatar">‍</div>
+          <div class="pro-info">
+            <h3 class="pro-name">Carlos Menezes</h3>
+            <span class="pro-category"> Eletricista</span>
+            <span class="pro-city"> São Paulo, SP</span>
+            <div class="pro-rating">
+              <span class="stars">★★★★★</span>
+              <span class="rating-val">5.0</span>
+              <span class="rating-count">(47 avaliações)</span>
+            </div>
+            <p class="pro-desc">Eletricista com 15 anos de experiência. Instalações, manutenção, laudos e projetos
+              elétricos residenciais e comerciais.</p>
+            <div class="pro-actions">
+              <button class="btn-whatsapp" id="pro-1-whatsapp"> WhatsApp</button>
+              <button class="btn-ver-perfil" id="pro-1-perfil">Ver perfil</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="pro-card" id="pro-2">
+          <div class="pro-avatar">‍</div>
+          <div class="pro-info">
+            <h3 class="pro-name">Ana Rodrigues</h3>
+            <span class="pro-category"> Diarista</span>
+            <span class="pro-city"> Belo Horizonte, MG</span>
+            <div class="pro-rating">
+              <span class="stars">★★★★★</span>
+              <span class="rating-val">4.9</span>
+              <span class="rating-count">(83 avaliações)</span>
+            </div>
+            <p class="pro-desc">Limpeza residencial completa, organização de ambientes e escritórios. Produto incluído
+              no serviço. Disponível diariamente.</p>
+            <div class="pro-actions">
+              <button class="btn-whatsapp" id="pro-2-whatsapp"> WhatsApp</button>
+              <button class="btn-ver-perfil" id="pro-2-perfil">Ver perfil</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="pro-card" id="pro-3">
+          <div class="pro-avatar">🧑‍</div>
+          <div class="pro-info">
+            <h3 class="pro-name">João Ferreira</h3>
+            <span class="pro-category"> Pintor</span>
+            <span class="pro-city"> Rio de Janeiro, RJ</span>
+            <div class="pro-rating">
+              <span class="stars">★★★★☆</span>
+              <span class="rating-val">4.8</span>
+              <span class="rating-count">(61 avaliações)</span>
+            </div>
+            <p class="pro-desc">Pintura interna e externa, textura, grafiato e epóxi. Orçamento grátis. Trabalha com os
+              melhores materiais do mercado.</p>
+            <div class="pro-actions">
+              <button class="btn-whatsapp" id="pro-3-whatsapp"> WhatsApp</button>
+              <button class="btn-ver-perfil" id="pro-3-perfil">Ver perfil</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="section-cta">
+        <a href="#" class="btn-outline" id="ver-todos-btn">Ver todos os profissionais →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── AVALIAÇÕES ────────────────────────────────────── -->
+  <section class="section section-alt" id="avaliacoes">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-chip">O que dizem nossos usuários</span>
+        <h2 class="section-title">Avaliações reais</h2>
+        <p class="section-subtitle">A confiança de quem já usou o Trabio</p>
+      </div>
+      <div class="testimonials-wrapper">
+        <div class="testimonials-track" id="testimonials-track">
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">"Encontrei um eletricista excelente em menos de 5 minutos. Resolveu o problema
+              no mesmo dia. Super recomendo o Trabio!"</p>
+            <div class="testimonial-author">
+              <div class="author-avatar"></div>
+              <div>
+                <strong>Mariana Costa</strong>
+                <span>São Paulo, SP</span>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">"Mudei para uma cidade nova e não conhecia ninguém. O Trabio salvou! Encontrei
+              uma diarista incrível logo de cara."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar"></div>
+              <div>
+                <strong>Rafael Oliveira</strong>
+                <span>Curitiba, PR</span>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">"Os perfis com fotos dos trabalhos anteriores me deram muita segurança para
+              contratar. Excelente plataforma!"</p>
+            <div class="testimonial-author">
+              <div class="author-avatar"></div>
+              <div>
+                <strong>Fernanda Lima</strong>
+                <span>Porto Alegre, RS</span>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★☆</div>
+            <p class="testimonial-text">"Como prestador de serviços, o Trabio me trouxe muitos clientes novos. Minha
+              agenda nunca esteve tão cheia!"</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">‍</div>
+              <div>
+                <strong>Pedro Santos</strong>
+                <span>Encanador — Salvador, BA</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-dots" id="carousel-dots">
+          <span class="dot active" data-index="0"></span>
+          <span class="dot" data-index="1"></span>
+          <span class="dot" data-index="2"></span>
+          <span class="dot" data-index="3"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA FINAL ─────────────────────────────────────── -->
+  <section class="cta-section" id="cta-section">
+    <div class="cta-bg-blobs">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+    </div>
+    <div class="container cta-container">
+      <div class="cta-left">
+        <h2 class="cta-title">Precisa de um profissional<br /> agora mesmo?</h2>
+        <p class="cta-subtitle">Crie sua conta gratuitamente e tenha acesso completo à plataforma.</p>
+        <div class="cta-buttons">
+          <a href="/buscar.html" class="btn-primary btn-lg" id="cta-usuario-btn">Sou cliente — quero buscar</a>
+          <a href="/cadastro.html" class="btn-outline-light btn-lg" id="cta-prestador-btn">Sou profissional — quero
+            me cadastrar</a>
+        </div>
+      </div>
+      <div class="cta-right">
+        <div class="cta-features">
+          <div class="feature-item">
+            <span class="feature-check"></span>
+            <span>Busca 100% gratuita</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-check"></span>
+            <span>Profissionais verificados e avaliados</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-check"></span>
+            <span>Contato direto pelo WhatsApp</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-check"></span>
+            <span>Sem intermediários ou taxas</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-check"></span>
+            <span>Disponível em todo o Brasil</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────────────────────── -->
+  <footer class="footer" id="footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo">
+          <span class="logo-icon"></span>
+          <span>Trabio</span>
+        </a>
+        <p>Conectando pessoas a profissionais autônomos de confiança em todo o Brasil.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Plataforma</h4>
+          <a href="#">Como funciona</a>
+          <a href="#">Categorias</a>
+          <a href="#">Seja um prestador</a>
+        </div>
+        <div class="footer-col">
+          <h4>Suporte</h4>
+          <a href="#">Central de ajuda</a>
+          <a href="#">Fale conosco</a>
+          <a href="#">Reportar problema</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="#">Termos de uso</a>
+          <a href="#">Privacidade</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Trabio. Site feito pela Trinity Soluções em TI.</p>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+
+</html>

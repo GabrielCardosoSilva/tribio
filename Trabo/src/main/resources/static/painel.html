@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trabio — Painel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    body { background-color: #F8FAF9; }
+    .panel-container { max-width: 1200px; margin: 100px auto 60px; padding: 20px; display: grid; grid-template-columns: 250px 1fr; gap: 32px; min-height: calc(100vh - 160px); }
+    
+    .panel-sidebar { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 4px 15px rgba(27,67,50,0.05); border: 1px solid #e1ede8; height: fit-content; }
+    .sidebar-user { text-align: center; margin-bottom: 32px; }
+    .sidebar-avatar { width: 80px; height: 80px; background: #D8F3DC; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #1B4332; font-weight: bold; margin: 0 auto 16px; position: relative; }
+    .sidebar-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .btn-edit-avatar { position: absolute; bottom: 0; right: 0; background: #2D6A4F; color: #fff; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .sidebar-user h3 { color: #1B4332; font-size: 1.2rem; margin-bottom: 4px; }
+    .sidebar-user p { color: #40916C; font-size: 0.9rem; }
+
+    .sidebar-nav { display: flex; flex-direction: column; gap: 8px; }
+    .sidebar-nav button { background: none; border: none; text-align: left; padding: 12px 16px; font-family: 'Outfit', sans-serif; font-size: 1rem; color: #4b5563; font-weight: 500; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+    .sidebar-nav button:hover { background: #f3f4f6; color: #1B4332; }
+    .sidebar-nav button.active { background: #E8F5E9; color: #2D6A4F; font-weight: 600; }
+    .sidebar-nav button.pro-only { display: none; }
+
+    .panel-content { background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 4px 15px rgba(27,67,50,0.05); border: 1px solid #e1ede8; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .tab-header { margin-bottom: 24px; border-bottom: 1px solid #f0f0f0; padding-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+    .tab-header h2 { color: #1B4332; font-size: 1.8rem; }
+    
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #40916C; }
+    .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #D8F3DC; border-radius: 8px; font-family: 'Outfit', sans-serif; font-size: 1rem; outline: none; }
+    .form-group input:focus, .form-group textarea:focus { border-color: #52B788; }
+    .btn-save { padding: 12px 24px; background: #2D6A4F; color: #fff; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
+    .btn-save:hover { background: #1B4332; }
+
+    /* Serviços Tab */
+    .btn-new-service { padding: 10px 20px; background: #2D6A4F; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
+    .btn-new-service:hover { background: #1B4332; }
+    .services-list { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
+    .service-card { border: 1px solid #D8F3DC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+    .service-card-header { display: flex; justify-content: space-between; align-items: center; }
+    .service-card-header h3 { color: #1B4332; font-size: 1.3rem; }
+    .service-card-header .price { font-weight: 700; color: #2D6A4F; font-size: 1.1rem; }
+    .service-desc { color: #4b5563; font-size: 0.95rem; line-height: 1.5; }
+    .service-actions { display: flex; gap: 12px; margin-top: 8px; border-top: 1px solid #f0f0f0; padding-top: 16px; }
+    .btn-outline { padding: 8px 16px; border: 1px solid #2D6A4F; color: #2D6A4F; background: transparent; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+    .btn-outline:hover { background: #E8F5E9; }
+    .btn-danger { padding: 8px 16px; border: 1px solid #EF4444; color: #EF4444; background: transparent; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+    .btn-danger:hover { background: #FEF2F2; }
+
+    .service-gallery { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; margin-top: 12px; }
+    .service-gallery img { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; }
+
+    /* Mock Tabs content */
+    .mock-content { text-align: center; padding: 60px 20px; color: #9CA3AF; }
+    .mock-content h3 { color: #6B7280; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+  <script>
+    if (!localStorage.getItem('trabio_token')) {
+      window.location.href = '/login.html';
+    }
+  </script>
+
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <span class="logo-icon"></span>
+        <span>Trabio</span>
+      </a>
+      
+      <div class="nav-actions" id="nav-actions-logged-in" style="position: relative;">
+        <button class="profile-btn" id="profile-dropdown-btn" aria-label="Menu de perfil">
+          <div class="profile-avatar" id="nav-profile-avatar">U</div>
+        </button>
+        <div class="profile-dropdown" id="profile-dropdown">
+          <a href="/painel.html#dados">Meus dados</a>
+          <a href="/painel.html#servicos" id="nav-link-servicos" style="display: none;">Meus serviços</a>
+          <a href="/painel.html#favoritos">Meus favoritos</a>
+          <a href="/painel.html#agendamentos">Meus agendamentos</a>
+          <a href="/painel.html#pagamentos">Meus pagamentos</a>
+          <hr>
+          <a href="#" id="btn-logout">Sair</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="panel-container">
+    
+    <!-- Sidebar -->
+    <aside class="panel-sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar" id="sidebar-avatar">
+          U
+          <button class="btn-edit-avatar" onclick="document.getElementById('input-avatar').click()">✏️</button>
+        </div>
+        <input type="file" id="input-avatar" style="display: none" accept="image/*" onchange="uploadAvatar(event)" />
+        <h3 id="sidebar-name">Nome do Usuário</h3>
+        <p id="sidebar-role">Papel</p>
+      </div>
+
+      <div class="sidebar-nav">
+        <button class="tab-btn active" data-target="dados">Meus Dados</button>
+        <button class="tab-btn pro-only" data-target="servicos">Meus Serviços</button>
+        <button class="tab-btn" data-target="favoritos">Meus Favoritos</button>
+        <button class="tab-btn" data-target="agendamentos">Meus Agendamentos</button>
+        <button class="tab-btn" data-target="pagamentos">Meus Pagamentos</button>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <main class="panel-content">
+      
+      <!-- ABA: Dados -->
+      <section id="dados" class="tab-pane active">
+        <div class="tab-header">
+          <h2>Meus Dados</h2>
+        </div>
+        <form id="form-dados">
+          <div class="form-group">
+            <label>Nome</label>
+            <input type="text" id="dados-nome" disabled style="background: #f9fafb;" />
+          </div>
+          <div class="form-group">
+            <label>E-mail</label>
+            <input type="email" id="dados-email" disabled style="background: #f9fafb;" />
+          </div>
+          <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 20px;">Edição de dados e telefone estará disponível em breve.</p>
+        </form>
+      </section>
+
+      <!-- ABA: Serviços -->
+      <section id="servicos" class="tab-pane">
+        <div class="tab-header">
+          <h2>Meus Serviços</h2>
+          <button class="btn-new-service" onclick="toggleFormServico()">+ Novo Serviço</button>
+        </div>
+
+        <div id="form-novo-servico" style="display:none; background: #f8faf9; padding: 20px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #D8F3DC;">
+          <h3 style="color:#1B4332; margin-bottom: 16px;">Cadastrar Serviço</h3>
+          <form id="form-servico">
+            <div class="form-group">
+              <label>Título do Serviço</label>
+              <input type="text" id="serv-titulo" required placeholder="Ex: Instalação Elétrica" />
+            </div>
+            <div class="form-group">
+              <label>Descrição</label>
+              <textarea id="serv-desc" rows="3" required placeholder="Detalhe o que está incluso no serviço..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Preço Base (R$)</label>
+              <input type="number" id="serv-preco" step="0.01" required placeholder="0.00" />
+            </div>
+            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+              <button type="button" class="btn-outline" onclick="toggleFormServico()">Cancelar</button>
+              <button type="submit" class="btn-save">Salvar Serviço</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="services-list" id="services-list">
+          <!-- Serviços listados aqui -->
+        </div>
+      </section>
+
+      <!-- ABA: Favoritos (Mock) -->
+      <section id="favoritos" class="tab-pane">
+        <div class="tab-header"><h2>Meus Favoritos</h2></div>
+        <div class="mock-content">
+          <h3>Nenhum favorito ainda</h3>
+          <p>Profissionais favoritados aparecerão aqui.</p>
+        </div>
+      </section>
+
+      <!-- ABA: Agendamentos (Mock) -->
+      <section id="agendamentos" class="tab-pane">
+        <div class="tab-header"><h2>Meus Agendamentos</h2></div>
+        <div class="mock-content">
+          <h3>Sem agendamentos</h3>
+          <p>Acompanhe os serviços agendados nesta área.</p>
+        </div>
+      </section>
+
+      <!-- ABA: Pagamentos (Mock) -->
+      <section id="pagamentos" class="tab-pane">
+        <div class="tab-header"><h2>Meus Pagamentos</h2></div>
+        <div class="mock-content">
+          <h3>Histórico vazio</h3>
+          <p>O registro de transações ficará disponível aqui.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="/js/main.js"></script>
+  <script>
+    const token = localStorage.getItem('trabio_token');
+    
+    // Tab Navigation logic
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+
+    function showTab(targetId) {
+      tabBtns.forEach(btn => btn.classList.remove('active'));
+      tabPanes.forEach(pane => pane.classList.remove('active'));
+      
+      const btn = document.querySelector(`.tab-btn[data-target="${targetId}"]`);
+      const pane = document.getElementById(targetId);
+      
+      if(btn && pane) {
+        btn.classList.add('active');
+        pane.classList.add('active');
+      }
+    }
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-target');
+        window.location.hash = target;
+        showTab(target);
+      });
+    });
+
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) showTab(hash);
+    });
+
+    // Initial load
+    document.addEventListener('DOMContentLoaded', async () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) showTab(hash);
+      
+      await carregarDadosUsuario();
+    });
+
+    let isPrestador = false;
+
+    async function carregarDadosUsuario() {
+      try {
+        const res = await fetch('/api/usuarios/me', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const u = await res.json();
+          document.getElementById('sidebar-name').textContent = u.nome;
+          document.getElementById('sidebar-role').textContent = u.role === 'PRESTADOR' ? 'Profissional' : 'Cliente';
+          document.getElementById('dados-nome').value = u.nome;
+          document.getElementById('dados-email').value = u.email;
+          
+          if (u.fotoPerfil) {
+            const imgHtml = `<img src="${u.fotoPerfil}" alt="Avatar">`;
+            document.getElementById('sidebar-avatar').innerHTML = imgHtml + `<button class="btn-edit-avatar" onclick="document.getElementById('input-avatar').click()">✏️</button>`;
+            document.getElementById('nav-profile-avatar').innerHTML = imgHtml;
+          } else {
+            const inicial = u.nome.charAt(0).toUpperCase();
+            document.getElementById('sidebar-avatar').innerHTML = inicial + `<button class="btn-edit-avatar" onclick="document.getElementById('input-avatar').click()">✏️</button>`;
+            document.getElementById('nav-profile-avatar').textContent = inicial;
+          }
+
+          if (u.role === 'PRESTADOR') {
+            isPrestador = true;
+            document.querySelectorAll('.pro-only').forEach(el => el.style.display = 'block');
+            const navLink = document.getElementById('nav-link-servicos');
+            if (navLink) navLink.style.display = 'block';
+            carregarServicos();
+          }
+
+        } else if (res.status === 401) {
+          localStorage.removeItem('trabio_token');
+          window.location.href = '/login.html';
+        }
+      } catch (err) {
+        console.error("Erro ao carregar dados", err);
+      }
+    }
+
+    async function uploadAvatar(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const res = await fetch('/api/usuarios/perfil/foto', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` },
+          body: formData
+        });
+        if (res.ok) {
+          carregarDadosUsuario(); // Recarrega imagem
+        } else {
+          alert('Erro ao enviar foto');
+        }
+      } catch (err) {
+        alert('Erro de conexão ao enviar foto');
+      }
+    }
+
+    // --- Lógica de Serviços ---
+    function toggleFormServico() {
+      const form = document.getElementById('form-novo-servico');
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+      if (form.style.display === 'none') {
+        document.getElementById('form-servico').reset();
+      }
+    }
+
+    document.getElementById('form-servico').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        titulo: document.getElementById('serv-titulo').value,
+        descricao: document.getElementById('serv-desc').value,
+        preco: parseFloat(document.getElementById('serv-preco').value)
+      };
+
+      try {
+        const res = await fetch('/api/servicos', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          toggleFormServico();
+          carregarServicos();
+        } else {
+          alert("Erro ao criar serviço");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    async function carregarServicos() {
+      if (!isPrestador) return;
+      try {
+        const res = await fetch('/api/servicos/meus', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const servicos = await res.json();
+          const list = document.getElementById('services-list');
+          list.innerHTML = '';
+
+          if (servicos.length === 0) {
+            list.innerHTML = `<p style="color:#6b7280; text-align:center; padding: 20px;">Você ainda não possui serviços cadastrados.</p>`;
+            return;
+          }
+
+          servicos.forEach(s => {
+            const card = document.createElement('div');
+            card.className = 'service-card';
+            
+            const fotosHtml = s.fotos && s.fotos.length > 0 
+              ? `<div class="service-gallery">${s.fotos.map(f => `<img src="${f}">`).join('')}</div>`
+              : `<p style="font-size:0.85rem; color:#9ca3af; margin-top:8px;">Sem fotos.</p>`;
+
+            card.innerHTML = `
+              <div class="service-card-header">
+                <h3>${s.titulo}</h3>
+                <span class="price">R$ ${s.preco.toFixed(2)}</span>
+              </div>
+              <p class="service-desc">${s.descricao}</p>
+              ${fotosHtml}
+              <div class="service-actions">
+                <input type="file" id="foto-servico-${s.id}" style="display:none" accept="image/*" onchange="uploadFotoServico(event, ${s.id})">
+                <button class="btn-outline" onclick="document.getElementById('foto-servico-${s.id}').click()">📷 Adicionar Foto</button>
+                <button class="btn-danger" onclick="excluirServico(${s.id})">🗑️ Excluir</button>
+              </div>
+            `;
+            list.appendChild(card);
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function excluirServico(id) {
+      if (!confirm("Tem certeza que deseja excluir este serviço?")) return;
+      try {
+        const res = await fetch(`/api/servicos/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          carregarServicos();
+        } else {
+          alert("Erro ao excluir serviço");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function uploadFotoServico(e, id) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const res = await fetch(`/api/servicos/${id}/fotos`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` },
+          body: formData
+        });
+        if (res.ok) {
+          carregarServicos();
+        } else {
+          alert('Erro ao enviar foto para o serviço');
+        }
+      } catch (err) {
+        alert('Erro de conexão ao enviar foto');
+      }
+    }
+  </script>
+</body>
+</html>
