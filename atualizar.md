@@ -1,8 +1,14 @@
-quero que seja mais detalhado a busca e que ao cadastrar coloque a cidade e o Estado em siglas RJ, SP etc...
+ao mudar a foto de perfil não esta aparecendo a escolhida
 
+só esta aparecendo a foto padrão
 
-quero que as notificaçoes de erro seja personalizada com um card vermelho bonito e que ao redirecionar ele mostre a mensagem de erro e que continue com o design do site e que de para clicar em voltar para a pagina anterior
+quero que o sistema diferencia a conta de usuario e de prestador
 
-quero que ao cadastrar um serviço ele apareça na pagina de serviços do prestador e que ele possa editar e excluir os serviços
+ao criar um portfolio e colocar uma foto ela n carrega tambem 
 
-quero que toda mensagem de erro explique oque o usuario fez de errado
+ao colocar no portifolio o local onde trabalha quero que coloque o estado em sigla ex sp
+e depois a cidade e que essas informações apareçam na busca de serviços e que essas informações fique salva para ser buscada depois 
+
+e que tenha a opção de publicar o portfolio e que ele apareça na busca de serviços
+
+e o visual da pagina ta tudo branco quero que seja mais dinamica e bem profissional igual a o exemplo que mandarei lembrando que os tons do site é verde

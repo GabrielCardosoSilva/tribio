@@ -33,6 +33,14 @@ public class ServicoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(servicoService.criar(request));
     }
 
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('PRESTADOR')")
+    public ResponseEntity<ServicoResponse> atualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody ServicoRequest request) {
+        return ResponseEntity.ok(servicoService.atualizar(id, request));
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('PRESTADOR')")
     public ResponseEntity<Void> excluir(@PathVariable Long id) {

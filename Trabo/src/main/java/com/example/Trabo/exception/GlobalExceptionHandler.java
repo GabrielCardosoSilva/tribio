@@ -43,13 +43,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
+        StringBuilder msg = new StringBuilder("Verifique os campos inválidos: ");
         ex.getBindingResult().getAllErrors().forEach(error -> {
             String field = ((FieldError) error).getField();
-            errors.put(field, error.getDefaultMessage());
+            String defaultMessage = error.getDefaultMessage();
+            msg.append(String.format("'%s' (%s). ", field, defaultMessage));
         });
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(LocalDateTime.now(), 400, "Validation Error", msg.toString().trim()));
     }
 
     @ExceptionHandler(Exception.class)

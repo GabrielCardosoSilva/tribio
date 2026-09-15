@@ -2,6 +2,7 @@ package com.example.Trabo.service;
 
 import com.example.Trabo.dto.request.ServicoRequest;
 import com.example.Trabo.dto.response.ServicoResponse;
+import com.example.Trabo.exception.BusinessException;
 import com.example.Trabo.exception.NotFoundException;
 import com.example.Trabo.model.entity.Prestador;
 import com.example.Trabo.model.entity.Servico;
@@ -49,8 +50,26 @@ public class ServicoService {
 
     @Transactional
     public ServicoResponse criar(ServicoRequest request) {
-        Prestador p = getPrestadorLogado();
-        Servico s = new Servico(p, request.titulo(), request.descricao(), request.preco());
+        Prestador prestador = getPrestadorLogado();
+        Servico s = new Servico(prestador, request.titulo(), request.descricao(), request.preco(), request.ondeAtende());
+        return toResponse(servicoRepository.save(s));
+    }
+
+    @Transactional
+    public ServicoResponse atualizar(Long id, ServicoRequest request) {
+        Prestador prestador = getPrestadorLogado();
+        Servico s = servicoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Serviço não encontrado: " + id));
+
+        if (!s.getPrestador().getId().equals(prestador.getId())) {
+            throw new BusinessException("Acesso negado a este serviço");
+        }
+
+        s.setTitulo(request.titulo());
+        s.setDescricao(request.descricao());
+        s.setPreco(request.preco());
+        s.setOndeAtende(request.ondeAtende());
+
         return toResponse(servicoRepository.save(s));
     }
 
@@ -83,6 +102,6 @@ public class ServicoService {
     }
 
     private ServicoResponse toResponse(Servico s) {
-        return new ServicoResponse(s.getId(), s.getTitulo(), s.getDescricao(), s.getPreco(), s.getFotos());
+        return new ServicoResponse(s.getId(), s.getTitulo(), s.getDescricao(), s.getOndeAtende(), s.getPreco(), s.getFotos());
     }
 }

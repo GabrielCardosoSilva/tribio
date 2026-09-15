@@ -31,6 +31,10 @@ public class Prestador {
     @Column(nullable = false)
     private String cidade;
 
+    @NotBlank
+    @Column(nullable = false, length = 2)
+    private String estado;
+
     private String bairro;
 
     @Column(columnDefinition = "TEXT")
@@ -64,6 +68,7 @@ public class Prestador {
     public static class Builder {
         private Usuario usuario;
         private String cidade;
+        private String estado;
         private String bairro;
         private String descricao;
         private String telefone;
@@ -72,6 +77,7 @@ public class Prestador {
 
         public Builder usuario(Usuario u)        { this.usuario = u; return this; }
         public Builder cidade(String c)          { this.cidade = c; return this; }
+        public Builder estado(String e)          { this.estado = e; return this; }
         public Builder bairro(String b)          { this.bairro = b; return this; }
         public Builder descricao(String d)       { this.descricao = d; return this; }
         public Builder telefone(String t)        { this.telefone = t; return this; }
@@ -82,6 +88,7 @@ public class Prestador {
             Prestador p = new Prestador();
             p.usuario = this.usuario;
             p.cidade = this.cidade;
+            p.estado = this.estado;
             p.bairro = this.bairro;
             p.descricao = this.descricao;
             p.telefone = this.telefone;
@@ -109,6 +116,9 @@ public class Prestador {
 
     public String getCidade()                        { return cidade; }
     public void   setCidade(String cidade)           { this.cidade = cidade; }
+
+    public String getEstado()                        { return estado; }
+    public void   setEstado(String estado)           { this.estado = estado; }
 
     public String getBairro()                        { return bairro; }
     public void   setBairro(String bairro)           { this.bairro = bairro; }

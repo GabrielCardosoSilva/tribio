@@ -10,6 +10,8 @@ public record ServicoRequest(
         
         String descricao,
         
+        String ondeAtende,
+        
         @NotNull(message = "Preço é obrigatório")
         BigDecimal preco
 ) {}

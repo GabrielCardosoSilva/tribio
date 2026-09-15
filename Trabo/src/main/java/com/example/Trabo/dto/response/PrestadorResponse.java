@@ -7,6 +7,7 @@ public record PrestadorResponse(
         String nome,
         String email,
         String cidade,
+        String estado,
         String bairro,
         String descricao,
         String telefone,
@@ -16,5 +17,6 @@ public record PrestadorResponse(
         Double mediaAvaliacoes,
         int totalAvaliacoes,
         List<CategoriaResponse> categorias,
-        List<String> fotos
+        List<String> fotos,
+        List<ServicoResponse> servicos
 ) {}

@@ -31,6 +31,9 @@ public class Servico {
     @Column(nullable = false)
     private BigDecimal preco;
 
+    @Column
+    private String ondeAtende;
+
     @ElementCollection
     @CollectionTable(name = "servico_fotos", joinColumns = @JoinColumn(name = "servico_id"))
     @Column(name = "foto_url")
@@ -41,11 +44,12 @@ public class Servico {
 
     public Servico() {}
 
-    public Servico(Prestador prestador, String titulo, String descricao, BigDecimal preco) {
+    public Servico(Prestador prestador, String titulo, String descricao, BigDecimal preco, String ondeAtende) {
         this.prestador = prestador;
         this.titulo = titulo;
         this.descricao = descricao;
         this.preco = preco;
+        this.ondeAtende = ondeAtende;
     }
 
     // Getters and Setters
@@ -59,6 +63,8 @@ public class Servico {
     public void setDescricao(String descricao) { this.descricao = descricao; }
     public BigDecimal getPreco() { return preco; }
     public void setPreco(BigDecimal preco) { this.preco = preco; }
+    public String getOndeAtende() { return ondeAtende; }
+    public void setOndeAtende(String ondeAtende) { this.ondeAtende = ondeAtende; }
     public List<String> getFotos() { return fotos; }
     public void setFotos(List<String> fotos) { this.fotos = fotos; }
     public LocalDateTime getCreatedAt() { return createdAt; }

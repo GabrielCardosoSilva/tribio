@@ -23,6 +23,7 @@ public interface PrestadorRepository extends JpaRepository<Prestador, Long> {
           AND SIZE(p.servicos) > 0
           AND (:categoriaId IS NULL OR c.id = :categoriaId)
           AND (:cidade IS NULL OR LOWER(p.cidade) LIKE LOWER(CONCAT('%', :cidade, '%')))
+          AND (:estado IS NULL OR LOWER(p.estado) = LOWER(:estado))
           AND (:texto IS NULL OR
                LOWER(p.descricao) LIKE LOWER(CONCAT('%', :texto, '%')) OR
                LOWER(p.usuario.nome) LIKE LOWER(CONCAT('%', :texto, '%')))
@@ -30,6 +31,7 @@ public interface PrestadorRepository extends JpaRepository<Prestador, Long> {
     List<Prestador> buscarPublico(
             @Param("categoriaId") Long categoriaId,
             @Param("cidade") String cidade,
+            @Param("estado") String estado,
             @Param("texto") String texto
     );
 }

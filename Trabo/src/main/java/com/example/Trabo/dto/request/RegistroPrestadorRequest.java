@@ -12,6 +12,7 @@ public record RegistroPrestadorRequest(
 
         // Dados profissionais
         @NotBlank String cidade,
+        @NotBlank @Size(min = 2, max = 2) String estado,
         String bairro,
         @NotBlank String descricao,
         @NotBlank String telefone,

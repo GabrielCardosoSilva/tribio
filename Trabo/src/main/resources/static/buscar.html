@@ -106,12 +106,7 @@
 </head>
 <body>
 
-  <!-- Verifica Autenticação antes de renderizar o resto -->
-  <script>
-    if (!localStorage.getItem('trabio_token')) {
-      window.location.href = '/login.html';
-    }
-  </script>
+  <!-- Acesso público permitido; validação de interações feita no JS -->
 
   <nav class="navbar scrolled" id="navbar">
     <div class="nav-container">
@@ -149,6 +144,21 @@
         <input type="text" id="filter-cidade" placeholder="Ex: São Paulo" />
       </div>
       <div class="filter-group">
+        <label>Estado</label>
+        <select id="filter-estado">
+          <option value="">Todos</option>
+          <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+          <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
+          <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
+          <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+          <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+          <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
+          <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
+          <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+          <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+        </select>
+      </div>
+      <div class="filter-group">
         <label>Busca livre</label>
         <input type="text" id="filter-texto" placeholder="Ex: Eletricista predial" />
       </div>
@@ -174,12 +184,12 @@
       </div>
       
       <div class="modal-body">
-        <h4>Sobre o serviço</h4>
+        <h4>Sobre o Profissional</h4>
         <p id="modal-desc">Descrição completa do prestador e seus serviços.</p>
         
-        <h4>Portfólio (Fotos)</h4>
-        <div class="modal-gallery" id="modal-gallery">
-          <div class="modal-img-placeholder">Sem fotos cadastradas</div>
+        <h4>Portfólio de Serviços</h4>
+        <div id="modal-portfolio" style="display: flex; flex-direction: column; gap: 16px; margin-top: 12px; max-height: 300px; overflow-y: auto;">
+          <!-- Serviços injetados via JS -->
         </div>
         
         <a href="#" class="btn-contratar" id="modal-btn-whatsapp" target="_blank">💬 Contratar pelo WhatsApp</a>
@@ -202,10 +212,12 @@
 
     async function buscarProfissionais() {
       const cidade = document.getElementById('filter-cidade').value;
+      const estado = document.getElementById('filter-estado').value;
       const texto = document.getElementById('filter-texto').value;
 
       const params = new URLSearchParams();
       if (cidade) params.append('cidade', cidade);
+      if (estado) params.append('estado', estado);
       if (texto) params.append('texto', texto);
 
       try {
@@ -223,10 +235,13 @@
           localStorage.removeItem('trabio_token');
           window.location.href = '/login.html';
         } else {
-          console.error("Erro ao buscar prestadores.");
+          if (typeof showToastError === 'function') showToastError('Erro ao buscar prestadores.');
+          else window.location.href = '/erro.html?msg=' + encodeURIComponent('Erro ao buscar prestadores.');
         }
       } catch (error) {
         console.error("Erro de conexão", error);
+        if (typeof showToastError === 'function') showToastError('Erro de conexão ao tentar buscar prestadores.');
+        else window.location.href = '/erro.html?msg=' + encodeURIComponent('Erro de conexão ao tentar buscar prestadores.');
       }
     }
 
@@ -253,7 +268,7 @@
             <div class="pro-avatar">${p.fotoPerfil ? `<img src="${p.fotoPerfil}" style="border-radius:50%; width:100%; height:100%; object-fit:cover;">` : inicial}</div>
             <div>
               <h3 class="pro-name">${nome}</h3>
-              <span class="pro-city">📍 ${p.cidade}</span>
+              <span class="pro-city">📍 ${p.cidade}, ${p.estado}</span>
             </div>
           </div>
           <p class="pro-desc">${p.descricao ? p.descricao.substring(0, 100) + '...' : 'Sem descrição fornecida.'}</p>
@@ -272,11 +287,16 @@
     const modalClose = document.getElementById('modal-close');
 
     function abrirModal(index) {
+      if (!localStorage.getItem('trabio_token')) {
+        if (typeof showToastError === 'function') showToastError('Você precisa estar logado para ver o perfil completo do profissional.');
+        return;
+      }
+      
       const p = prestadoresGlobais[index];
       const nome = p.nome || 'Profissional';
       
       document.getElementById('modal-name').textContent = nome;
-      document.getElementById('modal-city').textContent = `📍 ${p.cidade}`;
+      document.getElementById('modal-city').textContent = `📍 ${p.cidade}, ${p.estado}`;
       document.getElementById('modal-desc').textContent = p.descricao || 'Sem descrição fornecida.';
       
       const avatarContainer = document.getElementById('modal-avatar');
@@ -294,12 +314,28 @@
         btnZap.style.display = 'none';
       }
 
-      // Fotos do serviço (caso tenha)
-      const gallery = document.getElementById('modal-gallery');
-      if (p.fotos && p.fotos.length > 0) {
-        gallery.innerHTML = p.fotos.map(foto => `<img src="${foto}" style="width:100%; height:120px; object-fit:cover; border-radius:12px;">`).join('');
+      // Portfólio (Serviços)
+      const portfolioContainer = document.getElementById('modal-portfolio');
+      if (p.servicos && p.servicos.length > 0) {
+        portfolioContainer.innerHTML = p.servicos.map(s => {
+          const fotosHtml = s.fotos && s.fotos.length > 0
+            ? `<div style="display:flex; gap:8px; overflow-x:auto; margin-top:8px;">${s.fotos.map(f => `<img src="${f}" style="width:80px; height:80px; object-fit:cover; border-radius:8px;">`).join('')}</div>`
+            : '';
+          
+          return `
+            <div style="border: 1px solid #D8F3DC; border-radius: 12px; padding: 16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h5 style="color:#1B4332; font-size:1.1rem; margin:0;">${s.titulo}</h5>
+                <span style="font-weight:700; color:#2D6A4F;">R$ ${s.preco.toFixed(2)}</span>
+              </div>
+              <p style="color:#40916c; font-size:0.85rem; margin-top:4px;">📍 ${s.ondeAtende || 'Local não informado'}</p>
+              <p style="color:#4b5563; font-size:0.9rem; margin-top:8px;">${s.descricao}</p>
+              ${fotosHtml}
+            </div>
+          `;
+        }).join('');
       } else {
-        gallery.innerHTML = '<div class="modal-img-placeholder">Sem fotos cadastradas</div>';
+        portfolioContainer.innerHTML = '<div style="background:#f3f4f6; border-radius:12px; padding:20px; text-align:center; color:#9ca3af;">Nenhum item no portfólio.</div>';
       }
 
       modal.style.display = 'flex';
@@ -314,6 +350,10 @@
 
     document.getElementById('search-form').addEventListener('submit', (e) => {
       e.preventDefault();
+      if (!localStorage.getItem('trabio_token')) {
+        if (typeof showToastError === 'function') showToastError('Você precisa estar logado para realizar novas pesquisas.');
+        return;
+      }
       buscarProfissionais();
     });
 
@@ -323,5 +363,6 @@
       buscarProfissionais();
     });
   </script>
+  <script src="/js/toast.js"></script>
 </body>
 </html>

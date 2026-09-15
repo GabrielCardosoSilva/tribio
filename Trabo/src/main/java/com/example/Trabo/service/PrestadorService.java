@@ -3,6 +3,7 @@ package com.example.Trabo.service;
 import com.example.Trabo.dto.request.AtualizarPrestadorRequest;
 import com.example.Trabo.dto.response.CategoriaResponse;
 import com.example.Trabo.dto.response.PrestadorResponse;
+import com.example.Trabo.dto.response.ServicoResponse;
 import com.example.Trabo.exception.BusinessException;
 import com.example.Trabo.exception.NotFoundException;
 import com.example.Trabo.model.entity.Categoria;
@@ -32,8 +33,8 @@ public class PrestadorService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public List<PrestadorResponse> buscarPublico(Long categoriaId, String cidade, String texto) {
-        return prestadorRepository.buscarPublico(categoriaId, cidade, texto)
+    public List<PrestadorResponse> buscarPublico(Long categoriaId, String cidade, String estado, String texto) {
+        return prestadorRepository.buscarPublico(categoriaId, cidade, estado, texto)
                 .stream().map(this::toResponse).toList();
     }
 
@@ -52,6 +53,7 @@ public class PrestadorService {
                 .orElseThrow(() -> new NotFoundException("Perfil de prestador não encontrado"));
 
         prestador.setCidade(request.cidade());
+        prestador.setEstado(request.estado());
         prestador.setBairro(request.bairro());
         prestador.setDescricao(request.descricao());
         prestador.setTelefone(request.telefone());
@@ -75,6 +77,7 @@ public class PrestadorService {
                 p.getUsuario().getNome(),
                 p.getUsuario().getEmail(),
                 p.getCidade(),
+                p.getEstado(),
                 p.getBairro(),
                 p.getDescricao(),
                 p.getTelefone(),
@@ -84,7 +87,8 @@ public class PrestadorService {
                 p.getMediaAvaliacoes(),
                 p.getAvaliacoes() != null ? p.getAvaliacoes().size() : 0,
                 p.getCategorias().stream().map(c -> new CategoriaResponse(c.getId(), c.getNome(), c.getIcone(), c.getDescricao())).toList(),
-                p.getFotos().stream().map(f -> f.getUrl()).toList()
+                p.getFotos().stream().map(f -> f.getUrl()).toList(),
+                p.getServicos() != null ? p.getServicos().stream().map(s -> new ServicoResponse(s.getId(), s.getTitulo(), s.getDescricao(), s.getOndeAtende(), s.getPreco(), s.getFotos())).toList() : List.of()
         );
     }
 }

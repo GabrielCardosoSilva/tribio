@@ -7,6 +7,7 @@ public record ServicoResponse(
         Long id,
         String titulo,
         String descricao,
+        String ondeAtende,
         BigDecimal preco,
         List<String> fotos
 ) {}

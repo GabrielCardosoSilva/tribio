@@ -71,6 +71,7 @@ public class AuthService {
         Prestador prestador = Prestador.builder()
                 .usuario(usuario)
                 .cidade(request.cidade())
+                .estado(request.estado())
                 .bairro(request.bairro())
                 .descricao(request.descricao())
                 .telefone(request.telefone())

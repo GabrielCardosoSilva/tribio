@@ -85,7 +85,7 @@
         </button>
         <div class="profile-dropdown" id="profile-dropdown">
           <a href="/painel.html#dados">Meus dados</a>
-          <a href="/painel.html#servicos" id="nav-link-servicos" style="display: none;">Meus serviços</a>
+          <a href="/painel.html#servicos" id="nav-link-servicos" style="display: none;">Meu portfólio</a>
           <a href="/painel.html#favoritos">Meus favoritos</a>
           <a href="/painel.html#agendamentos">Meus agendamentos</a>
           <a href="/painel.html#pagamentos">Meus pagamentos</a>
@@ -112,7 +112,7 @@
 
       <div class="sidebar-nav">
         <button class="tab-btn active" data-target="dados">Meus Dados</button>
-        <button class="tab-btn pro-only" data-target="servicos">Meus Serviços</button>
+        <button class="tab-btn pro-only" data-target="servicos">Meu Portfólio</button>
         <button class="tab-btn" data-target="favoritos">Meus Favoritos</button>
         <button class="tab-btn" data-target="agendamentos">Meus Agendamentos</button>
         <button class="tab-btn" data-target="pagamentos">Meus Pagamentos</button>
@@ -127,28 +127,45 @@
         <div class="tab-header">
           <h2>Meus Dados</h2>
         </div>
-        <form id="form-dados">
-          <div class="form-group">
-            <label>Nome</label>
-            <input type="text" id="dados-nome" disabled style="background: #f9fafb;" />
+        
+        <div class="dados-container" style="display: flex; gap: 32px; flex-wrap: wrap;">
+          
+          <div class="profile-photo-card" style="background: #f8faf9; border: 1px solid #D8F3DC; padding: 24px; border-radius: 12px; text-align: center; flex: 1; min-width: 250px;">
+            <h3 style="color:#1B4332; margin-bottom: 16px;">Sua Foto</h3>
+            <div id="dados-avatar-preview" style="width: 120px; height: 120px; background: #D8F3DC; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #1B4332; font-weight: bold; margin: 0 auto 16px; overflow: hidden; border: 4px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">U</div>
+            <button class="btn-outline" onclick="document.getElementById('input-avatar').click()" style="width: 100%;">📸 Alterar Foto</button>
+            <p style="color: #6b7280; font-size: 0.85rem; margin-top: 12px;">Formatos aceitos: JPG, PNG, GIF</p>
           </div>
-          <div class="form-group">
-            <label>E-mail</label>
-            <input type="email" id="dados-email" disabled style="background: #f9fafb;" />
+
+          <div style="flex: 2; min-width: 300px; background: #fff; border: 1px solid #e1ede8; padding: 24px; border-radius: 12px; box-shadow: 0 4px 15px rgba(27,67,50,0.02);">
+            <h3 style="color:#1B4332; margin-bottom: 16px;">Informações de Contato</h3>
+            <form id="form-dados">
+              <div class="form-group">
+                <label>Nome Completo</label>
+                <input type="text" id="dados-nome" disabled style="background: #f8faf9; color: #40916C; font-weight: 500;" />
+              </div>
+              <div class="form-group">
+                <label>E-mail de Acesso</label>
+                <input type="email" id="dados-email" disabled style="background: #f8faf9; color: #40916C; font-weight: 500;" />
+              </div>
+              <div style="background: #E8F5E9; padding: 12px; border-radius: 8px; border: 1px solid #D8F3DC; margin-top: 24px; display: flex; gap: 12px; align-items: center;">
+                <span style="font-size: 1.5rem;">🔒</span>
+                <p style="color: #2D6A4F; font-size: 0.9rem; margin: 0;">Edição de dados sensíveis e telefone estará disponível em breve para maior segurança da sua conta.</p>
+              </div>
+            </form>
           </div>
-          <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 20px;">Edição de dados e telefone estará disponível em breve.</p>
-        </form>
+        </div>
       </section>
 
       <!-- ABA: Serviços -->
       <section id="servicos" class="tab-pane">
         <div class="tab-header">
-          <h2>Meus Serviços</h2>
-          <button class="btn-new-service" onclick="toggleFormServico()">+ Novo Serviço</button>
+          <h2>Meu Portfólio</h2>
+          <button class="btn-new-service" onclick="toggleFormServico()">+ Novo Item</button>
         </div>
 
         <div id="form-novo-servico" style="display:none; background: #f8faf9; padding: 20px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #D8F3DC;">
-          <h3 style="color:#1B4332; margin-bottom: 16px;">Cadastrar Serviço</h3>
+          <h3 style="color:#1B4332; margin-bottom: 16px;">Cadastrar no Portfólio</h3>
           <form id="form-servico">
             <div class="form-group">
               <label>Título do Serviço</label>
@@ -157,6 +174,10 @@
             <div class="form-group">
               <label>Descrição</label>
               <textarea id="serv-desc" rows="3" required placeholder="Detalhe o que está incluso no serviço..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Onde atende (Ex: Online, São Paulo - SP, Em domicílio)</label>
+              <input type="text" id="serv-onde" required placeholder="Ex: Em domicílio, São Paulo" />
             </div>
             <div class="form-group">
               <label>Preço Base (R$)</label>
@@ -261,13 +282,15 @@
           document.getElementById('dados-email').value = u.email;
           
           if (u.fotoPerfil) {
-            const imgHtml = `<img src="${u.fotoPerfil}" alt="Avatar">`;
+            const imgHtml = `<img src="${u.fotoPerfil}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">`;
             document.getElementById('sidebar-avatar').innerHTML = imgHtml + `<button class="btn-edit-avatar" onclick="document.getElementById('input-avatar').click()">✏️</button>`;
             document.getElementById('nav-profile-avatar').innerHTML = imgHtml;
+            document.getElementById('dados-avatar-preview').innerHTML = imgHtml;
           } else {
             const inicial = u.nome.charAt(0).toUpperCase();
             document.getElementById('sidebar-avatar').innerHTML = inicial + `<button class="btn-edit-avatar" onclick="document.getElementById('input-avatar').click()">✏️</button>`;
             document.getElementById('nav-profile-avatar').textContent = inicial;
+            document.getElementById('dados-avatar-preview').textContent = inicial;
           }
 
           if (u.role === 'PRESTADOR') {
@@ -281,9 +304,20 @@
         } else if (res.status === 401) {
           localStorage.removeItem('trabio_token');
           window.location.href = '/login.html';
+        } else {
+          showError("Erro ao carregar dados do usuário.");
         }
       } catch (err) {
         console.error("Erro ao carregar dados", err);
+        showError("Erro de conexão ao carregar dados do usuário.");
+      }
+    }
+
+    function showError(msg) {
+      if (typeof showToastError === 'function') {
+        showToastError(msg);
+      } else {
+        window.location.href = '/erro.html?msg=' + encodeURIComponent(msg);
       }
     }
 
@@ -303,20 +337,38 @@
         if (res.ok) {
           carregarDadosUsuario(); // Recarrega imagem
         } else {
-          alert('Erro ao enviar foto');
+          showError('Erro ao enviar foto.');
         }
       } catch (err) {
-        alert('Erro de conexão ao enviar foto');
+        showError('Erro de conexão ao enviar foto.');
       }
     }
 
     // --- Lógica de Serviços ---
-    function toggleFormServico() {
+    let servicosGlobais = [];
+    let servicoEmEdicaoId = null;
+
+    function toggleFormServico(isEdit = false) {
       const form = document.getElementById('form-novo-servico');
-      form.style.display = form.style.display === 'none' ? 'block' : 'none';
-      if (form.style.display === 'none') {
+      if (form.style.display === 'block' && !isEdit) {
+        form.style.display = 'none';
+        servicoEmEdicaoId = null;
         document.getElementById('form-servico').reset();
+      } else {
+        form.style.display = 'block';
       }
+    }
+
+    function editarServico(id) {
+      const s = servicosGlobais.find(x => x.id === id);
+      if (!s) return;
+      servicoEmEdicaoId = id;
+      document.getElementById('serv-titulo').value = s.titulo;
+      document.getElementById('serv-desc').value = s.descricao;
+      document.getElementById('serv-preco').value = s.preco;
+      document.getElementById('serv-onde').value = s.ondeAtende || '';
+      toggleFormServico(true);
+      window.location.hash = "servicos";
     }
 
     document.getElementById('form-servico').addEventListener('submit', async (e) => {
@@ -324,12 +376,16 @@
       const payload = {
         titulo: document.getElementById('serv-titulo').value,
         descricao: document.getElementById('serv-desc').value,
-        preco: parseFloat(document.getElementById('serv-preco').value)
+        preco: parseFloat(document.getElementById('serv-preco').value),
+        ondeAtende: document.getElementById('serv-onde').value
       };
 
+      const url = servicoEmEdicaoId ? `/api/servicos/${servicoEmEdicaoId}` : '/api/servicos';
+      const method = servicoEmEdicaoId ? 'PUT' : 'POST';
+
       try {
-        const res = await fetch('/api/servicos', {
-          method: 'POST',
+        const res = await fetch(url, {
+          method: method,
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -337,13 +393,22 @@
           body: JSON.stringify(payload)
         });
         if (res.ok) {
+          servicoEmEdicaoId = null;
           toggleFormServico();
           carregarServicos();
         } else {
-          alert("Erro ao criar serviço");
+          let errorMsg = 'Erro ao salvar serviço.';
+          try {
+            const errorObj = await res.json();
+            errorMsg = errorObj.message || errorObj.error || errorMsg;
+          } catch (e) {
+            errorMsg = await res.text() || errorMsg;
+          }
+          showError(errorMsg);
         }
       } catch (err) {
         console.error(err);
+        showError('Erro de conexão ao salvar serviço.');
       }
     });
 
@@ -354,16 +419,16 @@
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
-          const servicos = await res.json();
+          servicosGlobais = await res.json();
           const list = document.getElementById('services-list');
           list.innerHTML = '';
 
-          if (servicos.length === 0) {
+          if (servicosGlobais.length === 0) {
             list.innerHTML = `<p style="color:#6b7280; text-align:center; padding: 20px;">Você ainda não possui serviços cadastrados.</p>`;
             return;
           }
 
-          servicos.forEach(s => {
+          servicosGlobais.forEach(s => {
             const card = document.createElement('div');
             card.className = 'service-card';
             
@@ -376,19 +441,24 @@
                 <h3>${s.titulo}</h3>
                 <span class="price">R$ ${s.preco.toFixed(2)}</span>
               </div>
+              <p style="color:#40916c; font-size: 0.9rem; margin-top: 4px;">📍 ${s.ondeAtende || 'Local não informado'}</p>
               <p class="service-desc">${s.descricao}</p>
               ${fotosHtml}
               <div class="service-actions">
                 <input type="file" id="foto-servico-${s.id}" style="display:none" accept="image/*" onchange="uploadFotoServico(event, ${s.id})">
-                <button class="btn-outline" onclick="document.getElementById('foto-servico-${s.id}').click()">📷 Adicionar Foto</button>
+                <button class="btn-outline" onclick="document.getElementById('foto-servico-${s.id}').click()">📷 Foto</button>
+                <button class="btn-outline" onclick="editarServico(${s.id})">✏️ Editar</button>
                 <button class="btn-danger" onclick="excluirServico(${s.id})">🗑️ Excluir</button>
               </div>
             `;
             list.appendChild(card);
           });
+        } else {
+          showError('Erro ao carregar serviços.');
         }
       } catch (err) {
         console.error(err);
+        showError('Erro de conexão ao carregar serviços.');
       }
     }
 
@@ -402,10 +472,18 @@
         if (res.ok) {
           carregarServicos();
         } else {
-          alert("Erro ao excluir serviço");
+          let errorMsg = 'Erro ao excluir serviço.';
+          try {
+            const errorObj = await res.json();
+            errorMsg = errorObj.message || errorObj.error || errorMsg;
+          } catch (e) {
+            errorMsg = await res.text() || errorMsg;
+          }
+          showError(errorMsg);
         }
       } catch (err) {
         console.error(err);
+        showError('Erro de conexão ao tentar excluir serviço.');
       }
     }
 
@@ -425,12 +503,13 @@
         if (res.ok) {
           carregarServicos();
         } else {
-          alert('Erro ao enviar foto para o serviço');
+          showError('Erro ao enviar foto para o serviço.');
         }
       } catch (err) {
-        alert('Erro de conexão ao enviar foto');
+        showError('Erro de conexão ao enviar foto.');
       }
     }
   </script>
+  <script src="/js/toast.js"></script>
 </body>
 </html>

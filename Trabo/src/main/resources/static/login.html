@@ -234,16 +234,24 @@
           
           window.location.href = '/buscar.html';
         } else {
-          alert('E-mail ou senha inválidos.');
+          let errorMsg = 'E-mail ou senha inválidos.';
+          try {
+            const errorObj = await response.json();
+            errorMsg = errorObj.message || errorObj.error || errorMsg;
+          } catch (e) {
+            errorMsg = await response.text() || errorMsg;
+          }
+          showToastError(errorMsg);
         }
       } catch (error) {
         console.error(error);
-        alert('Erro de conexão ao tentar fazer login.');
+        showToastError('Erro de conexão ao tentar fazer login.');
       } finally {
         btn.disabled = false;
         btn.textContent = 'Login to Trabio';
       }
     });
   </script>
+  <script src="/js/toast.js"></script>
 </body>
 </html>

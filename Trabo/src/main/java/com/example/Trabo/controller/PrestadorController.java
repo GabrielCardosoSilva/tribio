@@ -34,8 +34,9 @@ public class PrestadorController {
     public ResponseEntity<List<PrestadorResponse>> buscar(
             @RequestParam(required = false) Long categoriaId,
             @RequestParam(required = false) String cidade,
+            @RequestParam(required = false) String estado,
             @RequestParam(required = false) String texto) {
-        return ResponseEntity.ok(prestadorService.buscarPublico(categoriaId, cidade, texto));
+        return ResponseEntity.ok(prestadorService.buscarPublico(categoriaId, cidade, estado, texto));
     }
 
     @GetMapping("/{id}")

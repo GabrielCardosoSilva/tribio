@@ -44,6 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.reload();
       });
     }
+  } else {
+    // Hide 'Profissionais' section if not logged in
+    const destaquesSec = document.getElementById('destaques');
+    if (destaquesSec) destaquesSec.style.display = 'none';
+    
+    document.querySelectorAll('#nav-links a[href="#destaques"]').forEach(link => {
+      if (link.parentElement) link.parentElement.style.display = 'none';
+    });
   }
 });
 
@@ -282,6 +290,17 @@ document.querySelectorAll('.btn-whatsapp').forEach(btn => {
     // Em prod: window.open(`https://wa.me/55${numero}?text=...`);
   });
 });
+
+// ── CTA Buscar Auth Check ─────────────────────
+const ctaUsuarioBtn = document.getElementById('cta-usuario-btn');
+if (ctaUsuarioBtn) {
+  ctaUsuarioBtn.addEventListener('click', (e) => {
+    if (!localStorage.getItem('trabio_token')) {
+      e.preventDefault();
+      window.location.href = '/login.html';
+    }
+  });
+}
 
 // ── Profile mock ──────────────────────────────
 document.querySelectorAll('.btn-ver-perfil').forEach(btn => {
