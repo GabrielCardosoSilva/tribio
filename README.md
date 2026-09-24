@@ -19,10 +19,10 @@ O foco da plataforma é entregar uma interface rica, responsiva e com uma experi
 - **Contato Rápido:** Entre em contato com o profissional diretamente pelo WhatsApp via modal interativo.
 
 ### 🔹 Para Prestadores (Autônomos)
-- **Painel de Controle:** Dashboard exclusivo para gerenciar seu perfil.
-- **Gestão de Serviços:** Cadastre seus serviços informando título, descrição, valor base e localização.
-- **Upload de Mídia:** Personalize o seu perfil com uma **Foto de Perfil** e gerencie as fotos do seu portfólio de serviços para impressionar os clientes.
-- **Visibilidade:** Assim que o perfil é configurado e o portfólio publicado, o prestador se torna visível na busca principal.
+- **Painel de Controle:** Dashboard exclusivo para gerenciar seu perfil (acesso restrito para prestadores).
+- **Gestão de Serviços e Preços:** Cadastre seus serviços e defina pacotes de preços (com dias e horários) diretamente pelo painel.
+- **Configurações do Portfólio:** Edite e monitore os dados do seu portfólio profissional (texto sobre, fotos da galeria, etc).
+- **Visibilidade Personalizada:** Controle com um botão se o seu portfólio fica público na busca principal ou não.
 
 ## 🛠️ Tecnologias Utilizadas
 

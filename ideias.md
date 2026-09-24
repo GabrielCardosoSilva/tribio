@@ -45,18 +45,6 @@ REGRAS ESSENCIAIS:
 
 vamos ter 3 tipos de contas a conta do usuario padrao que vai precisar de um serviço, do prestador que vai oferecer o serviço e do administrador que vai administrar a plataforma
 
-o usuario nao pode se cadastrar como prestador e nem como administrador
-
-o usuario so pode interagir no site se ele estiver logado
-
-o prestador precisa informar todos os dados para poder aparecer na plataforma
-
-vamos ter a tela inicial onde vai ser um resumo e que mostre o site visual e que encante o usuario e a sua ideia, depois do usuario logar ele vai ser pra tela onde acontece as coisas
-
-a pagina do prestador vai ser publica para qualquer um ver, mas so logado pra interagir
-
-vamos usar a API do whatzap para falar com o prestador
-
 o adm vai poder fazer tudo e vai ter um painel para cadastrar prestadores, categorias, etc...
 
 o adm vai ter paineis onde ve os prestadores cadastrados e vai poder aprovar ou reprovar o cadastro, ele tbm vai poder ver os usuarios cadastrados e vai poder aprovar ou reprovar o cadastro

@@ -32,12 +32,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = extractToken(request);
 
         if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
-            String email = tokenProvider.getEmailFromToken(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            try {
+                String email = tokenProvider.getEmailFromToken(token);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (Exception e) {
+                // Token válido mas usuário não encontrado (ex: conta deletada) — ignora e continua
+                SecurityContextHolder.clearContext();
+            }
         }
 
         filterChain.doFilter(request, response);

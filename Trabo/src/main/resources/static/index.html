@@ -20,7 +20,7 @@
   <nav class="navbar" id="navbar">
     <div class="nav-container">
       <a href="#" class="nav-logo" id="nav-logo">
-        <span class="logo-icon"></span>
+        <img src="/images/logo-trabio.png" alt="Trabio" class="nav-logo-img" />
         <span>Trabio</span>
       </a>
       <ul class="nav-links" id="nav-links">
@@ -29,22 +29,21 @@
         <li><a href="#destaques">Profissionais</a></li>
         <li><a href="#avaliacoes">Avaliações</a></li>
       </ul>
-      <div class="nav-actions" id="nav-actions-logged-out">
+      <div class="nav-actions">
         <a href="/login.html" class="btn-ghost" id="btn-login">Entrar</a>
         <a href="/cadastro.html" class="btn-primary" id="btn-cadastro">Cadastre-se</a>
-      </div>
-      <div class="nav-actions" id="nav-actions-logged-in" style="display: none; position: relative; margin-left: 10px;">
-        <button class="profile-btn" id="profile-dropdown-btn" aria-label="Menu de perfil">
-          <div class="profile-avatar" id="nav-profile-avatar">U</div>
-        </button>
-        <div class="profile-dropdown" id="profile-dropdown">
-          <a href="/painel.html#dados">Meus dados</a>
-          <a href="/painel.html#servicos" id="nav-link-servicos" style="display: none;">Meus serviços</a>
-          <a href="/painel.html#favoritos">Meus favoritos</a>
-          <a href="/painel.html#agendamentos">Meus agendamentos</a>
-          <a href="/painel.html#pagamentos">Meus pagamentos</a>
-          <hr>
-          <a href="#" id="btn-logout">Sair</a>
+        <div id="nav-actions-logged-in" style="display: none; position: relative;">
+          <button class="profile-btn" id="profile-dropdown-btn" aria-label="Menu de perfil">
+            <div class="profile-avatar" id="nav-profile-avatar">U</div>
+          </button>
+          <div class="profile-dropdown" id="profile-dropdown">
+            <a href="/buscar.html">Ver Serviços</a>
+            <a href="/painel.html#dados">Meus dados</a>
+            <a href="/painel.html#servicos" id="nav-link-servicos" style="display: none;">Meu portfólio</a>
+            <a href="/painel.html#favoritos">Meus favoritos</a>
+            <hr>
+            <a href="#" id="btn-logout">Sair</a>
+          </div>
         </div>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -421,7 +420,8 @@
     <div class="container footer-container">
       <div class="footer-brand">
         <a href="#" class="nav-logo">
-          <span class="logo-icon"></span>
+          <img src="/images/logo-trabio.png" alt="Trabio"
+            style="width:32px;height:32px;object-fit:contain;border-radius:8px;" />
           <span>Trabio</span>
         </a>
         <p>Conectando pessoas a profissionais autônomos de confiança em todo o Brasil.</p>

@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuarios")
@@ -42,6 +44,14 @@ public class Usuario {
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Prestador prestador;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "usuario_favoritos",
+        joinColumns = @JoinColumn(name = "usuario_id"),
+        inverseJoinColumns = @JoinColumn(name = "prestador_id")
+    )
+    private Set<Prestador> favoritos = new HashSet<>();
 
     // ── Constructors ──────────────────────────────────────────
     public Usuario() {}
@@ -119,4 +129,7 @@ public class Usuario {
 
     public Prestador getPrestador()                { return prestador; }
     public void      setPrestador(Prestador p)    { this.prestador = p; }
+
+    public Set<Prestador> getFavoritos()                 { return favoritos; }
+    public void           setFavoritos(Set<Prestador> f) { this.favoritos = f; }
 }

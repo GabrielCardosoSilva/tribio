@@ -3,65 +3,117 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trabio — Painel</title>
+  <title>Trabio — Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
   <style>
-    body { background-color: #F8FAF9; }
-    .panel-container { max-width: 1200px; margin: 100px auto 60px; padding: 20px; display: grid; grid-template-columns: 250px 1fr; gap: 32px; min-height: calc(100vh - 160px); }
+    body { background-color: #F5F7F8; margin: 0; padding: 0; display: flex; height: 100vh; overflow: hidden; font-family: 'Outfit', sans-serif; }
     
-    .panel-sidebar { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 4px 15px rgba(27,67,50,0.05); border: 1px solid #e1ede8; height: fit-content; }
-    .sidebar-user { text-align: center; margin-bottom: 32px; }
-    .sidebar-avatar { width: 80px; height: 80px; background: #D8F3DC; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #1B4332; font-weight: bold; margin: 0 auto 16px; position: relative; }
-    .sidebar-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-    .btn-edit-avatar { position: absolute; bottom: 0; right: 0; background: #2D6A4F; color: #fff; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .sidebar-user h3 { color: #1B4332; font-size: 1.2rem; margin-bottom: 4px; }
-    .sidebar-user p { color: #40916C; font-size: 0.9rem; }
-
-    .sidebar-nav { display: flex; flex-direction: column; gap: 8px; }
-    .sidebar-nav button { background: none; border: none; text-align: left; padding: 12px 16px; font-family: 'Outfit', sans-serif; font-size: 1rem; color: #4b5563; font-weight: 500; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-    .sidebar-nav button:hover { background: #f3f4f6; color: #1B4332; }
+    /* Layout */
+    .dashboard-layout { display: flex; width: 100vw; height: 100vh; }
+    
+    /* Sidebar */
+    .sidebar { width: 280px; background: #fff; border-right: 1px solid #E5E7EB; display: flex; flex-direction: column; padding: 24px 20px; box-sizing: border-box; }
+    .sidebar-logo { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: #1B4332; text-decoration: none; margin-bottom: 40px; }
+    .sidebar-logo span.icon { width: 32px; height: 32px; background: #2D6A4F; border-radius: 8px; display: inline-block; }
+    
+    .sidebar-menu-title { font-size: 0.75rem; color: #9CA3AF; font-weight: 600; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px; }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 4px; flex-grow: 1; }
+    .sidebar-nav button { background: none; border: none; text-align: left; padding: 12px 16px; font-family: 'Outfit', sans-serif; font-size: 1rem; color: #4B5563; font-weight: 500; border-radius: 12px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 12px; }
+    .sidebar-nav button:hover { background: #F3F4F6; color: #1B4332; }
     .sidebar-nav button.active { background: #E8F5E9; color: #2D6A4F; font-weight: 600; }
     .sidebar-nav button.pro-only { display: none; }
+    
+    .sidebar-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid #E5E7EB; }
+    .user-profile-sm { display: flex; align-items: center; gap: 12px; }
+    .user-avatar-sm { width: 40px; height: 40px; border-radius: 50%; background: #D8F3DC; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #1B4332; overflow: hidden; }
+    .user-avatar-sm img { width: 100%; height: 100%; object-fit: cover; }
+    .user-info-sm h4 { margin: 0; font-size: 0.95rem; color: #1B4332; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
+    .badge-role { display: inline-block; padding: 4px 8px; background: #2D6A4F; color: #fff; font-size: 0.7rem; font-weight: 700; border-radius: 6px; letter-spacing: 0.5px; margin-top: 4px; }
+    .badge-cliente { background: #6B7280; }
 
-    .panel-content { background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 4px 15px rgba(27,67,50,0.05); border: 1px solid #e1ede8; }
+    /* Main Content */
+    .main-wrapper { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
+    
+    .topbar { height: 80px; background: #fff; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; }
+    .search-bar { position: relative; width: 350px; }
+    .search-bar input { width: 100%; padding: 12px 16px 12px 40px; border-radius: 12px; border: 1px solid #E5E7EB; background: #F9FAFB; font-family: 'Outfit'; font-size: 0.95rem; outline: none; }
+    .search-bar input:focus { border-color: #52B788; background: #fff; }
+    .search-bar svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: #9CA3AF; }
+    
+    .topbar-actions { display: flex; align-items: center; gap: 20px; }
+    .btn-icon { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #E5E7EB; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #4B5563; transition: 0.2s; }
+    .btn-icon:hover { background: #F3F4F6; color: #1B4332; }
+
+    .main-content { padding: 40px; overflow-y: auto; height: calc(100vh - 80px); box-sizing: border-box; }
+    
     .tab-pane { display: none; }
     .tab-pane.active { display: block; animation: fadeIn 0.4s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .tab-header { margin-bottom: 24px; border-bottom: 1px solid #f0f0f0; padding-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
-    .tab-header h2 { color: #1B4332; font-size: 1.8rem; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .page-header h1 { font-size: 2rem; color: #1B4332; margin: 0; }
+    .page-header p { color: #6B7280; margin: 4px 0 0 0; }
     
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #40916C; }
-    .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #D8F3DC; border-radius: 8px; font-family: 'Outfit', sans-serif; font-size: 1rem; outline: none; }
-    .form-group input:focus, .form-group textarea:focus { border-color: #52B788; }
-    .btn-save { padding: 12px 24px; background: #2D6A4F; color: #fff; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
-    .btn-save:hover { background: #1B4332; }
+    .btn-primary { padding: 10px 20px; background: #2D6A4F; color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-family: 'Outfit'; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+    .btn-primary:hover { background: #1B4332; }
 
-    /* Serviços Tab */
-    .btn-new-service { padding: 10px 20px; background: #2D6A4F; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
-    .btn-new-service:hover { background: #1B4332; }
-    .services-list { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
-    .service-card { border: 1px solid #D8F3DC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-    .service-card-header { display: flex; justify-content: space-between; align-items: center; }
-    .service-card-header h3 { color: #1B4332; font-size: 1.3rem; }
-    .service-card-header .price { font-weight: 700; color: #2D6A4F; font-size: 1.1rem; }
-    .service-desc { color: #4b5563; font-size: 0.95rem; line-height: 1.5; }
-    .service-actions { display: flex; gap: 12px; margin-top: 8px; border-top: 1px solid #f0f0f0; padding-top: 16px; }
-    .btn-outline { padding: 8px 16px; border: 1px solid #2D6A4F; color: #2D6A4F; background: transparent; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+    /* Dashboard Grid (Mock Cards) */
+    .dashboard-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 24px; }
+    .stat-card { background: #fff; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #F3F4F6; }
+    .stat-card.green { background: #2D6A4F; color: #fff; border: none; }
+    .stat-card h3 { font-size: 1rem; color: #6B7280; margin: 0 0 12px 0; font-weight: 500; }
+    .stat-card.green h3 { color: #D8F3DC; }
+    .stat-card .value { font-size: 2.5rem; font-weight: 700; color: #1B4332; margin: 0; }
+    .stat-card.green .value { color: #fff; }
+    .stat-card .trend { font-size: 0.85rem; color: #52B788; margin-top: 12px; display: flex; align-items: center; gap: 4px; }
+    
+    .dashboard-bento { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+    .bento-card { background: #fff; border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #F3F4F6; }
+    .bento-title { font-size: 1.1rem; color: #1B4332; font-weight: 600; margin-bottom: 20px; }
+
+    /* Meus Dados Tab */
+    .dados-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 32px; }
+    .profile-edit-card { background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #F3F4F6; text-align: center; }
+    .avatar-lg { width: 150px; height: 150px; border-radius: 50%; background: #D8F3DC; margin: 0 auto 24px; border: 4px solid #fff; box-shadow: 0 8px 24px rgba(27,67,50,0.1); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: #1B4332; font-weight: bold; }
+    .avatar-lg img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { margin-bottom: 20px; text-align: left; }
+    .form-group.full { grid-column: span 2; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #4B5563; font-size: 0.9rem; }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 14px; border: 1px solid #E5E7EB; border-radius: 10px; font-family: 'Outfit'; font-size: 1rem; outline: none; background: #F9FAFB; transition: 0.3s; box-sizing: border-box; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: #52B788; background: #fff; box-shadow: 0 0 0 4px rgba(82, 183, 136, 0.1); }
+    
+    .btn-outline { padding: 10px 20px; background: transparent; color: #2D6A4F; border: 1px solid #2D6A4F; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.3s; }
     .btn-outline:hover { background: #E8F5E9; }
-    .btn-danger { padding: 8px 16px; border: 1px solid #EF4444; color: #EF4444; background: transparent; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-    .btn-danger:hover { background: #FEF2F2; }
 
-    .service-gallery { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; margin-top: 12px; }
-    .service-gallery img { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; }
-
-    /* Mock Tabs content */
-    .mock-content { text-align: center; padding: 60px 20px; color: #9CA3AF; }
-    .mock-content h3 { color: #6B7280; margin-bottom: 8px; }
+    /* Toggle Switch */
+    .toggle-container { display: flex; align-items: center; gap: 12px; margin-top: 24px; background: #F9FAFB; padding: 16px; border-radius: 12px; border: 1px solid #E5E7EB; }
+    .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #CBD5E1; transition: .4s; border-radius: 34px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background-color: #2D6A4F; }
+    input:checked + .slider:before { transform: translateX(24px); }
+    
+    /* Services List */
+    .services-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 24px; }
+    .service-card { background: #fff; border-radius: 16px; padding: 24px; border: 1px solid #E5E7EB; display: flex; flex-direction: column; gap: 12px; transition: 0.3s; }
+    .service-card:hover { border-color: #52B788; box-shadow: 0 4px 15px rgba(27,67,50,0.05); }
+    .service-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .service-header h3 { margin: 0; color: #1B4332; font-size: 1.2rem; }
+    .service-price { background: #E8F5E9; color: #2D6A4F; padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; }
+    .service-meta { color: #6B7280; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+    .service-actions { margin-top: auto; padding-top: 16px; border-top: 1px dashed #E5E7EB; display: flex; gap: 8px; }
+    .service-gallery { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-top: 8px; }
+    .service-gallery img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; }
+    
+    /* Logout Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-content { background: #fff; padding: 32px; border-radius: 20px; width: 400px; text-align: center; }
   </style>
 </head>
 <body>
@@ -72,160 +124,427 @@
     }
   </script>
 
-  <nav class="navbar scrolled" id="navbar">
-    <div class="nav-container">
-      <a href="/" class="nav-logo">
-        <span class="logo-icon"></span>
-        <span>Trabio</span>
-      </a>
-      
-      <div class="nav-actions" id="nav-actions-logged-in" style="position: relative;">
-        <button class="profile-btn" id="profile-dropdown-btn" aria-label="Menu de perfil">
-          <div class="profile-avatar" id="nav-profile-avatar">U</div>
-        </button>
-        <div class="profile-dropdown" id="profile-dropdown">
-          <a href="/painel.html#dados">Meus dados</a>
-          <a href="/painel.html#servicos" id="nav-link-servicos" style="display: none;">Meu portfólio</a>
-          <a href="/painel.html#favoritos">Meus favoritos</a>
-          <a href="/painel.html#agendamentos">Meus agendamentos</a>
-          <a href="/painel.html#pagamentos">Meus pagamentos</a>
-          <hr>
-          <a href="#" id="btn-logout">Sair</a>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <div class="panel-container">
+  <div class="dashboard-layout">
     
     <!-- Sidebar -->
-    <aside class="panel-sidebar">
-      <div class="sidebar-user">
-        <div class="sidebar-avatar" id="sidebar-avatar">
-          U
-          <button class="btn-edit-avatar" onclick="document.getElementById('input-avatar').click()">✏️</button>
-        </div>
-        <input type="file" id="input-avatar" style="display: none" accept="image/*" onchange="uploadAvatar(event)" />
-        <h3 id="sidebar-name">Nome do Usuário</h3>
-        <p id="sidebar-role">Papel</p>
+    <aside class="sidebar">
+      <a href="/" class="sidebar-logo">
+        <img src="/images/logo-trabio.png" alt="Trabio" style="width:36px; height:36px; border-radius: 10px; object-fit: contain;"> Trabio
+      </a>
+      
+      <div class="sidebar-menu-title">Menu Principal</div>
+      <nav class="sidebar-nav">
+        <button class="tab-btn active pro-only" data-target="dashboard">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          Dashboard
+        </button>
+        <button class="tab-btn" data-target="dados">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"></path></svg>
+          Meus Dados
+        </button>
+        <button class="tab-btn pro-only" data-target="servicos">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          Config. do Portfólio
+        </button>
+        <button class="tab-btn" data-target="favoritos">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+          Meus Favoritos
+        </button>
+        <button class="tab-btn" data-target="notificacoes">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+          Notificações
+        </button>
+        <button class="tab-btn" data-target="mensagens">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          Mensagens
+        </button>
+      </nav>
+
+      <div class="sidebar-nav" style="margin-top:20px; flex-grow: 0;">
+        <div class="sidebar-menu-title">Sistema</div>
+        <button onclick="logout()">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+          Sair da Conta
+        </button>
       </div>
 
-      <div class="sidebar-nav">
-        <button class="tab-btn active" data-target="dados">Meus Dados</button>
-        <button class="tab-btn pro-only" data-target="servicos">Meu Portfólio</button>
-        <button class="tab-btn" data-target="favoritos">Meus Favoritos</button>
-        <button class="tab-btn" data-target="agendamentos">Meus Agendamentos</button>
-        <button class="tab-btn" data-target="pagamentos">Meus Pagamentos</button>
+      <div class="sidebar-footer">
+        <div class="user-profile-sm">
+          <div class="user-avatar-sm" id="sidebar-avatar">U</div>
+          <div class="user-info-sm">
+            <h4 id="sidebar-name">Carregando...</h4>
+            <div class="badge-role" id="sidebar-role">CONTA CLIENTE</div>
+          </div>
+        </div>
       </div>
     </aside>
 
-    <!-- Content -->
-    <main class="panel-content">
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
       
-      <!-- ABA: Dados -->
-      <section id="dados" class="tab-pane active">
-        <div class="tab-header">
-          <h2>Meus Dados</h2>
+      <!-- Topbar -->
+      <header class="topbar">
+        <div style="color: #1B4332; font-size: 1.1rem; font-weight: 600;">Painel</div>
+        <div class="topbar-actions">
+          <div id="topbar-avatar" style="width:38px;height:38px;border-radius:50%;background:#D8F3DC;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#1B4332;font-size:1rem;overflow:hidden;cursor:pointer;border:2px solid #E5E7EB;" onclick="showTab('dados'); window.location.hash='dados';" title="Meu Perfil">U</div>
         </div>
+      </header>
+
+      <div class="main-content">
         
-        <div class="dados-container" style="display: flex; gap: 32px; flex-wrap: wrap;">
+        <!-- Tab: Dashboard -->
+        <section id="dashboard" class="tab-pane active">
+          <div class="page-header">
+            <div>
+              <h1>Dashboard</h1>
+              <p>Bem-vindo de volta! Planeje e acompanhe seus serviços com facilidade.</p>
+            </div>
+            <button class="btn-primary" onclick="document.querySelector('[data-target=\'servicos\']').click()">+ Novo Serviço</button>
+          </div>
+
+          <!-- Cards analíticos estáticos (Mock estilo Donezo) -->
+          <div class="dashboard-grid">
+            <div class="stat-card green">
+              <h3>Serviços Realizados</h3>
+              <p class="value">24</p>
+              <div class="trend" style="color: #D8F3DC">↑ Aumento neste mês</div>
+            </div>
+            <div class="stat-card">
+              <h3>Visualizações do Perfil</h3>
+              <p class="value">142</p>
+              <div class="trend">↑ +12 novos hoje</div>
+            </div>
+            <div class="stat-card">
+              <h3>Agendamentos Pendentes</h3>
+              <p class="value">3</p>
+              <div class="trend" style="color:#F59E0B">Aguardando resposta</div>
+            </div>
+            <div class="stat-card">
+              <h3>Avaliação Média</h3>
+              <p class="value" id="dash-rating">4.8</p>
+              <div class="trend">⭐ Estrelas</div>
+            </div>
+          </div>
+
+          <div class="dashboard-bento">
+            <div class="bento-card">
+              <div class="bento-title">Estatísticas de Visitas (Exemplo)</div>
+              <div style="height: 180px; display: flex; align-items: flex-end; gap: 10px;">
+                <div style="flex:1; background:#D8F3DC; height: 40%; border-radius: 8px 8px 0 0;"></div>
+                <div style="flex:1; background:#52B788; height: 70%; border-radius: 8px 8px 0 0;"></div>
+                <div style="flex:1; background:#2D6A4F; height: 100%; border-radius: 8px 8px 0 0;"></div>
+                <div style="flex:1; background:#D8F3DC; height: 50%; border-radius: 8px 8px 0 0;"></div>
+                <div style="flex:1; background:#40916C; height: 80%; border-radius: 8px 8px 0 0;"></div>
+              </div>
+            </div>
+            <div class="bento-card">
+              <div class="bento-title">Status da Conta</div>
+              <div style="text-align: center; margin-top: 20px;">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#F3F4F6" stroke-width="15"/>
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#2D6A4F" stroke-width="15" stroke-dasharray="180 250" stroke-linecap="round"/>
+                </svg>
+                <h2 style="color: #1B4332; margin: 10px 0 0 0;">Ativa</h2>
+                <p style="color: #6B7280; font-size: 0.85rem; margin:0;">Perfil Completo</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: Meus Dados -->
+        <section id="dados" class="tab-pane">
+          <div class="page-header">
+            <div>
+              <h1>Meus Dados</h1>
+              <p>Atualize suas informações pessoais e foto de perfil.</p>
+            </div>
+          </div>
           
-          <div class="profile-photo-card" style="background: #f8faf9; border: 1px solid #D8F3DC; padding: 24px; border-radius: 12px; text-align: center; flex: 1; min-width: 250px;">
-            <h3 style="color:#1B4332; margin-bottom: 16px;">Sua Foto</h3>
-            <div id="dados-avatar-preview" style="width: 120px; height: 120px; background: #D8F3DC; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #1B4332; font-weight: bold; margin: 0 auto 16px; overflow: hidden; border: 4px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">U</div>
-            <button class="btn-outline" onclick="document.getElementById('input-avatar').click()" style="width: 100%;">📸 Alterar Foto</button>
-            <p style="color: #6b7280; font-size: 0.85rem; margin-top: 12px;">Formatos aceitos: JPG, PNG, GIF</p>
+          <div class="dados-grid">
+            <div class="profile-edit-card">
+              <input type="file" id="input-avatar" style="display: none" accept="image/*" onchange="uploadAvatar(event)" />
+              <div class="avatar-lg" id="dados-avatar-preview">U</div>
+              <button class="btn-outline" style="width: 100%" onclick="document.getElementById('input-avatar').click()">📸 Alterar Foto</button>
+              <p style="color: #9CA3AF; font-size: 0.85rem; margin-top: 16px;">Formatos aceitos: JPG, PNG. Máx: 5MB.</p>
+            </div>
+            
+            <div class="bento-card">
+              <h3 style="margin-top: 0; color: #1B4332; border-bottom: 1px solid #E5E7EB; padding-bottom: 16px; margin-bottom: 24px;">Informações de Contato</h3>
+              <div class="form-grid">
+                <div class="form-group full">
+                  <label>Nome Completo</label>
+                  <input type="text" id="dados-nome" disabled />
+                </div>
+                <div class="form-group full">
+                  <label>E-mail de Acesso</label>
+                  <input type="email" id="dados-email" disabled />
+                </div>
+              </div>
+              <div style="background: #E8F5E9; padding: 16px; border-radius: 12px; border: 1px solid #D8F3DC; display: flex; gap: 16px; align-items: center; margin-top: 16px;">
+                <span style="font-size: 1.8rem;">🔒</span>
+                <p style="color: #2D6A4F; font-size: 0.95rem; margin: 0; line-height: 1.4;">Seu nome e e-mail estão protegidos. A edição de dados sensíveis e mudança de senha estarão disponíveis em breve.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: Meu Portfólio (Apenas Prestador) -->
+        <section id="servicos" class="tab-pane">
+          <div class="page-header">
+            <div>
+              <h1>Configurações do Portfólio</h1>
+              <p>Edite e monitore os dados do seu portfólio profissional.</p>
+            </div>
           </div>
 
-          <div style="flex: 2; min-width: 300px; background: #fff; border: 1px solid #e1ede8; padding: 24px; border-radius: 12px; box-shadow: 0 4px 15px rgba(27,67,50,0.02);">
-            <h3 style="color:#1B4332; margin-bottom: 16px;">Informações de Contato</h3>
-            <form id="form-dados">
-              <div class="form-group">
-                <label>Nome Completo</label>
-                <input type="text" id="dados-nome" disabled style="background: #f8faf9; color: #40916C; font-weight: 500;" />
+          <form id="portfolio-form" class="dashboard-bento" style="grid-template-columns: 1fr;">
+            
+            <!-- Informações Básicas -->
+            <div class="bento-card">
+              <h3 style="margin-top: 0; color: #1B4332; display: flex; align-items: center; gap: 8px;">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                Informações Básicas
+              </h3>
+              <div class="form-grid">
+                <div class="form-group full">
+                  <label>Texto "Sobre" *</label>
+                  <textarea id="port-sobre" required rows="4" placeholder="Descreva sua experiência, missão e por que o cliente deve escolher você..." style="resize: vertical;"></textarea>
+                </div>
               </div>
-              <div class="form-group">
-                <label>E-mail de Acesso</label>
-                <input type="email" id="dados-email" disabled style="background: #f8faf9; color: #40916C; font-weight: 500;" />
-              </div>
-              <div style="background: #E8F5E9; padding: 12px; border-radius: 8px; border: 1px solid #D8F3DC; margin-top: 24px; display: flex; gap: 12px; align-items: center;">
-                <span style="font-size: 1.5rem;">🔒</span>
-                <p style="color: #2D6A4F; font-size: 0.9rem; margin: 0;">Edição de dados sensíveis e telefone estará disponível em breve para maior segurança da sua conta.</p>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
+            </div>
 
-      <!-- ABA: Serviços -->
-      <section id="servicos" class="tab-pane">
-        <div class="tab-header">
-          <h2>Meu Portfólio</h2>
-          <button class="btn-new-service" onclick="toggleFormServico()">+ Novo Item</button>
-        </div>
+            <!-- Contato e Localização -->
+            <div class="bento-card">
+              <h3 style="margin-top: 0; color: #1B4332; display: flex; align-items: center; gap: 8px;">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                Contato e Localização
+              </h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Estado (UF) *</label>
+                  <select id="port-estado" required>
+                    <option value="">Selecione...</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Cidade Principal *</label>
+                  <input type="text" id="port-cidade" required placeholder="Ex: Campinas" />
+                </div>
+                <div class="form-group full">
+                  <label>Endereço Completo</label>
+                  <input type="text" id="port-endereco" placeholder="Ex: Av. Paulista, 1000 - São Paulo, SP" />
+                </div>
+                <div class="form-group">
+                  <label>WhatsApp *</label>
+                  <input type="text" id="port-whatsapp" required placeholder="(11) 99999-9999" />
+                </div>
+                <div class="form-group">
+                  <label>E-mail Profissional</label>
+                  <input type="email" id="port-email" placeholder="contato@empresa.com" />
+                </div>
+              </div>
+            </div>
 
-        <div id="form-novo-servico" style="display:none; background: #f8faf9; padding: 20px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #D8F3DC;">
-          <h3 style="color:#1B4332; margin-bottom: 16px;">Cadastrar no Portfólio</h3>
-          <form id="form-servico">
-            <div class="form-group">
-              <label>Título do Serviço</label>
-              <input type="text" id="serv-titulo" required placeholder="Ex: Instalação Elétrica" />
+            <!-- Serviços Oferecidos -->
+            <div class="bento-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin: 0; color: #1B4332; display: flex; align-items: center; gap: 8px;">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                  Serviços Oferecidos
+                </h3>
+                <button type="button" id="add-service-btn" class="btn-outline" style="padding: 6px 12px; font-size: 0.9rem;">+ Adicionar Serviço</button>
+              </div>
+              <div id="services-container" style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Linha Inicial de Serviço -->
+                <div class="dynamic-row" style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center;">
+                  <div class="form-group" style="margin: 0; flex: 1;">
+                    <label style="font-size: 0.85rem;">Nome do Serviço *</label>
+                    <input type="text" class="serv-titulo-input" required placeholder="Ex: Qualidade Premium" />
+                  </div>
+                  <div class="form-group" style="margin: 0; flex: 2;">
+                    <label style="font-size: 0.85rem;">Breve Descrição *</label>
+                    <input type="text" class="serv-desc-input" required placeholder="Ex: Utilizamos os melhores materiais..." />
+                  </div>
+                  <div style="width: 40px; height: 40px;"></div>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label>Descrição</label>
-              <textarea id="serv-desc" rows="3" required placeholder="Detalhe o que está incluso no serviço..."></textarea>
+
+            <!-- Tabela de Preços e Horários -->
+            <div class="bento-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin: 0; color: #1B4332; display: flex; align-items: center; gap: 8px;">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                  Tabela de Preços e Horários
+                </h3>
+                <button type="button" id="add-price-btn" class="btn-outline" style="padding: 6px 12px; font-size: 0.9rem;">+ Adicionar Linha</button>
+              </div>
+              <div id="pricing-container" style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Linha Inicial de Preço -->
+                <div class="dynamic-row" style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px; display: grid; grid-template-columns: 3fr 3fr 3fr 2fr 40px; gap: 16px; align-items: end;">
+                  <div class="form-group" style="margin: 0;">
+                    <label style="font-size: 0.85rem;">Item / Pacote *</label>
+                    <input type="text" class="preco-item-input" required placeholder="Ex: Pacote Básico" />
+                  </div>
+                  <div class="form-group" style="margin: 0;">
+                    <label style="font-size: 0.85rem;">Preço / Valor *</label>
+                    <input type="text" class="preco-valor-input" required placeholder="Ex: R$ 150,00" />
+                  </div>
+                  <div class="form-group" style="margin: 0;">
+                    <label style="font-size: 0.85rem;">Dias</label>
+                    <input type="text" class="preco-dias-input" placeholder="Ex: Seg a Sex" />
+                  </div>
+                  <div class="form-group" style="margin: 0;">
+                    <label style="font-size: 0.85rem;">Horário</label>
+                    <input type="text" class="preco-hora-input" placeholder="Ex: 08:00 - 18:00" />
+                  </div>
+                  <div></div>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label>Onde atende (Ex: Online, São Paulo - SP, Em domicílio)</label>
-              <input type="text" id="serv-onde" required placeholder="Ex: Em domicílio, São Paulo" />
+
+            <!-- Galeria -->
+            <div class="bento-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin: 0; color: #1B4332; display: flex; align-items: center; gap: 8px;">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  Galeria de Fotos (URLs)
+                </h3>
+                <button type="button" id="add-gallery-btn" class="btn-outline" style="padding: 6px 12px; font-size: 0.9rem;">+ Adicionar Foto</button>
+              </div>
+              <p style="color: #6B7280; font-size: 0.9rem; margin-top: -10px; margin-bottom: 16px;">Cole o link (URL) de imagens que você deseja exibir no portfólio.</p>
+              <div id="gallery-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <!-- Linha Inicial Galeria -->
+                <div class="dynamic-row" style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; padding: 12px; display: flex; gap: 12px; align-items: center;">
+                  <div class="form-group" style="margin: 0; flex: 1;">
+                    <input type="url" class="galeria-url-input" placeholder="https://exemplo.com/imagem.jpg" />
+                  </div>
+                  <div class="img-preview" style="width: 40px; height: 40px; background: #E5E7EB; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #9CA3AF; overflow: hidden; background-size: cover; background-position: center;">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  </div>
+                  <div style="width: 32px; height: 32px;"></div>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label>Preço Base (R$)</label>
-              <input type="number" id="serv-preco" step="0.01" required placeholder="0.00" />
+
+            <!-- Configurações de Visibilidade -->
+            <div class="bento-card" style="border: 2px solid #52B788; background: #F0FDF4;">
+              <h3 style="margin-top: 0; color: #1B4332; display: flex; align-items: center; gap: 8px;">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                Visibilidade do Portfólio
+              </h3>
+              <div class="toggle-container" style="justify-content: space-between; background: transparent; border: none; padding: 0;">
+                <div>
+                  <h4 style="margin: 0 0 4px 0; color: #1B4332;">Portfólio Público</h4>
+                  <p style="margin: 0; color: #6B7280; font-size: 0.9rem;">Ative para que os clientes encontrem seu perfil na busca e possam acessá-lo.</p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="port-visivel" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
             </div>
-            <div style="display: flex; gap: 12px; justify-content: flex-end;">
-              <button type="button" class="btn-outline" onclick="toggleFormServico()">Cancelar</button>
-              <button type="submit" class="btn-save">Salvar Serviço</button>
+
+            <div style="text-align: right; margin-top: 10px;">
+              <button type="submit" class="btn-primary" style="display: inline-flex; font-size: 1.1rem; padding: 14px 28px;">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"></path></svg>
+                Gerar / Salvar Portfólio
+              </button>
             </div>
           </form>
-        </div>
+        </section>
 
-        <div class="services-list" id="services-list">
-          <!-- Serviços listados aqui -->
-        </div>
-      </section>
+        <!-- Tab: Favoritos -->
+        <section id="favoritos" class="tab-pane">
+          <div class="page-header">
+            <div>
+              <h1>Meus Favoritos</h1>
+              <p>Profissionais que você salvou para contatar depois.</p>
+            </div>
+            <button class="btn-primary" onclick="window.location.href='/buscar.html'">+ Buscar Mais</button>
+          </div>
+          <div id="favoritos-container">
+            <!-- Carregado dinamicamente -->
+          </div>
+        </section>
 
-      <!-- ABA: Favoritos (Mock) -->
-      <section id="favoritos" class="tab-pane">
-        <div class="tab-header"><h2>Meus Favoritos</h2></div>
-        <div class="mock-content">
-          <h3>Nenhum favorito ainda</h3>
-          <p>Profissionais favoritados aparecerão aqui.</p>
-        </div>
-      </section>
+        <!-- Tab: Notificações -->
+        <section id="notificacoes" class="tab-pane">
+          <div class="page-header">
+            <div>
+              <h1>Notificações</h1>
+              <p>Fique por dentro das novidades e atualizações do seu perfil.</p>
+            </div>
+            <button class="btn-outline" onclick="marcarNotificacoesLidas()">Marcar todas como lidas</button>
+          </div>
+          <div class="bento-card" style="padding: 0; overflow: hidden;">
+            <div style="background: #2D6A4F; padding: 20px 28px; color: #fff; display: flex; align-items: center; gap: 12px;">
+              <svg width="24" height="24" fill="none" stroke="#fff" stroke-width="2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+              <h3 style="margin:0;">Central de Notificações</h3>
+            </div>
+            <div id="notificacoes-container" style="padding: 0;">
+              <div style="padding: 40px; text-align: center; color: #9CA3AF;">
+                <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 16px;"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                <h3 style="color: #6B7280;">Carregando notificações...</h3>
+              </div>
+            </div>
+          </div>
+        </section>
 
-      <!-- ABA: Agendamentos (Mock) -->
-      <section id="agendamentos" class="tab-pane">
-        <div class="tab-header"><h2>Meus Agendamentos</h2></div>
-        <div class="mock-content">
-          <h3>Sem agendamentos</h3>
-          <p>Acompanhe os serviços agendados nesta área.</p>
-        </div>
-      </section>
+        <!-- Tab: Mensagens -->
+        <section id="mensagens" class="tab-pane">
+          <div class="page-header">
+            <div>
+              <h1>Mensagens</h1>
+              <p>Converse com clientes e prestadores diretamente pela plataforma.</p>
+            </div>
+          </div>
+          <div class="bento-card" style="padding: 0; overflow: hidden;">
+            <div style="background: #2D6A4F; padding: 20px 28px; color: #fff; display: flex; align-items: center; gap: 12px;">
+              <svg width="24" height="24" fill="none" stroke="#fff" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              <h3 style="margin:0;">Caixa de Mensagens</h3>
+            </div>
+            <div style="padding: 40px; text-align: center; color: #9CA3AF;">
+              <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 16px;"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              <h3 style="color: #6B7280;">Nenhuma mensagem</h3>
+              <p>Quando clientes ou prestadores enviarem mensagens, elas aparecerão aqui.</p>
+            </div>
+          </div>
+        </section>
 
-      <!-- ABA: Pagamentos (Mock) -->
-      <section id="pagamentos" class="tab-pane">
-        <div class="tab-header"><h2>Meus Pagamentos</h2></div>
-        <div class="mock-content">
-          <h3>Histórico vazio</h3>
-          <p>O registro de transações ficará disponível aqui.</p>
-        </div>
-      </section>
-
+      </div>
     </main>
   </div>
 
   <script src="/js/main.js"></script>
+  <script src="/js/toast.js"></script>
   <script>
     const token = localStorage.getItem('trabio_token');
     
@@ -263,9 +582,188 @@
     document.addEventListener('DOMContentLoaded', async () => {
       const hash = window.location.hash.replace('#', '');
       if (hash) showTab(hash);
-      
+
       await carregarDadosUsuario();
+      carregarFavoritos();
+      carregarNotificacoes();
     });
+
+    // ── Favoritos ─────────────────────────────
+    function getFavoritosIds() {
+      try { return JSON.parse(localStorage.getItem('trabio_favoritos') || '[]'); } catch(_) { return []; }
+    }
+
+    async function carregarFavoritos() {
+      const container = document.getElementById('favoritos-container');
+      if (!container) return;
+
+      const ids = getFavoritosIds();
+
+      if (ids.length === 0) {
+        container.innerHTML = `
+          <div class="bento-card" style="text-align: center; padding: 60px;">
+            <div style="margin-bottom: 16px;">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </div>
+            <h3 style="color: #1B4332;">Nenhum favorito ainda</h3>
+            <p style="color: #6B7280; margin-top: 8px;">Vá para a busca e clique no coração dos profissionais que você gostou.</p>
+            <button class="btn-primary" style="margin: 20px auto 0;" onclick="window.location.href='/buscar.html'">Buscar Profissionais</button>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = `<div style="color:#6B7280; padding: 12px 0; font-size:0.9rem;">Carregando favoritos...</div>`;
+
+      try {
+        const res = await fetch('/api/prestadores', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Erro na API');
+
+        const todos     = await res.json();
+        const favoritos = todos.filter(p => ids.includes(String(p.id)));
+
+        if (favoritos.length === 0) {
+          container.innerHTML = `
+            <div class="bento-card" style="text-align: center; padding: 60px;">
+              <div style="margin-bottom: 16px;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </div>
+              <h3 style="color: #1B4332;">Seus favoritos foram removidos</h3>
+              <p style="color: #6B7280;">Os profissionais que você favoritou não estão mais disponíveis.</p>
+              <button class="btn-primary" style="margin: 20px auto 0;" onclick="window.location.href='/buscar.html'">Buscar Profissionais</button>
+            </div>`;
+          return;
+        }
+
+        const grid = document.createElement('div');
+        grid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;';
+
+        favoritos.forEach(p => {
+          const nome      = p.nome || 'Profissional';
+          const inicial   = nome.charAt(0).toUpperCase();
+          const cardColor = (p.servicos && p.servicos.length > 0 && p.servicos[0].corCard)
+            ? p.servicos[0].corCard : '#2D6A4F';
+          const zapLink   = p.whatsapp
+            ? `https://wa.me/55${p.whatsapp.replace(/\D/g,'')}`
+            : null;
+
+          const card = document.createElement('div');
+          card.className = 'service-card';
+          card.style.cursor = 'default';
+          card.innerHTML = `
+            <div style="height:5px; background:${cardColor}; border-radius:16px 16px 0 0; margin:-24px -24px 16px -24px;"></div>
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:12px;">
+              <div style="width:52px;height:52px;border-radius:50%;background:#D8F3DC;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:bold;color:#1B4332;overflow:hidden;flex-shrink:0;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                ${p.fotoPerfil ? `<img src="${p.fotoPerfil}" alt="${nome}" style="width:100%;height:100%;object-fit:cover;">` : inicial}
+              </div>
+              <div>
+                <h3 style="margin:0;color:#1B4332;font-size:1rem;">${nome}</h3>
+                <span style="font-size:0.8rem;color:#40916C;">📍 ${p.estado || ''} — ${p.cidade || 'Local não informado'}</span>
+              </div>
+            </div>
+            <p style="color:#6B7280;font-size:0.88rem;line-height:1.4;margin-bottom:14px;">${p.descricao ? p.descricao.substring(0, 100) + '...' : 'Sem descrição.'}</p>
+            <div class="service-actions">
+              ${zapLink
+                ? `<a href="${zapLink}" target="_blank" class="btn-primary" style="font-size:0.8rem;padding:7px 14px;gap:6px;text-decoration:none;">
+                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488A11.824 11.824 0 0123.94 11.9c-.003 6.556-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>
+                    WhatsApp
+                  </a>`
+                : ''}
+              <button class="btn-outline" style="font-size:0.8rem;padding:7px 14px;color:#EF4444;border-color:#EF4444; display:flex; align-items:center; gap:6px;"
+                onclick="desfavoritar(${JSON.stringify(p.id)}, this.closest('.service-card'))">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                Remover
+              </button>
+            </div>`;
+          grid.appendChild(card);
+        });
+
+        container.innerHTML = '';
+        container.appendChild(grid);
+
+      } catch(err) {
+        container.innerHTML = `<div class="bento-card" style="text-align:center;padding:40px;color:#6B7280;">Erro ao carregar favoritos. Tente novamente mais tarde.</div>`;
+      }
+    }
+
+    function desfavoritar(id, cardEl) {
+      const sid  = String(id);
+      const favs = getFavoritosIds().filter(x => x !== sid);
+      localStorage.setItem('trabio_favoritos', JSON.stringify(favs));
+      
+      // Also update backend
+      try {
+        fetch(`/api/prestadores/${id}/favoritar`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+      } catch (e) { console.error('Erro ao desfavoritar no backend', e); }
+
+      if (cardEl) {
+        cardEl.style.transition = 'opacity 0.3s';
+        cardEl.style.opacity    = '0';
+        setTimeout(() => { cardEl.remove(); carregarFavoritos(); }, 300);
+      }
+      showToastInfo('Profissional removido dos favoritos.');
+    }
+
+    // ── Notificações ─────────────────────────────
+    async function carregarNotificacoes() {
+      const container = document.getElementById('notificacoes-container');
+      if (!container) return;
+      try {
+        const res = await fetch('/api/notificacoes', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const notificacoes = await res.json();
+          if (notificacoes.length === 0) {
+            container.innerHTML = `
+              <div style="padding: 40px; text-align: center; color: #9CA3AF;">
+                <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 16px;"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                <h3 style="color: #6B7280;">Tudo tranquilo!</h3>
+                <p>Você não tem notificações no momento.</p>
+              </div>`;
+            return;
+          }
+
+          let html = '';
+          notificacoes.forEach(n => {
+            const date = new Date(n.createdAt).toLocaleString('pt-BR');
+            const icon = n.tipo === 'LIKE' ? '❤️' : (n.tipo === 'VIEW' ? '👁️' : '🔔');
+            const bgColor = n.lida ? '#fff' : '#F0FDF4';
+            const border = n.lida ? '1px solid #E5E7EB' : '1px solid #86EFAC';
+            
+            html += `
+              <div style="display: flex; gap: 16px; padding: 20px; border-bottom: 1px solid #E5E7EB; background: ${bgColor}; align-items: flex-start;">
+                <div style="font-size: 1.5rem; flex-shrink: 0;">${icon}</div>
+                <div>
+                  <p style="margin: 0; color: #1B4332; font-weight: ${n.lida ? '500' : '700'}; font-size: 1rem;">${n.mensagem}</p>
+                  <span style="color: #6B7280; font-size: 0.8rem; margin-top: 4px; display: block;">${date}</span>
+                </div>
+                ${!n.lida ? '<div style="width: 8px; height: 8px; background: #25D366; border-radius: 50%; margin-top: 6px; margin-left: auto;"></div>' : ''}
+              </div>`;
+          });
+          container.innerHTML = html;
+        }
+      } catch (err) {
+        container.innerHTML = `<div style="padding: 20px; color: #EF4444;">Erro ao carregar notificações.</div>`;
+      }
+    }
+
+    async function marcarNotificacoesLidas() {
+      try {
+        await fetch('/api/notificacoes/lidas', {
+          method: 'PUT',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        carregarNotificacoes();
+        showToastSuccess('Notificações marcadas como lidas.');
+      } catch (e) {
+        showToastError('Erro ao atualizar notificações.');
+      }
+    }
 
     let isPrestador = false;
 
@@ -277,49 +775,307 @@
         if (res.ok) {
           const u = await res.json();
           document.getElementById('sidebar-name').textContent = u.nome;
-          document.getElementById('sidebar-role').textContent = u.role === 'PRESTADOR' ? 'Profissional' : 'Cliente';
+          
+          const roleBadge = document.getElementById('sidebar-role');
+          if(u.role === 'PRESTADOR') {
+            roleBadge.textContent = 'CONTA PRESTADOR';
+            roleBadge.classList.remove('badge-cliente');
+          } else {
+            roleBadge.textContent = 'CONTA CLIENTE';
+            roleBadge.classList.add('badge-cliente');
+          }
+
           document.getElementById('dados-nome').value = u.nome;
           document.getElementById('dados-email').value = u.email;
           
           if (u.fotoPerfil) {
-            const imgHtml = `<img src="${u.fotoPerfil}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">`;
-            document.getElementById('sidebar-avatar').innerHTML = imgHtml + `<button class="btn-edit-avatar" onclick="document.getElementById('input-avatar').click()">✏️</button>`;
-            document.getElementById('nav-profile-avatar').innerHTML = imgHtml;
+            const imgHtml = `<img src="${u.fotoPerfil}" alt="Avatar">`;
+            document.getElementById('sidebar-avatar').innerHTML = imgHtml;
             document.getElementById('dados-avatar-preview').innerHTML = imgHtml;
+            const topbarAv = document.getElementById('topbar-avatar');
+            if (topbarAv) topbarAv.innerHTML = `<img src="${u.fotoPerfil}" alt="${u.nome}" style="width:100%;height:100%;object-fit:cover;">`;
           } else {
             const inicial = u.nome.charAt(0).toUpperCase();
-            document.getElementById('sidebar-avatar').innerHTML = inicial + `<button class="btn-edit-avatar" onclick="document.getElementById('input-avatar').click()">✏️</button>`;
-            document.getElementById('nav-profile-avatar').textContent = inicial;
+            document.getElementById('sidebar-avatar').textContent = inicial;
             document.getElementById('dados-avatar-preview').textContent = inicial;
+            const topbarAv = document.getElementById('topbar-avatar');
+            if (topbarAv) topbarAv.textContent = inicial;
           }
 
           if (u.role === 'PRESTADOR') {
             isPrestador = true;
-            document.querySelectorAll('.pro-only').forEach(el => el.style.display = 'block');
-            const navLink = document.getElementById('nav-link-servicos');
-            if (navLink) navLink.style.display = 'block';
-            carregarServicos();
+            document.querySelectorAll('.pro-only').forEach(el => el.style.display = 'flex'); // flex para manter o gap do botao
+            carregarPerfilPrestador();
+            if (!window.location.hash) showTab('dashboard');
+          } else {
+            document.querySelectorAll('.pro-only').forEach(el => el.style.display = 'none');
+            if (!window.location.hash || window.location.hash === '#dashboard' || window.location.hash === '#servicos') {
+              showTab('dados');
+              window.location.hash = 'dados';
+            }
           }
 
         } else if (res.status === 401) {
-          localStorage.removeItem('trabio_token');
-          window.location.href = '/login.html';
+          logout();
         } else {
-          showError("Erro ao carregar dados do usuário.");
+          showToastError("Erro ao carregar dados do usuário.");
         }
       } catch (err) {
-        console.error("Erro ao carregar dados", err);
-        showError("Erro de conexão ao carregar dados do usuário.");
+        showToastError("Erro de conexão ao carregar dados do usuário.");
       }
     }
 
-    function showError(msg) {
-      if (typeof showToastError === 'function') {
-        showToastError(msg);
-      } else {
-        window.location.href = '/erro.html?msg=' + encodeURIComponent(msg);
-      }
+    async function carregarPerfilPrestador() {
+        if (!isPrestador) return;
+        try {
+            const resMe = await fetch('/api/usuarios/me', { headers: { 'Authorization': `Bearer ${token}` } });
+            const me = await resMe.json();
+
+            const res = await fetch(`/api/prestadores?texto=${me.email}`);
+            if (res.ok) {
+                const prestadores = await res.json();
+                const meuPerfil = prestadores.find(p => p.email === me.email);
+                if (meuPerfil) {
+                    // Load dashboard top data
+                    document.getElementById('dash-rating').textContent = meuPerfil.mediaAvaliacoes > 0 ? meuPerfil.mediaAvaliacoes.toFixed(1) : 'Novo';
+                    
+                    // Load portfolio basic fields
+                    if (meuPerfil.descricao) document.getElementById('port-sobre').value = meuPerfil.descricao;
+                    if (meuPerfil.estado) document.getElementById('port-estado').value = meuPerfil.estado;
+                    if (meuPerfil.cidade) document.getElementById('port-cidade').value = meuPerfil.cidade;
+                    if (meuPerfil.enderecoCompleto) document.getElementById('port-endereco').value = meuPerfil.enderecoCompleto;
+                    if (meuPerfil.whatsapp) document.getElementById('port-whatsapp').value = meuPerfil.whatsapp;
+                    if (meuPerfil.emailContato) document.getElementById('port-email').value = meuPerfil.emailContato;
+                    
+                    document.getElementById('port-visivel').checked = meuPerfil.visivel !== false;
+                    
+                    // Load servicos
+                    if (meuPerfil.servicos && meuPerfil.servicos.length > 0) {
+                        servicesContainer.innerHTML = ''; // Clear default
+                        meuPerfil.servicos.forEach(s => {
+                            const row = document.createElement('div');
+                            row.className = 'dynamic-row';
+                            row.style = 'background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; margin-top: 10px;';
+                            row.innerHTML = `
+                                <div class="form-group" style="margin: 0; flex: 1;">
+                                    <label style="font-size: 0.85rem;">Nome do Serviço *</label>
+                                    <input type="text" class="serv-titulo-input" required value="${s.titulo}" />
+                                </div>
+                                <div class="form-group" style="margin: 0; flex: 2;">
+                                    <label style="font-size: 0.85rem;">Breve Descrição *</label>
+                                    <input type="text" class="serv-desc-input" required value="${s.descricao || ''}" />
+                                </div>
+                                <button type="button" class="remove-btn" style="width: 40px; height: 40px; background: #FEF2F2; color: #EF4444; border: 1px solid #FCA5A5; border-radius: 8px; cursor: pointer; align-self: end;">X</button>
+                            `;
+                            servicesContainer.appendChild(row);
+                        });
+                    }
+
+                    // Load pacotes
+                    if (meuPerfil.pacotesPrecos && meuPerfil.pacotesPrecos.length > 0) {
+                        pricingContainer.innerHTML = ''; // Clear default
+                        meuPerfil.pacotesPrecos.forEach(p => {
+                            const row = document.createElement('div');
+                            row.className = 'dynamic-row';
+                            row.style = 'background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px; display: grid; grid-template-columns: 3fr 3fr 3fr 2fr 40px; gap: 16px; align-items: end; margin-top: 10px;';
+                            row.innerHTML = `
+                                <div class="form-group" style="margin: 0;">
+                                    <label style="font-size: 0.85rem;">Item / Pacote *</label>
+                                    <input type="text" class="preco-item-input" required value="${p.pacote}" />
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label style="font-size: 0.85rem;">Preço / Valor *</label>
+                                    <input type="text" class="preco-valor-input" required value="${p.preco}" />
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label style="font-size: 0.85rem;">Dias</label>
+                                    <input type="text" class="preco-dias-input" value="${p.dias || ''}" />
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label style="font-size: 0.85rem;">Horário</label>
+                                    <input type="text" class="preco-hora-input" value="${p.horario || ''}" />
+                                </div>
+                                <button type="button" class="remove-btn" style="width: 40px; height: 40px; background: #FEF2F2; color: #EF4444; border: 1px solid #FCA5A5; border-radius: 8px; cursor: pointer;">X</button>
+                            `;
+                            pricingContainer.appendChild(row);
+                        });
+                    }
+
+                    // Load galeria
+                    if (meuPerfil.galeria && meuPerfil.galeria.length > 0) {
+                        galleryContainer.innerHTML = ''; // Clear default
+                        meuPerfil.galeria.forEach(url => {
+                            const row = document.createElement('div');
+                            row.className = 'dynamic-row';
+                            row.style = 'background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; padding: 12px; display: flex; gap: 12px; align-items: center; margin-top: 10px;';
+                            row.innerHTML = `
+                                <div class="form-group" style="margin: 0; flex: 1;">
+                                    <input type="url" class="galeria-url-input" value="${url}" />
+                                </div>
+                                <div class="img-preview" style="width: 40px; height: 40px; background: #E5E7EB; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #9CA3AF; overflow: hidden; background-size: cover; background-position: center; background-image: url('${url}');">
+                                </div>
+                                <button type="button" class="remove-btn" style="width: 32px; height: 32px; background: #FEF2F2; color: #EF4444; border: 1px solid #FCA5A5; border-radius: 8px; cursor: pointer; display:flex; align-items:center; justify-content:center;">X</button>
+                            `;
+                            galleryContainer.appendChild(row);
+                            bindImagePreview(row.querySelector('.galeria-url-input'), row.querySelector('.img-preview'));
+                        });
+                    }
+                }
+            }
+        } catch (e) { console.error("Erro ao carregar perfil de prestador", e); }
     }
+
+    // --- Dynamic Portfolio Logic ---
+    const servicesContainer = document.getElementById('services-container');
+    const addServiceBtn = document.getElementById('add-service-btn');
+    addServiceBtn.addEventListener('click', () => {
+        const row = document.createElement('div');
+        row.className = 'dynamic-row';
+        row.style = 'background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center; margin-top: 10px;';
+        row.innerHTML = `
+            <div class="form-group" style="margin: 0; flex: 1;">
+                <label style="font-size: 0.85rem;">Nome do Serviço *</label>
+                <input type="text" class="serv-titulo-input" required placeholder="Novo Serviço" />
+            </div>
+            <div class="form-group" style="margin: 0; flex: 2;">
+                <label style="font-size: 0.85rem;">Breve Descrição *</label>
+                <input type="text" class="serv-desc-input" required placeholder="Descrição detalhada..." />
+            </div>
+            <button type="button" class="remove-btn" style="width: 40px; height: 40px; background: #FEF2F2; color: #EF4444; border: 1px solid #FCA5A5; border-radius: 8px; cursor: pointer; align-self: end;">X</button>
+        `;
+        servicesContainer.appendChild(row);
+    });
+
+    const pricingContainer = document.getElementById('pricing-container');
+    const addPriceBtn = document.getElementById('add-price-btn');
+    addPriceBtn.addEventListener('click', () => {
+        const row = document.createElement('div');
+        row.className = 'dynamic-row';
+        row.style = 'background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px; display: grid; grid-template-columns: 3fr 3fr 3fr 2fr 40px; gap: 16px; align-items: end; margin-top: 10px;';
+        row.innerHTML = `
+            <div class="form-group" style="margin: 0;">
+                <label style="font-size: 0.85rem;">Item / Pacote *</label>
+                <input type="text" class="preco-item-input" required placeholder="Novo Item" />
+            </div>
+            <div class="form-group" style="margin: 0;">
+                <label style="font-size: 0.85rem;">Preço / Valor *</label>
+                <input type="text" class="preco-valor-input" required placeholder="R$ 0,00" />
+            </div>
+            <div class="form-group" style="margin: 0;">
+                <label style="font-size: 0.85rem;">Dias</label>
+                <input type="text" class="preco-dias-input" placeholder="Seg a Sex" />
+            </div>
+            <div class="form-group" style="margin: 0;">
+                <label style="font-size: 0.85rem;">Horário</label>
+                <input type="text" class="preco-hora-input" placeholder="00:00 - 00:00" />
+            </div>
+            <button type="button" class="remove-btn" style="width: 40px; height: 40px; background: #FEF2F2; color: #EF4444; border: 1px solid #FCA5A5; border-radius: 8px; cursor: pointer;">X</button>
+        `;
+        pricingContainer.appendChild(row);
+    });
+
+    const galleryContainer = document.getElementById('gallery-container');
+    const addGalleryBtn = document.getElementById('add-gallery-btn');
+    
+    function bindImagePreview(input, previewDiv) {
+        input.addEventListener('input', (e) => {
+            const url = e.target.value;
+            if(url.match(/\.(jpeg|jpg|gif|png|webp)$/i) || url.startsWith('http')) {
+                previewDiv.innerHTML = '';
+                previewDiv.style.backgroundImage = `url('${url}')`;
+            } else {
+                previewDiv.style.backgroundImage = 'none';
+                previewDiv.innerHTML = '<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>';
+            }
+        });
+    }
+
+    const initialGalleryInput = document.querySelector('.galeria-url-input');
+    const initialGalleryPreview = document.querySelector('.img-preview');
+    if(initialGalleryInput && initialGalleryPreview) bindImagePreview(initialGalleryInput, initialGalleryPreview);
+
+    addGalleryBtn.addEventListener('click', () => {
+        const row = document.createElement('div');
+        row.className = 'dynamic-row';
+        row.style = 'background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; padding: 12px; display: flex; gap: 12px; align-items: center; margin-top: 10px;';
+        row.innerHTML = `
+            <div class="form-group" style="margin: 0; flex: 1;">
+                <input type="url" class="galeria-url-input" placeholder="https://exemplo.com/imagem.jpg" />
+            </div>
+            <div class="img-preview" style="width: 40px; height: 40px; background: #E5E7EB; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #9CA3AF; overflow: hidden; background-size: cover; background-position: center;">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </div>
+            <button type="button" class="remove-btn" style="width: 32px; height: 32px; background: #FEF2F2; color: #EF4444; border: 1px solid #FCA5A5; border-radius: 8px; cursor: pointer; display:flex; align-items:center; justify-content:center;">X</button>
+        `;
+        galleryContainer.appendChild(row);
+        bindImagePreview(row.querySelector('.galeria-url-input'), row.querySelector('.img-preview'));
+    });
+
+    document.addEventListener('click', (e) => {
+        if(e.target.closest('.remove-btn')) {
+            const btn = e.target.closest('.remove-btn');
+            const row = btn.closest('.dynamic-row');
+            row.remove();
+        }
+    });
+
+    document.getElementById('portfolio-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const servicos = [];
+        document.querySelectorAll('#services-container .dynamic-row').forEach(row => {
+            const t = row.querySelector('.serv-titulo-input').value;
+            const d = row.querySelector('.serv-desc-input').value;
+            if(t) servicos.push({ titulo: t, descricao: d });
+        });
+
+        const pacotes = [];
+        document.querySelectorAll('#pricing-container .dynamic-row').forEach(row => {
+            const item = row.querySelector('.preco-item-input').value;
+            const val = row.querySelector('.preco-valor-input').value;
+            const dias = row.querySelector('.preco-dias-input').value;
+            const hora = row.querySelector('.preco-hora-input').value;
+            if(item && val) pacotes.push({ pacote: item, preco: val, dias: dias, horario: hora });
+        });
+
+        const galeria = [];
+        document.querySelectorAll('#gallery-container .galeria-url-input').forEach(input => {
+            if(input.value) galeria.push(input.value);
+        });
+
+        const payload = {
+            descricao: document.getElementById('port-sobre').value,
+            estado: document.getElementById('port-estado').value,
+            cidade: document.getElementById('port-cidade').value,
+            enderecoCompleto: document.getElementById('port-endereco').value,
+            whatsapp: document.getElementById('port-whatsapp').value,
+            emailContato: document.getElementById('port-email').value,
+            servicos: servicos,
+            pacotes: pacotes,
+            galeria: galeria,
+            visivel: document.getElementById('port-visivel').checked
+        };
+
+        try {
+            const res = await fetch('/api/prestadores/me/portfolio', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                showToastSuccess("Portfólio salvo com sucesso!");
+                carregarPerfilPrestador();
+            } else {
+                showToastError("Erro ao salvar portfólio.");
+            }
+        } catch (err) {
+            showToastError("Erro de conexão ao salvar portfólio.");
+        }
+    });
 
     async function uploadAvatar(e) {
       const file = e.target.files[0];
@@ -335,181 +1091,20 @@
           body: formData
         });
         if (res.ok) {
-          carregarDadosUsuario(); // Recarrega imagem
+          carregarDadosUsuario();
         } else {
-          showError('Erro ao enviar foto.');
+          showToastError('Erro ao enviar foto.');
         }
       } catch (err) {
-        showError('Erro de conexão ao enviar foto.');
+        showToastError('Erro de conexão ao enviar foto.');
       }
     }
 
-    // --- Lógica de Serviços ---
-    let servicosGlobais = [];
-    let servicoEmEdicaoId = null;
-
-    function toggleFormServico(isEdit = false) {
-      const form = document.getElementById('form-novo-servico');
-      if (form.style.display === 'block' && !isEdit) {
-        form.style.display = 'none';
-        servicoEmEdicaoId = null;
-        document.getElementById('form-servico').reset();
-      } else {
-        form.style.display = 'block';
-      }
-    }
-
-    function editarServico(id) {
-      const s = servicosGlobais.find(x => x.id === id);
-      if (!s) return;
-      servicoEmEdicaoId = id;
-      document.getElementById('serv-titulo').value = s.titulo;
-      document.getElementById('serv-desc').value = s.descricao;
-      document.getElementById('serv-preco').value = s.preco;
-      document.getElementById('serv-onde').value = s.ondeAtende || '';
-      toggleFormServico(true);
-      window.location.hash = "servicos";
-    }
-
-    document.getElementById('form-servico').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const payload = {
-        titulo: document.getElementById('serv-titulo').value,
-        descricao: document.getElementById('serv-desc').value,
-        preco: parseFloat(document.getElementById('serv-preco').value),
-        ondeAtende: document.getElementById('serv-onde').value
-      };
-
-      const url = servicoEmEdicaoId ? `/api/servicos/${servicoEmEdicaoId}` : '/api/servicos';
-      const method = servicoEmEdicaoId ? 'PUT' : 'POST';
-
-      try {
-        const res = await fetch(url, {
-          method: method,
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        });
-        if (res.ok) {
-          servicoEmEdicaoId = null;
-          toggleFormServico();
-          carregarServicos();
-        } else {
-          let errorMsg = 'Erro ao salvar serviço.';
-          try {
-            const errorObj = await res.json();
-            errorMsg = errorObj.message || errorObj.error || errorMsg;
-          } catch (e) {
-            errorMsg = await res.text() || errorMsg;
-          }
-          showError(errorMsg);
-        }
-      } catch (err) {
-        console.error(err);
-        showError('Erro de conexão ao salvar serviço.');
-      }
-    });
-
-    async function carregarServicos() {
-      if (!isPrestador) return;
-      try {
-        const res = await fetch('/api/servicos/meus', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (res.ok) {
-          servicosGlobais = await res.json();
-          const list = document.getElementById('services-list');
-          list.innerHTML = '';
-
-          if (servicosGlobais.length === 0) {
-            list.innerHTML = `<p style="color:#6b7280; text-align:center; padding: 20px;">Você ainda não possui serviços cadastrados.</p>`;
-            return;
-          }
-
-          servicosGlobais.forEach(s => {
-            const card = document.createElement('div');
-            card.className = 'service-card';
-            
-            const fotosHtml = s.fotos && s.fotos.length > 0 
-              ? `<div class="service-gallery">${s.fotos.map(f => `<img src="${f}">`).join('')}</div>`
-              : `<p style="font-size:0.85rem; color:#9ca3af; margin-top:8px;">Sem fotos.</p>`;
-
-            card.innerHTML = `
-              <div class="service-card-header">
-                <h3>${s.titulo}</h3>
-                <span class="price">R$ ${s.preco.toFixed(2)}</span>
-              </div>
-              <p style="color:#40916c; font-size: 0.9rem; margin-top: 4px;">📍 ${s.ondeAtende || 'Local não informado'}</p>
-              <p class="service-desc">${s.descricao}</p>
-              ${fotosHtml}
-              <div class="service-actions">
-                <input type="file" id="foto-servico-${s.id}" style="display:none" accept="image/*" onchange="uploadFotoServico(event, ${s.id})">
-                <button class="btn-outline" onclick="document.getElementById('foto-servico-${s.id}').click()">📷 Foto</button>
-                <button class="btn-outline" onclick="editarServico(${s.id})">✏️ Editar</button>
-                <button class="btn-danger" onclick="excluirServico(${s.id})">🗑️ Excluir</button>
-              </div>
-            `;
-            list.appendChild(card);
-          });
-        } else {
-          showError('Erro ao carregar serviços.');
-        }
-      } catch (err) {
-        console.error(err);
-        showError('Erro de conexão ao carregar serviços.');
-      }
-    }
-
-    async function excluirServico(id) {
-      if (!confirm("Tem certeza que deseja excluir este serviço?")) return;
-      try {
-        const res = await fetch(`/api/servicos/${id}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (res.ok) {
-          carregarServicos();
-        } else {
-          let errorMsg = 'Erro ao excluir serviço.';
-          try {
-            const errorObj = await res.json();
-            errorMsg = errorObj.message || errorObj.error || errorMsg;
-          } catch (e) {
-            errorMsg = await res.text() || errorMsg;
-          }
-          showError(errorMsg);
-        }
-      } catch (err) {
-        console.error(err);
-        showError('Erro de conexão ao tentar excluir serviço.');
-      }
-    }
-
-    async function uploadFotoServico(e, id) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      try {
-        const res = await fetch(`/api/servicos/${id}/fotos`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}` },
-          body: formData
-        });
-        if (res.ok) {
-          carregarServicos();
-        } else {
-          showError('Erro ao enviar foto para o serviço.');
-        }
-      } catch (err) {
-        showError('Erro de conexão ao enviar foto.');
-      }
+    function logout() {
+      localStorage.removeItem('trabio_token');
+      localStorage.removeItem('trabio_role');
+      window.location.href = '/login.html';
     }
   </script>
-  <script src="/js/toast.js"></script>
 </body>
 </html>

@@ -7,11 +7,5 @@ import java.math.BigDecimal;
 public record ServicoRequest(
         @NotBlank(message = "Título é obrigatório")
         String titulo,
-        
-        String descricao,
-        
-        String ondeAtende,
-        
-        @NotNull(message = "Preço é obrigatório")
-        BigDecimal preco
+        String descricao
 ) {}

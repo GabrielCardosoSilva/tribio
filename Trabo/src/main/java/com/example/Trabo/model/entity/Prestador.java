@@ -37,15 +37,27 @@ public class Prestador {
 
     private String bairro;
 
+    private String enderecoCompleto;
+
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
     private String telefone;
 
     private String whatsapp;
+    
+    private String emailContato;
+
+    @ElementCollection
+    @CollectionTable(name = "prestador_galeria", joinColumns = @JoinColumn(name = "prestador_id"))
+    @Column(name = "foto_url")
+    private List<String> galeria = new ArrayList<>();
 
     @Column(nullable = false)
     private boolean aprovado = false;
+    
+    @Column(nullable = false)
+    private boolean visivel = true;
 
     @Column(updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -58,6 +70,9 @@ public class Prestador {
 
     @OneToMany(mappedBy = "prestador", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Servico> servicos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "prestador", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PacotePreco> pacotesPrecos = new ArrayList<>();
 
     // ── Constructors ──────────────────────────────
     public Prestador() {}
@@ -123,6 +138,9 @@ public class Prestador {
     public String getBairro()                        { return bairro; }
     public void   setBairro(String bairro)           { this.bairro = bairro; }
 
+    public String getEnderecoCompleto() { return enderecoCompleto; }
+    public void setEnderecoCompleto(String enderecoCompleto) { this.enderecoCompleto = enderecoCompleto; }
+
     public String getDescricao()                     { return descricao; }
     public void   setDescricao(String descricao)     { this.descricao = descricao; }
 
@@ -135,6 +153,9 @@ public class Prestador {
     public boolean isAprovado()                      { return aprovado; }
     public void    setAprovado(boolean aprovado)     { this.aprovado = aprovado; }
 
+    public boolean isVisivel()                       { return visivel; }
+    public void    setVisivel(boolean visivel)       { this.visivel = visivel; }
+
     public LocalDateTime getCreatedAt()                  { return createdAt; }
     public void          setCreatedAt(LocalDateTime t)   { this.createdAt = t; }
 
@@ -146,4 +167,13 @@ public class Prestador {
 
     public List<Servico> getServicos() { return servicos; }
     public void setServicos(List<Servico> servicos) { this.servicos = servicos; }
+
+    public String getEmailContato() { return emailContato; }
+    public void setEmailContato(String emailContato) { this.emailContato = emailContato; }
+
+    public List<String> getGaleria() { return galeria; }
+    public void setGaleria(List<String> galeria) { this.galeria = galeria; }
+
+    public List<PacotePreco> getPacotesPrecos() { return pacotesPrecos; }
+    public void setPacotesPrecos(List<PacotePreco> pacotesPrecos) { this.pacotesPrecos = pacotesPrecos; }
 }

@@ -9,122 +9,313 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
   <style>
-    body { background-color: #F8FAF9; }
-    .search-page { padding: 120px 20px 60px; max-width: 1200px; margin: 0 auto; min-height: calc(100vh - 100px); }
-    .search-header { text-align: center; margin-bottom: 40px; }
-    .search-header h1 { color: #1B4332; font-size: 2.5rem; margin-bottom: 16px; font-weight: 700; }
-    
-    .search-filters { display: flex; gap: 16px; background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 40px; flex-wrap: wrap; }
-    .filter-group { flex: 1; min-width: 200px; }
-    .filter-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #40916C; }
-    .filter-group input, .filter-group select { width: 100%; padding: 12px; border: 1px solid #D8F3DC; border-radius: 8px; font-family: 'Outfit', sans-serif; font-size: 1rem; outline: none; }
-    .filter-group input:focus, .filter-group select:focus { border-color: #52B788; }
-    .btn-filter { padding: 12px 32px; background: #2D6A4F; color: #fff; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; align-self: flex-end; transition: background 0.3s; }
-    .btn-filter:hover { background: #1B4332; }
+    body { background-color: #F5F7F8; margin: 0; }
 
-    .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
-    .empty-state { text-align: center; grid-column: 1 / -1; padding: 60px 20px; color: #74A57F; }
-    
-    /* Novo estilo de card */
+    /* ── Hero ─────────────────────────────── */
+    .search-hero {
+      position: relative; padding: 0;
+      min-height: 340px; display: flex; align-items: center;
+      justify-content: center; overflow: hidden;
+    }
+    .search-hero-bg {
+      position: absolute; inset: 0;
+      background: url('/images/search-hero.jpg') center/cover no-repeat;
+    }
+    .search-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(27,67,50,0.93) 0%, rgba(45,106,79,0.86) 50%, rgba(64,145,108,0.76) 100%);
+    }
+    .search-hero-content {
+      position: relative; z-index: 2; text-align: center;
+      padding: 100px 24px 60px; width: 100%; max-width: 820px; margin: 0 auto;
+    }
+    .search-hero-logo {
+      width: 68px; height: 68px; border-radius: 18px;
+      margin: 0 auto 20px; object-fit: contain;
+      /* Sempre branca no hero */
+      filter: brightness(0) invert(1) drop-shadow(0 4px 12px rgba(0,0,0,0.25));
+      transition: filter 0.4s cubic-bezier(.4,0,.2,1);
+    }
+    .navbar.scrolled ~ .search-hero .search-hero-content .search-hero-logo {
+      filter: none;
+    }
+    .search-hero-content h1 {
+      font-size: 2.4rem; font-weight: 800; color: #fff; margin: 0 0 12px 0;
+    }
+    .search-hero-content p {
+      color: rgba(255,255,255,0.8); font-size: 1.1rem; margin: 0 0 32px 0;
+    }
+
+    /* ── Search Form ──────────────────────── */
+    .search-form-hero {
+      display: flex; gap: 0; background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(20px); border-radius: 20px; overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.22); max-width: 760px; margin: 0 auto;
+      /* Efeito de transição ao scrollar */
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    /* A barra de busca fica destacada quando a navbar scrollou */
+    .navbar.scrolled + .search-hero .search-form-hero {
+      box-shadow: 0 12px 48px rgba(27,67,50,0.25);
+    }
+    .sf-field {
+      flex: 1; padding: 0 18px;
+      display: flex; align-items: center; gap: 10px;
+      border-right: 1px solid #E5E7EB;
+    }
+    .sf-field:last-of-type { border-right: none; }
+    .sf-field svg { flex-shrink: 0; width: 18px; height: 18px; color: #40916C; }
+    .sf-field input, .sf-field select {
+      border: none; outline: none; background: transparent;
+      font-family: 'Outfit'; font-size: 0.95rem; color: #374151;
+      width: 100%; padding: 17px 0;
+    }
+    .sf-field select option { color: #374151; }
+    .sf-btn {
+      padding: 14px 28px; background: #2D6A4F; color: #fff;
+      font-weight: 700; font-size: 0.95rem; border: none; cursor: pointer;
+      margin: 6px; border-radius: 14px; transition: 0.3s; white-space: nowrap;
+      font-family: 'Outfit';
+    }
+    .sf-btn:hover { background: #1B4332; }
+
+    /* ── Tags ─────────────────────────────── */
+    .search-tags {
+      display: flex; gap: 10px; justify-content: center;
+      margin-top: 20px; flex-wrap: wrap;
+    }
+    .search-tag {
+      padding: 6px 16px; background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3); color: #fff;
+      border-radius: 999px; font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; transition: 0.3s; backdrop-filter: blur(8px);
+    }
+    .search-tag:hover { background: rgba(255,255,255,0.28); transform: translateY(-2px); }
+
+    /* ── Results ──────────────────────────── */
+    .results-section {
+      max-width: 1200px; margin: -40px auto 60px;
+      padding: 0 24px; position: relative; z-index: 3;
+    }
+    .results-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 24px; background: #fff; padding: 20px 28px;
+      border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      border: 1px solid #F3F4F6;
+    }
+    .results-header h2 { font-size: 1.3rem; color: #1B4332; margin: 0; }
+    .results-count { color: #6B7280; font-size: 0.9rem; }
+
+    .results-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+    }
+    .empty-state {
+      text-align: center; grid-column: 1 / -1;
+      padding: 80px 20px; color: #6B7280;
+      background: #fff; border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    }
+    .empty-state h2 { color: #1B4332; margin-bottom: 8px; }
+
+    /* ── Pro Card ─────────────────────────── */
     .pro-card-new {
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 4px 15px rgba(27, 67, 50, 0.08);
-      border: 1px solid #e1ede8;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
+      background: #fff; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #F3F4F6;
+      transition: all 0.3s ease; display: flex; flex-direction: column;
+      position: relative; cursor: pointer;
     }
     .pro-card-new:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(27, 67, 50, 0.15);
-      border-color: #74c69d;
+      transform: translateY(-6px); box-shadow: 0 12px 30px rgba(27,67,50,0.12);
+      border-color: #52B788;
     }
-    .pro-card-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
+    .pro-card-banner { height: 6px; width: 100%; }
+    .pro-card-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+    .pro-card-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+
     .pro-avatar {
-      width: 60px; height: 60px;
-      background: #D8F3DC;
-      border-radius: 50%;
+      width: 56px; height: 56px; background: #D8F3DC; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; font-weight: bold; color: #1B4332;
+      font-size: 1.3rem; font-weight: bold; color: #1B4332;
+      overflow: hidden; flex-shrink: 0;
+      border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
-    .pro-name { font-size: 1.2rem; font-weight: 700; color: #1B4332; margin-bottom: 4px; }
-    .pro-city { font-size: 0.85rem; color: #40916C; display: flex; align-items: center; gap: 4px;}
-    .pro-desc { color: #6B7280; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; flex: 1; }
+    .pro-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .pro-name { font-size: 1.1rem; font-weight: 700; color: #1B4332; margin-bottom: 2px; }
+    .pro-city { font-size: 0.8rem; color: #40916C; display: flex; align-items: center; gap: 4px; }
+    .pro-desc { color: #6B7280; font-size: 0.9rem; line-height: 1.5; margin-bottom: 16px; flex: 1; }
+
+    /* ── Botão Favoritar ─────────────────── */
+    .btn-favoritar {
+      position: absolute; top: 16px; right: 16px;
+      background: rgba(255,255,255,0.92); border: none; border-radius: 50%;
+      width: 40px; height: 40px; display: flex; align-items: center;
+      justify-content: center; cursor: pointer; font-size: 1.1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.25s; z-index: 10;
+      backdrop-filter: blur(4px);
+    }
+    .btn-favoritar:hover { transform: scale(1.2); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .btn-favoritar.favoritado { background: #fff0f0; }
+
+    /* ── Service Mini Cards ───────────────── */
+    .pro-services-preview {
+      display: flex; gap: 8px; overflow-x: auto;
+      padding-bottom: 8px; margin-bottom: 16px;
+      scrollbar-width: none;
+    }
+    .pro-services-preview::-webkit-scrollbar { display: none; }
+    .service-mini {
+      min-width: 110px; padding: 10px;
+      background: #F9FAFB; border-radius: 12px; border: 1px solid #E5E7EB;
+      text-align: center; flex-shrink: 0;
+    }
+    .service-mini-img {
+      width: 100%; height: 56px; object-fit: cover; border-radius: 8px;
+      margin-bottom: 6px; background: #E8F5E9;
+      display: flex; align-items: center; justify-content: center;
+      color: #40916C; font-size: 1.3rem;
+    }
+    .service-mini h5 {
+      font-size: 0.72rem; color: #1B4332; margin: 0;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .service-mini p { font-size: 0.68rem; color: #2D6A4F; font-weight: 700; margin: 2px 0 0 0; }
+
     .pro-footer {
       display: flex; justify-content: space-between; align-items: center;
-      border-top: 1px solid #f0f0f0; padding-top: 16px;
+      border-top: 1px solid #F3F4F6; padding-top: 14px; gap: 10px;
     }
-    .pro-price { font-weight: 700; color: #2D6A4F; font-size: 1.1rem; }
     .pro-rating-tag {
-      background: #fef3c7; color: #d97706; padding: 4px 10px; border-radius: 20px;
-      font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;
+      background: #FEF3C7; color: #D97706; padding: 4px 10px; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;
     }
+    .card-footer-btns { display: flex; gap: 8px; }
 
-    /* MODAL */
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-      display: none; align-items: center; justify-content: center; z-index: 9999;
+    .btn-ver-detalhes {
+      padding: 8px 14px; background: #2D6A4F; color: #fff;
+      border: none; border-radius: 10px; font-weight: 600;
+      font-size: 0.82rem; cursor: pointer; transition: 0.25s; font-family: 'Outfit';
+      text-decoration: none; display: inline-flex; align-items: center;
     }
+    .btn-ver-detalhes:hover { background: #1B4332; }
+
+    .btn-whatsapp-card {
+      padding: 8px 14px; background: #25D366; color: #fff;
+      border: none; border-radius: 10px; font-weight: 600;
+      font-size: 0.82rem; cursor: pointer; transition: 0.25s;
+      display: flex; align-items: center; gap: 6px; font-family: 'Outfit';
+    }
+    .btn-whatsapp-card:hover { background: #1EB958; }
+    .btn-whatsapp-card svg { flex-shrink: 0; }
+
+    /* ── Modal ────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.52);
+      backdrop-filter: blur(5px); display: none; align-items: center;
+      justify-content: center; z-index: 9999;
+    }
+    .modal-overlay.active { display: flex; }
     .modal-content {
-      background: #fff; width: 90%; max-width: 600px;
-      border-radius: 24px; padding: 32px; position: relative;
-      max-height: 90vh; overflow-y: auto;
+      background: #fff; width: 92%; max-width: 680px;
+      border-radius: 24px; padding: 0; position: relative;
+      max-height: 92vh; overflow-y: auto;
       animation: modalIn 0.3s ease;
     }
-    @keyframes modalIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-    .modal-close { position: absolute; top: 24px; right: 24px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6B7280; }
-    
-    .modal-header { display: flex; align-items: center; gap: 20px; margin-bottom: 24px; }
-    .modal-avatar { width: 80px; height: 80px; background: #D8F3DC; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #1B4332; font-weight: bold; }
-    .modal-title h2 { color: #1B4332; margin-bottom: 4px; }
-    .modal-title p { color: #40916C; font-weight: 500;}
-    
-    .modal-body h4 { color: #1B4332; margin-bottom: 8px; margin-top: 20px; }
-    .modal-body p { color: #4b5563; line-height: 1.6; }
-    
-    .modal-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
-    .modal-img-placeholder { background: #f3f4f6; border-radius: 12px; height: 120px; display: flex; align-items: center; justify-content: center; color: #9ca3af; font-size: 0.9rem; }
-    
-    .btn-contratar {
-      display: block; width: 100%; padding: 16px; background: #25D366; color: #fff;
-      text-align: center; border-radius: 12px; font-weight: 700; font-size: 1.1rem;
-      margin-top: 32px; transition: 0.3s; text-decoration: none;
+    @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .modal-close {
+      position: absolute; top: 18px; right: 18px;
+      background: rgba(255,255,255,0.9); border: none; font-size: 1.2rem;
+      cursor: pointer; color: #4B5563; width: 36px; height: 36px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: 0.2s;
     }
-    .btn-contratar:hover { background: #1eb958; transform: translateY(-2px); }
+    .modal-close:hover { background: #f3f4f6; color: #111; }
 
+    .modal-banner {
+      height: 120px; background: linear-gradient(135deg, #1B4332, #2D6A4F);
+      border-radius: 24px 24px 0 0; position: relative;
+    }
+    .modal-avatar-wrap { position: absolute; bottom: -40px; left: 32px; }
+    .modal-avatar {
+      width: 80px; height: 80px; background: #D8F3DC; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; color: #1B4332; font-weight: bold;
+      border: 4px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden;
+    }
+    .modal-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .modal-body { padding: 56px 32px 32px; }
+    .modal-title h2 { color: #1B4332; margin: 0 0 4px; font-size: 1.5rem; }
+    .modal-title p  { color: #40916C; font-weight: 500; margin: 0 0 24px; }
+
+    .modal-section-title { color: #1B4332; font-size: 1.05rem; font-weight: 700; margin: 24px 0 12px; }
+    .modal-desc { color: #4B5563; line-height: 1.6; font-size: 0.95rem; background: #F9FAFB; padding: 16px; border-radius: 12px; border-left: 3px solid #52B788; }
+
+    .modal-servico-card {
+      border: 1px solid #E5E7EB; border-radius: 16px; padding: 18px;
+      margin-bottom: 12px; transition: 0.2s;
+    }
+    .modal-servico-card:hover { border-color: #52B788; }
+    .modal-servico-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .modal-servico-header h5 { color: #1B4332; font-size: 1rem; margin: 0; }
+    .modal-servico-price { font-weight: 700; color: #2D6A4F; background: #E8F5E9; padding: 4px 12px; border-radius: 8px; }
+
+    .modal-gallery { display: flex; gap: 8px; overflow-x: auto; margin-top: 10px; padding-bottom: 4px; }
+    .modal-gallery img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; flex-shrink: 0; cursor: pointer; }
+
+    .modal-actions {
+      display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap;
+    }
+
+    .btn-contratar {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      flex: 1; padding: 16px; background: #25D366; color: #fff;
+      border-radius: 14px; font-weight: 700; font-size: 1rem;
+      transition: 0.3s; text-decoration: none; border: none; cursor: pointer;
+      font-family: 'Outfit'; min-width: 200px;
+    }
+    .btn-contratar:hover { background: #1EB958; transform: translateY(-2px); }
+
+    .btn-ver-perfil-modal {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 16px 24px; background: #F3F4F6; color: #1B4332;
+      border-radius: 14px; font-weight: 600; font-size: 1rem;
+      transition: 0.3s; text-decoration: none; border: none; cursor: pointer;
+      font-family: 'Outfit';
+    }
+    .btn-ver-perfil-modal:hover { background: #E8F5E9; }
+
+    /* ── Navbar ───────────────────────────── */
+    .navbar.scrolled .nav-logo img { height: 36px; }
+
+    /* ─── Barra de busca: efeito de cor ao scrollar (como a logo) ─── */
+    .search-form-hero-wrapper {
+      transition: all 0.4s cubic-bezier(.4,0,.2,1);
+    }
+    /* Quando a navbar scrollou, o hero fica fixo e a barra destaca */
+    .search-hero-content .search-hero-logo {
+      transition: filter 0.4s cubic-bezier(.4,0,.2,1), transform 0.4s;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Acesso público permitido; validação de interações feita no JS -->
-
-  <nav class="navbar scrolled" id="navbar">
+  <nav class="navbar scrolled always-scrolled" id="navbar">
     <div class="nav-container">
       <a href="/" class="nav-logo">
-        <span class="logo-icon"></span>
+        <img src="/images/logo-trabio.png" alt="Trabio" class="nav-logo-img">
         <span>Trabio</span>
       </a>
-      
-      <div class="nav-actions" id="nav-actions-logged-in" style="position: relative;">
+
+      <div class="nav-actions" style="position: relative;">
         <button class="profile-btn" id="profile-dropdown-btn" aria-label="Menu de perfil">
           <div class="profile-avatar" id="nav-profile-avatar">U</div>
         </button>
         <div class="profile-dropdown" id="profile-dropdown">
           <a href="/painel.html#dados">Meus dados</a>
-          <a href="/painel.html#servicos" id="nav-link-servicos" style="display: none;">Meus serviços</a>
+          <a href="/painel.html#servicos" id="nav-link-servicos" style="display: none;">Meu portfólio</a>
           <a href="/painel.html#favoritos">Meus favoritos</a>
-          <a href="/painel.html#agendamentos">Meus agendamentos</a>
-          <a href="/painel.html#pagamentos">Meus pagamentos</a>
           <hr>
           <a href="#" id="btn-logout">Sair</a>
         </div>
@@ -132,116 +323,213 @@
     </div>
   </nav>
 
-  <div class="search-page">
-    <div class="search-header">
-      <h1>Encontre o profissional ideal</h1>
-      <p>Utilize os filtros abaixo para buscar especialistas na sua região.</p>
+  <!-- Hero Search -->
+  <section class="search-hero">
+    <div class="search-hero-bg"></div>
+    <div class="search-hero-overlay"></div>
+    <div class="search-hero-content">
+      <img src="/images/logo-trabio.png" class="search-hero-logo" alt="Trabio" id="hero-logo">
+      <h1>Encontre o Profissional Ideal</h1>
+      <p>Busque por prestadores de serviço qualificados na sua cidade.</p>
+
+      <div class="search-form-hero-wrapper">
+        <form class="search-form-hero" id="search-form">
+          <!-- Filtro Estado (UF) -->
+          <div class="sf-field" style="flex: 0 0 130px;">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+              <circle cx="12" cy="9" r="2.5"/>
+            </svg>
+            <select id="filter-estado" aria-label="Estado (UF)">
+              <option value="">Estado</option>
+              <option value="AC">AC</option><option value="AL">AL</option>
+              <option value="AP">AP</option><option value="AM">AM</option>
+              <option value="BA">BA</option><option value="CE">CE</option>
+              <option value="DF">DF</option><option value="ES">ES</option>
+              <option value="GO">GO</option><option value="MA">MA</option>
+              <option value="MT">MT</option><option value="MS">MS</option>
+              <option value="MG">MG</option><option value="PA">PA</option>
+              <option value="PB">PB</option><option value="PR">PR</option>
+              <option value="PE">PE</option><option value="PI">PI</option>
+              <option value="RJ">RJ</option><option value="RN">RN</option>
+              <option value="RS">RS</option><option value="RO">RO</option>
+              <option value="RR">RR</option><option value="SC">SC</option>
+              <option value="SP">SP</option><option value="SE">SE</option>
+              <option value="TO">TO</option>
+            </select>
+          </div>
+
+          <!-- Filtro Cidade -->
+          <div class="sf-field">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input type="text" id="filter-cidade" placeholder="Cidade..." />
+          </div>
+
+          <!-- Busca livre -->
+          <div class="sf-field">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 9.36l-7.1 7.1a2.12 2.12 0 01-3-3l7.1-7.1a6 6 0 019.36-7.94l-3.6 3.6z"/>
+            </svg>
+            <input type="text" id="filter-texto" placeholder="Serviço, ex: Eletricista..." />
+          </div>
+
+          <button type="submit" class="sf-btn">Buscar</button>
+        </form>
+      </div>
+
+      <div class="search-tags">
+        <span class="search-tag" onclick="buscarTag('Eletricista')">⚡ Eletricista</span>
+        <span class="search-tag" onclick="buscarTag('Encanador')">🔧 Encanador</span>
+        <span class="search-tag" onclick="buscarTag('Pintor')">🎨 Pintor</span>
+        <span class="search-tag" onclick="buscarTag('Pedreiro')">🧱 Pedreiro</span>
+        <span class="search-tag" onclick="buscarTag('Design')">🎯 Design</span>
+      </div>
     </div>
+  </section>
 
-    <form class="search-filters" id="search-form">
-      <div class="filter-group">
-        <label>Cidade</label>
-        <input type="text" id="filter-cidade" placeholder="Ex: São Paulo" />
-      </div>
-      <div class="filter-group">
-        <label>Estado</label>
-        <select id="filter-estado">
-          <option value="">Todos</option>
-          <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
-          <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
-          <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
-          <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
-          <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
-          <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
-          <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
-          <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
-          <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Busca livre</label>
-        <input type="text" id="filter-texto" placeholder="Ex: Eletricista predial" />
-      </div>
-      <button type="submit" class="btn-filter">Buscar</button>
-    </form>
-
-    <div class="results-grid" id="results-container">
-      <!-- Resultados injetados aqui -->
+  <!-- Results -->
+  <section class="results-section">
+    <div class="results-header">
+      <h2>Resultados da Busca</h2>
+      <span class="results-count" id="results-count">Carregando...</span>
     </div>
-  </div>
+    <div class="results-grid" id="results-container"></div>
+  </section>
 
-  <!-- Modal do Profissional -->
+  <!-- Modal de Detalhes -->
   <div class="modal-overlay" id="pro-modal">
     <div class="modal-content">
-      <button class="modal-close" id="modal-close">&times;</button>
-      
-      <div class="modal-header">
+      <button class="modal-close" id="modal-close">&#x2715;</button>
+      <div class="modal-banner" id="modal-banner"></div>
+      <div class="modal-avatar-wrap">
         <div class="modal-avatar" id="modal-avatar">U</div>
+      </div>
+      <div class="modal-body">
         <div class="modal-title">
           <h2 id="modal-name">Nome</h2>
           <p id="modal-city">📍 Cidade</p>
         </div>
-      </div>
-      
-      <div class="modal-body">
-        <h4>Sobre o Profissional</h4>
-        <p id="modal-desc">Descrição completa do prestador e seus serviços.</p>
-        
-        <h4>Portfólio de Serviços</h4>
-        <div id="modal-portfolio" style="display: flex; flex-direction: column; gap: 16px; margin-top: 12px; max-height: 300px; overflow-y: auto;">
-          <!-- Serviços injetados via JS -->
+
+        <h4 class="modal-section-title">Sobre o Profissional</h4>
+        <p class="modal-desc" id="modal-desc">Descrição completa do prestador.</p>
+
+        <h4 class="modal-section-title">Portfólio de Serviços</h4>
+        <div id="modal-portfolio" style="max-height: 380px; overflow-y: auto;"></div>
+
+        <div class="modal-actions">
+          <a href="#" class="btn-contratar" id="modal-btn-whatsapp" target="_blank" style="display:none;">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488A11.824 11.824 0 0123.94 11.9c-.003 6.556-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>
+            Contratar pelo WhatsApp
+          </a>
+          <a href="#" class="btn-ver-perfil-modal" id="modal-btn-perfil">
+            👤 Ver perfil completo
+          </a>
         </div>
-        
-        <a href="#" class="btn-contratar" id="modal-btn-whatsapp" target="_blank">💬 Contratar pelo WhatsApp</a>
       </div>
     </div>
   </div>
 
   <script src="/js/main.js"></script>
+  <script src="/js/toast.js"></script>
   <script>
-    // Inicializar role no menu
+    // ── Inicialização ─────────────────────────
     document.addEventListener('DOMContentLoaded', () => {
+      // Verificar login
+      if (!localStorage.getItem('trabio_token')) {
+        window.location.href = '/login.html';
+        return;
+      }
+
       const role = localStorage.getItem('trabio_role');
       if (role === 'PRESTADOR') {
         const link = document.getElementById('nav-link-servicos');
         if (link) link.style.display = 'block';
       }
+
+      // Carregar avatar do usuário na navbar
+      carregarAvatarNav();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('cidade'))    document.getElementById('filter-cidade').value  = urlParams.get('cidade');
+      if (urlParams.has('estado'))    document.getElementById('filter-estado').value  = urlParams.get('estado');
+      if (urlParams.has('categoria')) document.getElementById('filter-texto').value   = urlParams.get('categoria');
+
+      buscarProfissionais();
     });
 
+    async function carregarAvatarNav() {
+      try {
+        const token = localStorage.getItem('trabio_token');
+        const res = await fetch('/api/usuarios/me', { headers: { 'Authorization': `Bearer ${token}` } });
+        if (res.ok) {
+          const u = await res.json();
+          const avatarEl = document.getElementById('nav-profile-avatar');
+          if (u.fotoPerfil) {
+            avatarEl.innerHTML = `<img src="${u.fotoPerfil}" alt="${u.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+          } else {
+            avatarEl.textContent = u.nome ? u.nome.charAt(0).toUpperCase() : 'U';
+          }
+        }
+      } catch(_) {}
+    }
+
+    // ── Favoritos (localStorage) ──────────────
+    function getFavoritos() {
+      try { return JSON.parse(localStorage.getItem('trabio_favoritos') || '[]'); } catch(_) { return []; }
+    }
+    function isFavoritado(id) { return getFavoritos().includes(String(id)); }
+    function toggleFavorito(id) {
+      const favs = getFavoritos();
+      const sid  = String(id);
+      const idx  = favs.indexOf(sid);
+      if (idx >= 0) { favs.splice(idx, 1); } else { favs.push(sid); }
+      localStorage.setItem('trabio_favoritos', JSON.stringify(favs));
+    }
+
+    // ── Dados ─────────────────────────────────
     let prestadoresGlobais = [];
 
+    function buscarTag(tag) {
+      document.getElementById('filter-texto').value = tag;
+      buscarProfissionais();
+    }
+
     async function buscarProfissionais() {
-      const cidade = document.getElementById('filter-cidade').value;
+      const cidade = document.getElementById('filter-cidade').value.trim();
+      const texto  = document.getElementById('filter-texto').value.trim();
       const estado = document.getElementById('filter-estado').value;
-      const texto = document.getElementById('filter-texto').value;
 
       const params = new URLSearchParams();
       if (cidade) params.append('cidade', cidade);
+      if (texto)  params.append('texto',  texto);
       if (estado) params.append('estado', estado);
-      if (texto) params.append('texto', texto);
+
+      const countEl = document.getElementById('results-count');
+      countEl.textContent = 'Buscando...';
 
       try {
-        const token = localStorage.getItem('trabio_token');
+        const token    = localStorage.getItem('trabio_token');
         const response = await fetch(`/api/prestadores?${params.toString()}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          headers: { 'Authorization': `Bearer ${token}` }
         });
-        
+
         if (response.ok) {
           prestadoresGlobais = await response.json();
+          countEl.textContent = `${prestadoresGlobais.length} profissional(is) encontrado(s)`;
           renderResults(prestadoresGlobais);
         } else if (response.status === 401 || response.status === 403) {
           localStorage.removeItem('trabio_token');
           window.location.href = '/login.html';
         } else {
-          if (typeof showToastError === 'function') showToastError('Erro ao buscar prestadores.');
-          else window.location.href = '/erro.html?msg=' + encodeURIComponent('Erro ao buscar prestadores.');
+          showToastError('Erro ao buscar prestadores.');
+          countEl.textContent = '0 profissional(is) encontrado(s)';
         }
       } catch (error) {
-        console.error("Erro de conexão", error);
-        if (typeof showToastError === 'function') showToastError('Erro de conexão ao tentar buscar prestadores.');
-        else window.location.href = '/erro.html?msg=' + encodeURIComponent('Erro de conexão ao tentar buscar prestadores.');
+        console.error('Erro de conexão', error);
+        showToastError('Erro de conexão ao buscar.');
       }
     }
 
@@ -250,119 +538,152 @@
       container.innerHTML = '';
 
       if (prestadores.length === 0) {
-        container.innerHTML = `<div class="empty-state"><h2>Nenhum profissional encontrado.</h2><p>Tente buscar de outra forma ou verifique se há profissionais aprovados e com serviços cadastrados.</p></div>`;
+        container.innerHTML = `
+          <div class="empty-state">
+            <h2>Nenhum profissional encontrado.</h2>
+            <p>Tente ajustar os filtros ou buscar por outra categoria.</p>
+          </div>`;
         return;
       }
 
       prestadores.forEach((p, index) => {
         const card = document.createElement('div');
         card.className = 'pro-card-new';
-        
-        // Corrigido para p.nome ao invés de p.nomeUsuario
-        const nome = p.nome || 'Profissional'; 
-        const inicial = nome.charAt(0).toUpperCase();
+
+        const nome      = p.nome || 'Profissional';
+        const inicial   = nome.charAt(0).toUpperCase();
         const avaliacao = p.mediaAvaliacoes ? p.mediaAvaliacoes.toFixed(1) : 'Novo';
-        
+        const cardColor = (p.servicos && p.servicos.length > 0 && p.servicos[0].corCard)
+          ? p.servicos[0].corCard : '#2D6A4F';
+
+        const favId   = p.id || index;
+        const favAtivo = isFavoritado(favId);
+
+        // Preview dos serviços
+        let servicesPreview = '';
+        if (p.servicos && p.servicos.length > 0) {
+          const previews = p.servicos.slice(0, 4).map(s => {
+            const fotoHtml = s.fotos && s.fotos.length > 0
+              ? `<img class="service-mini-img" src="${s.fotos[0]}" alt="${s.titulo}" style="display:block;">`
+              : `<div class="service-mini-img">🛠️</div>`;
+            return `
+              <div class="service-mini">
+                ${fotoHtml}
+                <h5>${s.titulo}</h5>
+                <p>R$ ${parseFloat(s.preco).toFixed(2)}</p>
+              </div>`;
+          }).join('');
+          servicesPreview = `<div class="pro-services-preview">${previews}</div>`;
+        }
+
+        // WhatsApp link
+        const zapLink = p.whatsapp
+          ? `https://wa.me/55${p.whatsapp.replace(/\D/g,'')}`
+          : null;
+
+        // Botão favoritar — apenas favorita, NÃO navega
+        const heartFilled = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#EF4444" stroke="#EF4444" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+        const heartEmpty  = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+
         card.innerHTML = `
-          <div class="pro-card-header">
-            <div class="pro-avatar">${p.fotoPerfil ? `<img src="${p.fotoPerfil}" style="border-radius:50%; width:100%; height:100%; object-fit:cover;">` : inicial}</div>
-            <div>
-              <h3 class="pro-name">${nome}</h3>
-              <span class="pro-city">📍 ${p.cidade}, ${p.estado}</span>
+          <div class="pro-card-banner" style="background: ${cardColor};"></div>
+          <button class="btn-favoritar ${favAtivo ? 'favoritado' : ''}"
+                  id="fav-btn-${favId}"
+                  title="${favAtivo ? 'Remover dos favoritos' : 'Favoritar'}">
+            ${favAtivo ? heartFilled : heartEmpty}
+          </button>
+          <div class="pro-card-body">
+            <div class="pro-card-header">
+              <div class="pro-avatar">${p.fotoPerfil ? `<img src="${p.fotoPerfil}" alt="${nome}">` : inicial}</div>
+              <div>
+                <h3 class="pro-name">${nome}</h3>
+                <span class="pro-city">📍 ${p.estado || ''} — ${p.cidade || 'Local não informado'}</span>
+              </div>
             </div>
-          </div>
-          <p class="pro-desc">${p.descricao ? p.descricao.substring(0, 100) + '...' : 'Sem descrição fornecida.'}</p>
-          <div class="pro-footer">
-            <span class="pro-price">A combinar</span>
-            <span class="pro-rating-tag">⭐ ${avaliacao}</span>
-          </div>
-        `;
-        
-        card.addEventListener('click', () => abrirModal(index));
+            <p class="pro-desc">${p.descricao ? p.descricao.substring(0, 120) + (p.descricao.length > 120 ? '...' : '') : 'Sem descrição fornecida.'}</p>
+            ${servicesPreview}
+            <div class="pro-footer">
+              <span class="pro-rating-tag">⭐ ${avaliacao}</span>
+              <div class="card-footer-btns">
+                ${zapLink
+                  ? `<button class="btn-whatsapp-card" id="zap-card-${favId}">
+                       <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488A11.824 11.824 0 0123.94 11.9c-.003 6.556-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>
+                       WhatsApp
+                     </button>`
+                  : ''}
+                <a class="btn-ver-detalhes" href="/profissional.html?id=${p.id}">Ver perfil</a>
+              </div>
+            </div>
+          </div>`;
+
+        // ── Event listeners no card ──
+        // Clicar no card navega para profissional.html
+        card.addEventListener('click', (e) => {
+          // Não navegar se clicou num botão
+          if (e.target.closest('button') || e.target.closest('a')) return;
+          window.location.href = `/profissional.html?id=${p.id}`;
+        });
+
+        // Favoritar — apenas favorita, não navega
+        const favBtn = card.querySelector(`#fav-btn-${favId}`);
+        favBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          handleFavoritar(favId, nome);
+        });
+
+        // WhatsApp
+        if (zapLink) {
+          const zapBtn = card.querySelector(`#zap-card-${favId}`);
+          if (zapBtn) {
+            zapBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              window.open(zapLink, '_blank');
+            });
+          }
+        }
+
         container.appendChild(card);
       });
     }
 
-    const modal = document.getElementById('pro-modal');
-    const modalClose = document.getElementById('modal-close');
+    async function handleFavoritar(id, nome) {
+      toggleFavorito(id);
+      const btn   = document.getElementById(`fav-btn-${id}`);
+      const agora = isFavoritado(id);
+      if (btn) {
+        const heartFilled = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#EF4444" stroke="#EF4444" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+        const heartEmpty  = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+        btn.innerHTML         = agora ? heartFilled : heartEmpty;
+        btn.title             = agora ? 'Remover dos favoritos' : 'Favoritar';
+        btn.classList.toggle('favoritado', agora);
 
-    function abrirModal(index) {
-      if (!localStorage.getItem('trabio_token')) {
-        if (typeof showToastError === 'function') showToastError('Você precisa estar logado para ver o perfil completo do profissional.');
-        return;
+        btn.style.transform = 'scale(1.4)';
+        setTimeout(() => { btn.style.transform = ''; }, 250);
       }
       
-      const p = prestadoresGlobais[index];
-      const nome = p.nome || 'Profissional';
-      
-      document.getElementById('modal-name').textContent = nome;
-      document.getElementById('modal-city').textContent = `📍 ${p.cidade}, ${p.estado}`;
-      document.getElementById('modal-desc').textContent = p.descricao || 'Sem descrição fornecida.';
-      
-      const avatarContainer = document.getElementById('modal-avatar');
-      if (p.fotoPerfil) {
-        avatarContainer.innerHTML = `<img src="${p.fotoPerfil}" style="border-radius:50%; width:100%; height:100%; object-fit:cover;">`;
-      } else {
-        avatarContainer.textContent = nome.charAt(0).toUpperCase();
+      try {
+        const token = localStorage.getItem('trabio_token');
+        await fetch(`/api/prestadores/${id}/favoritar`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+      } catch (e) {
+        console.error('Erro ao favoritar no backend', e);
       }
 
-      const btnZap = document.getElementById('modal-btn-whatsapp');
-      if (p.whatsapp) {
-        btnZap.href = `https://wa.me/55${p.whatsapp.replace(/\D/g,'')}`;
-        btnZap.style.display = 'block';
+      if (agora) {
+        showToastSuccess(`${nome} adicionado(a) aos favoritos!`);
       } else {
-        btnZap.style.display = 'none';
+        showToastInfo(`${nome} removido(a) dos favoritos.`);
       }
-
-      // Portfólio (Serviços)
-      const portfolioContainer = document.getElementById('modal-portfolio');
-      if (p.servicos && p.servicos.length > 0) {
-        portfolioContainer.innerHTML = p.servicos.map(s => {
-          const fotosHtml = s.fotos && s.fotos.length > 0
-            ? `<div style="display:flex; gap:8px; overflow-x:auto; margin-top:8px;">${s.fotos.map(f => `<img src="${f}" style="width:80px; height:80px; object-fit:cover; border-radius:8px;">`).join('')}</div>`
-            : '';
-          
-          return `
-            <div style="border: 1px solid #D8F3DC; border-radius: 12px; padding: 16px;">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h5 style="color:#1B4332; font-size:1.1rem; margin:0;">${s.titulo}</h5>
-                <span style="font-weight:700; color:#2D6A4F;">R$ ${s.preco.toFixed(2)}</span>
-              </div>
-              <p style="color:#40916c; font-size:0.85rem; margin-top:4px;">📍 ${s.ondeAtende || 'Local não informado'}</p>
-              <p style="color:#4b5563; font-size:0.9rem; margin-top:8px;">${s.descricao}</p>
-              ${fotosHtml}
-            </div>
-          `;
-        }).join('');
-      } else {
-        portfolioContainer.innerHTML = '<div style="background:#f3f4f6; border-radius:12px; padding:20px; text-align:center; color:#9ca3af;">Nenhum item no portfólio.</div>';
-      }
-
-      modal.style.display = 'flex';
     }
 
-    modalClose.addEventListener('click', () => {
-      modal.style.display = 'none';
-    });
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.style.display = 'none';
-    });
+    // ── Sem modal — card navega diretamente para profissional.html ──
 
     document.getElementById('search-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      if (!localStorage.getItem('trabio_token')) {
-        if (typeof showToastError === 'function') showToastError('Você precisa estar logado para realizar novas pesquisas.');
-        return;
-      }
-      buscarProfissionais();
-    });
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.has('cidade')) document.getElementById('filter-cidade').value = urlParams.get('cidade');
       buscarProfissionais();
     });
   </script>
-  <script src="/js/toast.js"></script>
 </body>
 </html>

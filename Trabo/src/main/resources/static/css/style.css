@@ -173,6 +173,17 @@ select, input { font-family: var(--font); }
   flex-shrink: 0;
 }
 .navbar.scrolled .nav-logo { color: var(--green-900); }
+.nav-logo-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 8px;
+  filter: brightness(0) invert(1);
+  transition: var(--transition);
+}
+.navbar.scrolled .nav-logo-img {
+  filter: none;
+}
 .logo-icon { font-size: 1.4rem; }
 .nav-links {
   display: flex;

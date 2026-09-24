@@ -56,8 +56,8 @@ public class SecurityConfig {
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 // Públicos
-                .requestMatchers("/", "/index.html", "/login.html", "/cadastro.html", "/buscar.html", "/painel.html", "/erro.html", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/", "/index.html", "/login.html", "/cadastro.html", "/buscar.html", "/profissional.html", "/painel.html", "/erro.html", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
+                .requestMatchers("/api/auth/**", "/api/arquivos/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/prestadores/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/categorias").permitAll()
                 // Swagger

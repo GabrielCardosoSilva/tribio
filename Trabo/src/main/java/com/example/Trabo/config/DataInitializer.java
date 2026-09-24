@@ -6,7 +6,6 @@ import com.example.Trabo.model.enums.Role;
 import com.example.Trabo.repository.PrestadorRepository;
 import com.example.Trabo.repository.UsuarioRepository;
 import com.example.Trabo.model.entity.Servico;
-import com.example.Trabo.repository.ServicoRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +17,6 @@ public class DataInitializer {
     @Bean
     CommandLineRunner initData(UsuarioRepository usuarioRepository, 
                                PrestadorRepository prestadorRepository, 
-                               ServicoRepository servicoRepository,
                                PasswordEncoder passwordEncoder) {
         return args -> {
             // Apenas inicializar se o banco estiver vazio
@@ -109,14 +107,14 @@ public class DataInitializer {
                         .build();
                 prestadorRepository.save(prestador3);
                 // --- Serviços Mock ---
-                Servico servico1 = new Servico(prestador1, "Instalação Elétrica Completa", "Instalação de rede elétrica, disjuntores e tomadas para toda a residência.", new java.math.BigDecimal("850.00"), "São Paulo (Zonas Sul e Oeste)");
-                servicoRepository.save(servico1);
+                prestador1.getServicos().add(new Servico(prestador1, "Instalação Elétrica Completa", "Instalação de rede elétrica, disjuntores e tomadas para toda a residência."));
+                prestadorRepository.save(prestador1);
 
-                Servico servico2 = new Servico(prestador2, "Caça Vazamentos", "Identificação e reparo de vazamentos em tubulações com equipamentos de ultrassom.", new java.math.BigDecimal("250.00"), "Atendimento em Domicílio");
-                servicoRepository.save(servico2);
+                prestador2.getServicos().add(new Servico(prestador2, "Caça Vazamentos", "Identificação e reparo de vazamentos em tubulações com equipamentos de ultrassom."));
+                prestadorRepository.save(prestador2);
                 
-                Servico servico3 = new Servico(prestador3, "Pintura Interna", "Pintura de paredes e teto com fino acabamento.", new java.math.BigDecimal("1200.00"), "Somente Rio de Janeiro - Capital");
-                servicoRepository.save(servico3);
+                prestador3.getServicos().add(new Servico(prestador3, "Pintura Interna", "Pintura de paredes e teto com fino acabamento."));
+                prestadorRepository.save(prestador3);
             }
         };
     }

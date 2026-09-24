@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trabio — Perfil do Profissional</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    body { background-color: #F5F7F8; margin: 0; }
+
+    .pro-header-banner {
+      height: 220px;
+      background: linear-gradient(135deg, #2D6A4F, #1B4332);
+      width: 100%;
+      margin-top: 72px;
+    }
+
+    .pro-container {
+      max-width: 900px;
+      margin: -90px auto 60px;
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.09);
+      padding: 0;
+      position: relative;
+      overflow: visible;
+    }
+
+    .pro-container-inner {
+      padding: 40px;
+    }
+
+    .pro-avatar-large {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 5px solid #fff;
+      background: #D8F3DC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 700;
+      color: #1B4332;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      position: absolute;
+      top: -60px;
+      left: 40px;
+    }
+
+    .pro-avatar-large img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .pro-info-top {
+      margin-top: 68px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .pro-name-block h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1B4332;
+      margin: 0 0 6px 0;
+    }
+
+    .pro-city-tag {
+      color: #40916C;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .pro-rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FEF3C7;
+      color: #D97706;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .pro-desc {
+      color: #4B5563;
+      line-height: 1.7;
+      font-size: 1rem;
+      margin: 20px 0 30px;
+      padding: 20px;
+      background: #F9FAFB;
+      border-radius: 14px;
+      border-left: 4px solid #52B788;
+    }
+
+    .btn-whatsapp-large {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #25D366;
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.3s;
+      box-shadow: 0 4px 14px rgba(37,211,102,0.3);
+    }
+
+    .btn-whatsapp-large:hover {
+      background: #1EBE5D;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37,211,102,0.4);
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      color: #1B4332;
+      border-bottom: 2px solid #E5E7EB;
+      padding-bottom: 12px;
+      margin-top: 36px;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .service-card {
+      border: 1px solid #E5E7EB;
+      border-radius: 16px;
+      padding: 24px;
+      background: #fff;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card:hover {
+      border-color: #52B788;
+      box-shadow: 0 8px 24px rgba(27,67,50,0.08);
+      transform: translateY(-3px);
+    }
+
+    .service-card-accent {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+    }
+
+    .service-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      margin-top: 8px;
+    }
+
+    .service-header h4 {
+      margin: 0;
+      font-size: 1.05rem;
+      color: #1B4332;
+      font-weight: 700;
+    }
+
+    .service-price {
+      font-weight: 700;
+      color: #40916C;
+      background: #D8F3DC;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      white-space: nowrap;
+    }
+
+    .service-location {
+      color: #40916C;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+
+    .service-desc {
+      color: #4B5563;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .service-photos {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .service-photos img {
+      width: 80px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .service-photos img:hover { transform: scale(1.08); }
+
+    /* Loading state */
+    .loading-state {
+      text-align: center;
+      padding: 100px 20px;
+      color: #6B7280;
+    }
+    .loading-spinner {
+      width: 48px; height: 48px;
+      border: 4px solid #E5E7EB;
+      border-top-color: #2D6A4F;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Error state */
+    .error-state {
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .error-state h2 { color: #EF4444; margin-bottom: 12px; }
+    .error-state p { color: #6B7280; margin-bottom: 24px; }
+    .btn-back {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; background: #2D6A4F; color: #fff;
+      border-radius: 12px; font-weight: 600; text-decoration: none;
+      transition: 0.3s;
+    }
+    .btn-back:hover { background: #1B4332; }
+
+    @media (max-width: 768px) {
+      .pro-info-top { flex-direction: column; }
+      .pro-container-inner { padding: 24px; }
+      .pro-avatar-large { width: 90px; height: 90px; top: -45px; left: 24px; }
+      .pro-info-top { margin-top: 52px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar scrolled always-scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <img src="/images/logo-trabio.png" alt="Trabio" class="nav-logo-img" />
+        <span>Trabio</span>
+      </a>
+      <div class="nav-actions" style="position: relative;">
+        <a href="/buscar.html" class="btn-ghost">← Voltar para Busca</a>
+        <div id="nav-actions-logged-in" style="display: none; position: relative;">
+          <button class="profile-btn" id="profile-dropdown-btn" aria-label="Menu de perfil">
+            <div class="profile-avatar" id="nav-profile-avatar">U</div>
+          </button>
+          <div class="profile-dropdown" id="profile-dropdown">
+            <a href="/painel.html#dados">Meus dados</a>
+            <a href="/painel.html#servicos" id="nav-link-servicos" style="display: none;">Meu portfólio</a>
+            <a href="/painel.html#favoritos">Meus favoritos</a>
+            <hr>
+            <a href="#" id="btn-logout">Sair</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div id="page-content">
+    <div style="margin-top: 72px;">
+      <div class="loading-state">
+        <div class="loading-spinner"></div>
+        <p>Carregando perfil...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('id');
+      const pageContent = document.getElementById('page-content');
+
+      if (!id || isNaN(id)) {
+        pageContent.innerHTML = `
+          <div style="margin-top:72px;">
+            <div class="pro-container" style="max-width:900px;margin:40px auto;padding:0;">
+              <div class="error-state">
+                <h2>❌ Profissional não encontrado</h2>
+                <p>O link que você acessou não contém um ID válido.</p>
+                <a href="/buscar.html" class="btn-back">← Voltar para Busca</a>
+              </div>
+            </div>
+          </div>`;
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('trabio_token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+        const res = await fetch(`/api/prestadores/${id}`, { headers });
+
+        if (res.status === 404) {
+          pageContent.innerHTML = `
+            <div style="margin-top:72px;">
+              <div class="pro-container" style="max-width:900px;margin:40px auto;padding:0;">
+                <div class="error-state">
+                  <h2>😕 Profissional não encontrado</h2>
+                  <p>Este perfil pode ter sido removido ou o link está incorreto.</p>
+                  <a href="/buscar.html" class="btn-back">← Voltar para Busca</a>
+                </div>
+              </div>
+            </div>`;
+          return;
+        }
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const p = await res.json();
+        renderPerfil(p, pageContent);
+
+      } catch (err) {
+        console.error('Erro ao carregar perfil:', err);
+        pageContent.innerHTML = `
+          <div style="margin-top:72px;">
+            <div class="pro-container" style="max-width:900px;margin:40px auto;padding:0;">
+              <div class="error-state">
+                <h2>⚠️ Erro ao carregar</h2>
+                <p>Não foi possível carregar os dados deste profissional. Tente novamente.</p>
+                <a href="/buscar.html" class="btn-back">← Voltar para Busca</a>
+              </div>
+            </div>
+          </div>`;
+      }
+    });
+
+    function renderPerfil(p, container) {
+      const nome = p.nome || 'Profissional';
+      const inicial = nome.charAt(0).toUpperCase();
+      const avaliacao = p.mediaAvaliacoes ? p.mediaAvaliacoes.toFixed(1) : null;
+
+      // Avatar
+      const avatarHtml = p.fotoPerfil
+        ? `<img src="${p.fotoPerfil}" alt="${nome}">`
+        : inicial;
+
+      // Rating
+      const ratingHtml = avaliacao
+        ? `<span class="pro-rating-badge">⭐ ${avaliacao}</span>`
+        : `<span class="pro-rating-badge" style="background:#E8F5E9;color:#2D6A4F;">Novo</span>`;
+
+      // WhatsApp
+      const zapHtml = p.whatsapp
+        ? `<a href="https://wa.me/55${p.whatsapp.replace(/\\D/g,'')}" class="btn-whatsapp-large" target="_blank">
+             <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488A11.824 11.824 0 0123.94 11.9c-.003 6.556-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>
+             Contatar pelo WhatsApp
+           </a>`
+        : '';
+
+      // Serviços
+      let servicosHtml = '';
+      if (p.servicos && p.servicos.length > 0) {
+        servicosHtml = p.servicos.map(s => {
+          return `
+            <div class="service-card">
+              <div class="service-card-accent" style="background:#2D6A4F;"></div>
+              <div class="service-header">
+                <h4>${s.titulo}</h4>
+              </div>
+              <p class="service-desc">${s.descricao || ''}</p>
+            </div>`;
+        }).join('');
+      } else {
+        servicosHtml = `<div style="background:#F9FAFB;border-radius:14px;padding:32px;text-align:center;color:#9CA3AF;grid-column:1/-1;">
+          Nenhum serviço público disponível.
+        </div>`;
+      }
+
+      // Pacotes de Preços
+      let pacotesHtml = '';
+      if (p.pacotesPrecos && p.pacotesPrecos.length > 0) {
+        pacotesHtml = `
+          <h3 class="section-title">Tabela de Preços e Horários</h3>
+          <div style="overflow-x: auto;">
+            <table style="width:100%; border-collapse: collapse; margin-bottom: 20px;">
+              <thead>
+                <tr style="background: #F9FAFB; border-bottom: 2px solid #E5E7EB;">
+                  <th style="padding: 12px; text-align: left; color: #4B5563;">Item / Pacote</th>
+                  <th style="padding: 12px; text-align: left; color: #4B5563;">Preço / Valor</th>
+                  <th style="padding: 12px; text-align: left; color: #4B5563;">Dias</th>
+                  <th style="padding: 12px; text-align: left; color: #4B5563;">Horário</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${p.pacotesPrecos.map(pacote => `
+                  <tr style="border-bottom: 1px solid #E5E7EB;">
+                    <td style="padding: 12px; color: #1B4332; font-weight: 500;">${pacote.pacote}</td>
+                    <td style="padding: 12px; color: #40916C; font-weight: 700;">${pacote.preco}</td>
+                    <td style="padding: 12px; color: #6B7280;">${pacote.dias || '-'}</td>
+                    <td style="padding: 12px; color: #6B7280;">${pacote.horario || '-'}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      // Galeria
+      let galeriaHtml = '';
+      if (p.galeria && p.galeria.length > 0) {
+        galeriaHtml = `
+          <h3 class="section-title">Galeria de Fotos</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px;">
+            ${p.galeria.map(url => `
+              <div style="border-radius: 12px; overflow: hidden; height: 150px; cursor: pointer; border: 1px solid #E5E7EB;" onclick="window.open('${url}', '_blank')">
+                <img src="${url}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      // Endereço e Email
+      let contatoHtml = '';
+      if (p.enderecoCompleto || p.emailContato) {
+        contatoHtml = `
+          <div style="background: #F9FAFB; padding: 20px; border-radius: 12px; margin-top: 30px; border: 1px solid #E5E7EB;">
+            <h4 style="margin: 0 0 12px 0; color: #1B4332;">Informações de Contato</h4>
+            ${p.enderecoCompleto ? `<p style="margin: 0 0 8px 0; color: #4B5563;">📍 <strong>Endereço:</strong> ${p.enderecoCompleto}</p>` : ''}
+            ${p.emailContato ? `<p style="margin: 0; color: #4B5563;">✉️ <strong>E-mail:</strong> <a href="mailto:${p.emailContato}" style="color: #40916C; text-decoration: none;">${p.emailContato}</a></p>` : ''}
+          </div>
+        `;
+      }
+
+      document.title = `Trabio — ${nome}`;
+
+      container.innerHTML = `
+        <div class="pro-header-banner" style="background: linear-gradient(135deg, #2D6A4F, #1B4332);"></div>
+        <div class="pro-container" style="max-width:900px;margin:-90px auto 60px;">
+          <div class="pro-avatar-large">${avatarHtml}</div>
+          <div class="pro-container-inner">
+            <div class="pro-info-top">
+              <div class="pro-name-block">
+                <h1>${nome}</h1>
+                <div class="pro-city-tag">📍 ${p.estado || ''} — ${p.cidade || 'Local não informado'}</div>
+                ${ratingHtml}
+              </div>
+              <div>${zapHtml}</div>
+            </div>
+            ${p.descricao ? `<div class="pro-desc">${p.descricao}</div>` : ''}
+            
+            <h3 class="section-title">Serviços Oferecidos</h3>
+            <div class="services-grid">${servicosHtml}</div>
+            
+            ${pacotesHtml}
+            ${galeriaHtml}
+            ${contatoHtml}
+          </div>
+        </div>`;
+    }
+  </script>
+</body>
+</html>

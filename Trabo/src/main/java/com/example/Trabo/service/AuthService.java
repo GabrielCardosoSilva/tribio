@@ -76,7 +76,7 @@ public class AuthService {
                 .descricao(request.descricao())
                 .telefone(request.telefone())
                 .whatsapp(request.whatsapp())
-                .aprovado(false) // Aguarda aprovação do admin
+                .aprovado(true) // Auto-aprovado ao cadastrar
                 .build();
         prestadorRepository.save(prestador);
     }

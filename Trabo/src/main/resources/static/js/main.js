@@ -8,42 +8,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('trabio_token');
   const role = localStorage.getItem('trabio_role');
   
-  const loggedOutActions = document.getElementById('nav-actions-logged-out');
-  const loggedInActions = document.getElementById('nav-actions-logged-in');
-  
-  if (token && loggedInActions) {
-    if(loggedOutActions) loggedOutActions.style.display = 'none';
-    loggedInActions.style.display = 'flex';
-    
+  if (token) {
     if (role === 'PRESTADOR') {
       const linkServicos = document.getElementById('nav-link-servicos');
       if (linkServicos) linkServicos.style.display = 'block';
     }
     
-    const profileBtn = document.getElementById('profile-dropdown-btn');
-    const dropdown = document.getElementById('profile-dropdown');
+    const btnLogin = document.getElementById('btn-login');
+    const btnCadastro = document.getElementById('btn-cadastro');
+    const navLoggedIn = document.getElementById('nav-actions-logged-in');
     
-    if(profileBtn && dropdown) {
-      profileBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dropdown.classList.toggle('show');
-      });
-      document.addEventListener('click', (e) => {
-        if (!dropdown.contains(e.target)) {
-          dropdown.classList.remove('show');
-        }
-      });
-    }
-    
-    const btnLogout = document.getElementById('btn-logout');
-    if (btnLogout) {
-      btnLogout.addEventListener('click', (e) => {
-        e.preventDefault();
-        localStorage.removeItem('trabio_token');
-        localStorage.removeItem('trabio_role');
-        window.location.reload();
-      });
-    }
+    if (btnLogin) btnLogin.style.display = 'none';
+    if (btnCadastro) btnCadastro.style.display = 'none';
+    if (navLoggedIn) navLoggedIn.style.display = 'block';
+
+    carregarAvatarNavGlobal();
   } else {
     // Hide 'Profissionais' section if not logged in
     const destaquesSec = document.getElementById('destaques');
@@ -55,13 +34,65 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+async function carregarAvatarNavGlobal() {
+  try {
+    const token = localStorage.getItem('trabio_token');
+    const res = await fetch('/api/usuarios/me', { headers: { 'Authorization': `Bearer ${token}` } });
+    if (res.ok) {
+      const u = await res.json();
+      const avatarEl = document.getElementById('nav-profile-avatar');
+      if (avatarEl) {
+        if (u.fotoPerfil) {
+          avatarEl.innerHTML = `<img src="${u.fotoPerfil}" alt="${u.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+        } else {
+          avatarEl.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#2D6A4F; margin: auto; display: block; width: 100%; height: 100%; padding: 4px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`;
+        }
+      }
+    } else if (res.status === 401 || res.status === 403) {
+      // Token inválido ou expirado (ex: banco resetado)
+      localStorage.removeItem('trabio_token');
+      localStorage.removeItem('trabio_role');
+      window.location.reload();
+    }
+  } catch(_) {}
+}
+
+// ── Profile Dropdown Logic ───────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const profileBtn = document.getElementById('profile-dropdown-btn');
+  const profileDropdown = document.getElementById('profile-dropdown');
+  if (profileBtn && profileDropdown) {
+    profileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      profileDropdown.classList.toggle('show');
+    });
+    document.addEventListener('click', (e) => {
+      if (!profileDropdown.contains(e.target)) {
+        profileDropdown.classList.remove('show');
+      }
+    });
+  }
+
+  const btnLogout = document.getElementById('btn-logout');
+  if (btnLogout) {
+    btnLogout.addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.removeItem('trabio_token');
+      localStorage.removeItem('trabio_role');
+      window.location.href = '/';
+    });
+  }
+});
+
 // ── Navbar scroll effect ─────────────────────
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
-  if (window.scrollY > 40) {
-    navbar.classList.add('scrolled');
-  } else {
-    navbar.classList.remove('scrolled');
+  if (navbar && !navbar.classList.contains('always-scrolled')) {
+    if (window.scrollY > 40) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
   }
 }, { passive: true });
 
@@ -139,6 +170,13 @@ document.querySelectorAll('.cat-card').forEach(card => {
 
 // ── Search button ─────────────────────────────
 document.getElementById('btn-search')?.addEventListener('click', () => {
+  // Verificar se está logado
+  if (!localStorage.getItem('trabio_token')) {
+    showToast('⚠ Você precisa estar logado para buscar profissionais.');
+    setTimeout(() => { window.location.href = '/login.html'; }, 1200);
+    return;
+  }
+
   const cat    = document.getElementById('select-categoria')?.value || '';
   const cidade = document.getElementById('input-cidade')?.value.trim() || '';
   if (!cat && !cidade) {
@@ -148,8 +186,8 @@ document.getElementById('btn-search')?.addEventListener('click', () => {
   const params = new URLSearchParams();
   if (cat)    params.set('categoria', cat);
   if (cidade) params.set('cidade', cidade);
-  
-  showToast(' Redirecionando para resultados...');
+
+  showToast('🔍 Redirecionando para resultados...');
   setTimeout(() => {
     window.location.href = `/buscar.html?${params.toString()}`;
   }, 800);

@@ -19,14 +19,17 @@ public interface PrestadorRepository extends JpaRepository<Prestador, Long> {
     @Query("""
         SELECT DISTINCT p FROM Prestador p
         LEFT JOIN p.categorias c
+        LEFT JOIN p.servicos s
         WHERE p.aprovado = true
-          AND SIZE(p.servicos) > 0
+          AND p.visivel = true
           AND (:categoriaId IS NULL OR c.id = :categoriaId)
           AND (:cidade IS NULL OR LOWER(p.cidade) LIKE LOWER(CONCAT('%', :cidade, '%')))
           AND (:estado IS NULL OR LOWER(p.estado) = LOWER(:estado))
           AND (:texto IS NULL OR
                LOWER(p.descricao) LIKE LOWER(CONCAT('%', :texto, '%')) OR
-               LOWER(p.usuario.nome) LIKE LOWER(CONCAT('%', :texto, '%')))
+               LOWER(p.usuario.nome) LIKE LOWER(CONCAT('%', :texto, '%')) OR
+               LOWER(s.titulo) LIKE LOWER(CONCAT('%', :texto, '%')) OR
+               LOWER(s.descricao) LIKE LOWER(CONCAT('%', :texto, '%')))
         """)
     List<Prestador> buscarPublico(
             @Param("categoriaId") Long categoriaId,
