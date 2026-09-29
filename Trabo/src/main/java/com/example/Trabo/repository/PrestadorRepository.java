@@ -16,21 +16,22 @@ public interface PrestadorRepository extends JpaRepository<Prestador, Long> {
 
     List<Prestador> findByAprovado(boolean aprovado);
 
-    @Query("""
-        SELECT DISTINCT p FROM Prestador p
-        LEFT JOIN p.categorias c
-        LEFT JOIN p.servicos s
+    @Query(value = """
+        SELECT DISTINCT p.* FROM prestadores p
+        JOIN usuarios u ON u.id = p.usuario_id
+        LEFT JOIN prestador_categorias pc ON pc.prestador_id = p.id
+        LEFT JOIN servicos s ON s.prestador_id = p.id
         WHERE p.aprovado = true
           AND p.visivel = true
-          AND (:categoriaId IS NULL OR c.id = :categoriaId)
-          AND (:cidade IS NULL OR LOWER(p.cidade) LIKE LOWER(CONCAT('%', :cidade, '%')))
-          AND (:estado IS NULL OR LOWER(p.estado) = LOWER(:estado))
+          AND (:categoriaId IS NULL OR pc.categoria_id = :categoriaId)
+          AND (:cidade IS NULL OR LOWER(CAST(p.cidade AS text)) LIKE LOWER(CONCAT('%', CAST(:cidade AS text), '%')))
+          AND (:estado IS NULL OR LOWER(CAST(p.estado AS text)) = LOWER(CAST(:estado AS text)))
           AND (:texto IS NULL OR
-               LOWER(p.descricao) LIKE LOWER(CONCAT('%', :texto, '%')) OR
-               LOWER(p.usuario.nome) LIKE LOWER(CONCAT('%', :texto, '%')) OR
-               LOWER(s.titulo) LIKE LOWER(CONCAT('%', :texto, '%')) OR
-               LOWER(s.descricao) LIKE LOWER(CONCAT('%', :texto, '%')))
-        """)
+               LOWER(CAST(p.descricao AS text)) LIKE LOWER(CONCAT('%', CAST(:texto AS text), '%')) OR
+               LOWER(CAST(u.nome AS text)) LIKE LOWER(CONCAT('%', CAST(:texto AS text), '%')) OR
+               LOWER(CAST(s.titulo AS text)) LIKE LOWER(CONCAT('%', CAST(:texto AS text), '%')) OR
+               LOWER(CAST(s.descricao AS text)) LIKE LOWER(CONCAT('%', CAST(:texto AS text), '%')))
+        """, nativeQuery = true)
     List<Prestador> buscarPublico(
             @Param("categoriaId") Long categoriaId,
             @Param("cidade") String cidade,

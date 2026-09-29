@@ -13,5 +13,6 @@ public record PortfolioRequest(
         List<ServicoRequest> servicos,
         List<PacotePrecoRequest> pacotes,
         List<String> galeria,
-        Boolean visivel
+        Boolean visivel,
+        String corPerfil
 ) {}

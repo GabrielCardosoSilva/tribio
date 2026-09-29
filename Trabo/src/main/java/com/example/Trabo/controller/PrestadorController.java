@@ -72,6 +72,14 @@ public class PrestadorController {
 
 
 
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('PRESTADOR')")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Perfil do próprio prestador")
+    public ResponseEntity<PrestadorResponse> buscarMeuPerfil() {
+        return ResponseEntity.ok(prestadorService.buscarMeuPerfil());
+    }
+
     @PostMapping("/me/portfolio")
     @PreAuthorize("hasRole('PRESTADOR')")
     @SecurityRequirement(name = "bearerAuth")

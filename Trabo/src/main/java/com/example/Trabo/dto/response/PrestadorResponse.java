@@ -22,5 +22,6 @@ public record PrestadorResponse(
         List<String> galeria,
         List<ServicoResponse> servicos,
         List<PacotePrecoResponse> pacotesPrecos,
-        boolean visivel
+        boolean visivel,
+        String corPerfil
 ) {}

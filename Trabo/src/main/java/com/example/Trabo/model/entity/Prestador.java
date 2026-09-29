@@ -59,6 +59,8 @@ public class Prestador {
     @Column(nullable = false)
     private boolean visivel = true;
 
+    private String corPerfil = "#2D6A4F";
+
     @Column(updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -155,6 +157,9 @@ public class Prestador {
 
     public boolean isVisivel()                       { return visivel; }
     public void    setVisivel(boolean visivel)       { this.visivel = visivel; }
+
+    public String getCorPerfil()                     { return corPerfil; }
+    public void   setCorPerfil(String corPerfil)     { this.corPerfil = corPerfil; }
 
     public LocalDateTime getCreatedAt()                  { return createdAt; }
     public void          setCreatedAt(LocalDateTime t)   { this.createdAt = t; }

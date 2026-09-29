@@ -1,4 +1,3 @@
-na pagina profissional, esta com erros na tabela de preço como mostrei na foto 
-
-e na parte de meu portifolio devia ter uma parte que podia editar e monitorar os portifolios já criados
+quero que agora nós suba nosso aplicação no docker tem como fazer isso eu to com o docker aberto porem eu n sei mexer nele entao faça só apos conseguir subir no docker quero que envie para a main nesse repository
+https://github.com/GabrielCardosoSilva/tribio.git
 

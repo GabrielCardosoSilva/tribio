@@ -3,13 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trabio — Perfil do Profissional</title>
+  <title>Trabio</title>
+  <link rel="icon" type="image/png" href="/images/logo-trabio.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
   <style>
     body { background-color: #F5F7F8; margin: 0; }
+
+    /* Lightbox */
+    #lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:9999;
+                align-items:center; justify-content:center; animation: fadeIn 0.2s ease; }
+    #lightbox.open { display:flex; }
+    #lightbox img { max-width:90vw; max-height:88vh; object-fit:contain; border-radius:12px;
+                    box-shadow:0 20px 80px rgba(0,0,0,0.5); }
+    #lightbox-close { position:fixed; top:20px; right:28px; background:rgba(255,255,255,0.15);
+                      border:none; color:#fff; font-size:2rem; cursor:pointer; border-radius:50%;
+                      width:44px; height:44px; display:flex; align-items:center; justify-content:center;
+                      transition:background 0.2s; backdrop-filter:blur(8px); }
+    #lightbox-close:hover { background:rgba(255,255,255,0.28); }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
     .pro-header-banner {
       height: 220px;
@@ -359,6 +373,7 @@
     });
 
     function renderPerfil(p, container) {
+      galeriaGlobal = p.galeria || [];
       const nome = p.nome || 'Profissional';
       const inicial = nome.charAt(0).toUpperCase();
       const avaliacao = p.mediaAvaliacoes ? p.mediaAvaliacoes.toFixed(1) : null;
@@ -436,9 +451,11 @@
         galeriaHtml = `
           <h3 class="section-title">Galeria de Fotos</h3>
           <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px;">
-            ${p.galeria.map(url => `
-              <div style="border-radius: 12px; overflow: hidden; height: 150px; cursor: pointer; border: 1px solid #E5E7EB;" onclick="window.open('${url}', '_blank')">
-                <img src="${url}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            ${p.galeria.map((url, i) => `
+              <div style="border-radius: 12px; overflow: hidden; height: 150px; cursor: zoom-in; border: 1px solid #E5E7EB;"
+                   onclick="openLightbox(${i})">
+                <img src="${url}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.25s;"
+                     onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'">
               </div>
             `).join('')}
           </div>
@@ -457,10 +474,16 @@
         `;
       }
 
+      const cor = p.corPerfil || '#2D6A4F';
+      const corEscura = cor + 'CC';
       document.title = `Trabio — ${nome}`;
 
       container.innerHTML = `
-        <div class="pro-header-banner" style="background: linear-gradient(135deg, #2D6A4F, #1B4332);"></div>
+        <div id="lightbox" onclick="if(event.target===this)closeLightbox()">
+          <button id="lightbox-close" onclick="closeLightbox()">&times;</button>
+          <img id="lightbox-img" src="" alt="Foto ampliada">
+        </div>
+        <div class="pro-header-banner" style="background: linear-gradient(135deg, ${cor}, ${corEscura});"></div>
         <div class="pro-container" style="max-width:900px;margin:-90px auto 60px;">
           <div class="pro-avatar-large">${avatarHtml}</div>
           <div class="pro-container-inner">
@@ -483,6 +506,20 @@
           </div>
         </div>`;
     }
+    // ── Lightbox ──────────────────────────────
+    let galeriaGlobal = [];
+    function openLightbox(index) {
+      galeriaGlobal._currentIndex = index;
+      const lb = document.getElementById('lightbox');
+      document.getElementById('lightbox-img').src = galeriaGlobal[index];
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
   </script>
 </body>
 </html>

@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trabio — Buscar Profissionais</title>
+  <title>Trabio</title>
+  <link rel="icon" type="image/png" href="/images/logo-trabio.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -553,8 +554,7 @@
         const nome      = p.nome || 'Profissional';
         const inicial   = nome.charAt(0).toUpperCase();
         const avaliacao = p.mediaAvaliacoes ? p.mediaAvaliacoes.toFixed(1) : 'Novo';
-        const cardColor = (p.servicos && p.servicos.length > 0 && p.servicos[0].corCard)
-          ? p.servicos[0].corCard : '#2D6A4F';
+        const cardColor = p.corPerfil || '#2D6A4F';
 
         const favId   = p.id || index;
         const favAtivo = isFavoritado(favId);
@@ -562,15 +562,18 @@
         // Preview dos serviços
         let servicesPreview = '';
         if (p.servicos && p.servicos.length > 0) {
-          const previews = p.servicos.slice(0, 4).map(s => {
+          const previews = p.servicos.slice(0, 4).map((s, i) => {
             const fotoHtml = s.fotos && s.fotos.length > 0
               ? `<img class="service-mini-img" src="${s.fotos[0]}" alt="${s.titulo}" style="display:block;">`
               : `<div class="service-mini-img">🛠️</div>`;
+            // Use price from matching pacote if available
+            const pacote = p.pacotesPrecos && p.pacotesPrecos[i];
+            const precoLabel = pacote ? pacote.preco : null;
             return `
               <div class="service-mini">
                 ${fotoHtml}
                 <h5>${s.titulo}</h5>
-                <p>R$ ${parseFloat(s.preco).toFixed(2)}</p>
+                <p>${precoLabel ? precoLabel : 'Consultar'}</p>
               </div>`;
           }).join('');
           servicesPreview = `<div class="pro-services-preview">${previews}</div>`;

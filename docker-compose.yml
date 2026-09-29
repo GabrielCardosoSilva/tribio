@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  trabio:
+    build:
+      context: ./Trabo
+      dockerfile: Dockerfile
+    container_name: trabio-app
+    ports:
+      - "8080:8080"
+    environment:
+      # Banco de dados Neon PostgreSQL (já configurado no application.properties)
+      SPRING_DATASOURCE_URL: jdbc:postgresql://ep-weathered-voice-b6g1rwyr-pooler.c-2.sa-east-1.aws.neon.tech/Trabio?sslmode=require&channel_binding=require
+      SPRING_DATASOURCE_USERNAME: Trabio_owner
+      SPRING_DATASOURCE_PASSWORD: npg_GgRaMF4Db3Bm
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      APP_JWT_SECRET: dHJhYmlvLXNlY3JldC1rZXktbXVpdG8tc2VndXJhLWRldmUtdGVyLWFvLW1lbm9zLTI1Ni1iaXRzLWFxdWktb2s=
+      APP_JWT_EXPIRATION_MS: 86400000
+    volumes:
+      - trabio-uploads:/app/uploads
+    restart: unless-stopped
+
+volumes:
+  trabio-uploads:

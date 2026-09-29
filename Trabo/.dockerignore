@@ -1,0 +1,7 @@
+*.md
+.git
+.gitignore
+*.log
+uploads/
+target/original-*.jar
+target/*-sources.jar

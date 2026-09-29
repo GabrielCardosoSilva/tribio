@@ -101,6 +101,16 @@ public class PrestadorService {
 
 
     @Transactional
+    public PrestadorResponse buscarMeuPerfil() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+        Prestador prestador = prestadorRepository.findByUsuarioId(usuario.getId())
+                .orElseThrow(() -> new NotFoundException("Perfil de prestador não encontrado"));
+        return toResponse(prestador);
+    }
+
+    @Transactional
     public PrestadorResponse atualizarPortfolio(PortfolioRequest request) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario usuario = usuarioRepository.findByEmail(email)
@@ -136,6 +146,9 @@ public class PrestadorService {
         
         prestador.setAprovado(true);
         prestador.setVisivel(request.visivel() != null ? request.visivel() : true);
+        if (request.corPerfil() != null && !request.corPerfil().isBlank()) {
+            prestador.setCorPerfil(request.corPerfil());
+        }
 
         return toResponse(prestadorRepository.save(prestador));
     }
@@ -161,7 +174,8 @@ public class PrestadorService {
                 p.getGaleria() != null ? p.getGaleria() : new ArrayList<>(),
                 p.getServicos() != null ? p.getServicos().stream().map(s -> new ServicoResponse(s.getId(), s.getTitulo(), s.getDescricao())).toList() : List.of(),
                 p.getPacotesPrecos() != null ? p.getPacotesPrecos().stream().map(pp -> new PacotePrecoResponse(pp.getId(), pp.getPacote(), pp.getPreco(), pp.getDias(), pp.getHorario())).toList() : List.of(),
-                p.isVisivel()
+                p.isVisivel(),
+                p.getCorPerfil()
         );
     }
 }
