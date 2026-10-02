@@ -24,7 +24,11 @@ public class FileService {
 
     public String salvarArquivo(MultipartFile arquivo) {
         try {
-            String fileName = UUID.randomUUID().toString() + "_" + arquivo.getOriginalFilename();
+            String originalFilename = arquivo.getOriginalFilename();
+            String extension = (originalFilename != null && originalFilename.contains("."))
+                    ? originalFilename.substring(originalFilename.lastIndexOf("."))
+                    : "";
+            String fileName = UUID.randomUUID().toString() + extension;
             Path filePath = Paths.get(uploadDir + fileName);
             Files.copy(arquivo.getInputStream(), filePath);
             return "/api/arquivos/" + fileName;

@@ -12,15 +12,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.Trabo.security.TokenBlacklist;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.util.StringUtils;
+
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "Autenticação")
 public class AuthController {
 
     private final AuthService authService;
+    private final TokenBlacklist tokenBlacklist;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, TokenBlacklist tokenBlacklist) {
         this.authService = authService;
+        this.tokenBlacklist = tokenBlacklist;
     }
 
     @PostMapping("/registro/usuario")
@@ -41,5 +47,17 @@ public class AuthController {
     @Operation(summary = "Login — retorna JWT")
     public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/logout")
+    @Operation(summary = "Logout — Invalida o token atual")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            String token = bearerToken.substring(7);
+            tokenBlacklist.blacklist(token);
+            return ResponseEntity.ok("Logout realizado com sucesso");
+        }
+        return ResponseEntity.badRequest().body("Token não encontrado");
     }
 }

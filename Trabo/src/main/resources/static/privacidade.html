@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Política de Privacidade — Trabio</title>
+  <meta name="description" content="Política de Privacidade do Trabio — saiba quais dados coletamos, como usamos e como protegemos suas informações." />
+  <link rel="icon" type="image/png" href="/images/logo-trabio.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #0f1f17;
+      color: #d4e8db;
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    /* ── Navbar ── */
+    nav {
+      background: #1a3b2b;
+      border-bottom: 1px solid #2b4f3c;
+      padding: 0 40px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+    .nav-logo span { color: #52b788; }
+    .nav-logo img { width: 26px; height: 26px; object-fit: contain; }
+    .nav-back {
+      color: #74a57f;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: #52b788; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #1a3b2b 0%, #0f2419 100%);
+      padding: 60px 40px;
+      text-align: center;
+      border-bottom: 1px solid #2b4f3c;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(82, 183, 136, 0.15);
+      border: 1px solid rgba(82, 183, 136, 0.3);
+      color: #52b788;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+    }
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .hero p {
+      color: #74a57f;
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ── Content ── */
+    .content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 40px 80px;
+    }
+
+    .toc {
+      background: #1a3b2b;
+      border: 1px solid #2b4f3c;
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 48px;
+    }
+    .toc h3 {
+      color: #52b788;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .toc ol {
+      padding-left: 20px;
+    }
+    .toc ol li {
+      margin-bottom: 8px;
+    }
+    .toc ol li a {
+      color: #a8d5b8;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    .toc ol li a:hover { color: #52b788; }
+
+    .section {
+      margin-bottom: 48px;
+      scroll-margin-top: 80px;
+    }
+    .section h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #2b4f3c;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section h2 .icon {
+      width: 32px;
+      height: 32px;
+      background: rgba(82, 183, 136, 0.15);
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .section p {
+      color: #a8d5b8;
+      margin-bottom: 12px;
+      font-size: 0.97rem;
+    }
+    .section ul, .section ol {
+      padding-left: 20px;
+      color: #a8d5b8;
+      font-size: 0.97rem;
+    }
+    .section ul li, .section ol li {
+      margin-bottom: 8px;
+    }
+
+    .highlight-box {
+      background: rgba(82, 183, 136, 0.08);
+      border-left: 3px solid #52b788;
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+    .highlight-box p {
+      color: #c0e0cc;
+      margin: 0;
+    }
+
+    .rights-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .right-card {
+      background: #1a3b2b;
+      border: 1px solid #2b4f3c;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .right-card .right-title {
+      font-weight: 600;
+      color: #52b788;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    .right-card p {
+      color: #7db592;
+      font-size: 0.85rem;
+      margin: 0;
+    }
+
+    /* ── Footer ── */
+    .page-footer {
+      background: #1a3b2b;
+      border-top: 1px solid #2b4f3c;
+      text-align: center;
+      padding: 32px 40px;
+      color: #74a57f;
+      font-size: 0.85rem;
+    }
+    .page-footer a { color: #52b788; text-decoration: none; }
+    .page-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 1.8rem; }
+      .content { padding: 40px 20px 60px; }
+      nav { padding: 0 20px; }
+      .rights-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">
+      <img src="/images/logo-trabio.png" alt="Trabio" />
+      TRABIO<span>.</span>
+    </a>
+    <a href="/" class="nav-back">← Voltar ao início</a>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-badge">🔒 LGPD — Lei 13.709/2018</div>
+    <h1>Política de Privacidade</h1>
+    <p>Última atualização: outubro de 2026 · Transparência total sobre seus dados</p>
+  </div>
+
+  <div class="content">
+
+    <!-- Índice -->
+    <div class="toc">
+      <h3>Índice</h3>
+      <ol>
+        <li><a href="#quem-somos">Quem somos</a></li>
+        <li><a href="#dados-coletados">Dados que coletamos</a></li>
+        <li><a href="#finalidade">Finalidade do uso</a></li>
+        <li><a href="#retencao">Por quanto tempo guardamos</a></li>
+        <li><a href="#compartilhamento">Compartilhamento</a></li>
+        <li><a href="#seguranca">Segurança</a></li>
+        <li><a href="#seus-direitos">Seus direitos (LGPD Art. 18)</a></li>
+        <li><a href="#contato">Contato do DPO</a></li>
+      </ol>
+    </div>
+
+    <!-- 1 -->
+    <div class="section" id="quem-somos">
+      <h2><span class="icon">🏢</span> 1. Quem somos</h2>
+      <p>
+        O <strong style="color:#fff;">Trabio</strong> é uma plataforma que conecta clientes a prestadores de serviços locais. Somos o controlador dos seus dados pessoais, conforme definido pela Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018).
+      </p>
+      <div class="highlight-box">
+        <p>📧 Contato do encarregado (DPO): <strong>privacidade@trabio.com.br</strong></p>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="section" id="dados-coletados">
+      <h2><span class="icon">📋</span> 2. Dados que coletamos</h2>
+      <p>Coletamos apenas os dados necessários para o funcionamento da plataforma:</p>
+      <ul>
+        <li><strong>Dados de cadastro:</strong> nome completo, endereço de e-mail e senha (armazenada em hash bcrypt, nunca em texto plano).</li>
+        <li><strong>Dados de prestador:</strong> cidade, estado, bairro, telefone/WhatsApp, descrição de serviços e foto de perfil.</li>
+        <li><strong>Avaliações:</strong> nota e comentário deixados por clientes sobre prestadores.</li>
+        <li><strong>Dados de uso:</strong> logs de acesso e endereço IP (para segurança e prevenção de fraudes).</li>
+        <li><strong>Fotos de trabalhos:</strong> imagens enviadas voluntariamente pelos prestadores para o portfólio.</li>
+      </ul>
+    </div>
+
+    <!-- 3 -->
+    <div class="section" id="finalidade">
+      <h2><span class="icon">🎯</span> 3. Finalidade do uso</h2>
+      <p>Seus dados são usados exclusivamente para:</p>
+      <ul>
+        <li>Criar e gerenciar sua conta na plataforma.</li>
+        <li>Exibir o perfil de prestadores para clientes em busca de serviços.</li>
+        <li>Enviar notificações dentro da plataforma (avaliações, mensagens).</li>
+        <li>Garantir a segurança do sistema (rate limiting, autenticação).</li>
+        <li>Cumprir obrigações legais e regulatórias.</li>
+      </ul>
+      <p>Não vendemos, alugamos ou compartilhamos seus dados com anunciantes ou terceiros para fins comerciais.</p>
+    </div>
+
+    <!-- 4 -->
+    <div class="section" id="retencao">
+      <h2><span class="icon">⏱️</span> 4. Por quanto tempo guardamos</h2>
+      <ul>
+        <li><strong>Dados de conta ativa:</strong> enquanto sua conta existir na plataforma.</li>
+        <li><strong>Após exclusão da conta:</strong> os dados pessoais identificáveis são removidos em até 30 dias. Dados anonimizados (ex: estatísticas) podem ser mantidos.</li>
+        <li><strong>Logs de segurança:</strong> armazenados por até 6 meses para fins de auditoria.</li>
+        <li><strong>Obrigações legais:</strong> alguns dados podem ser retidos por mais tempo se exigido por lei (ex: dados fiscais por 5 anos).</li>
+      </ul>
+    </div>
+
+    <!-- 5 -->
+    <div class="section" id="compartilhamento">
+      <h2><span class="icon">🤝</span> 5. Compartilhamento</h2>
+      <p>Compartilhamos dados apenas com:</p>
+      <ul>
+        <li><strong>Neon (banco de dados):</strong> armazenamento seguro dos dados em servidores na América do Sul.</li>
+        <li><strong>Autoridades públicas:</strong> quando exigido por lei, ordem judicial ou investigação legal.</li>
+      </ul>
+      <p>Todos os nossos parceiros estão sujeitos a acordos de confidencialidade e tratam os dados conforme a LGPD.</p>
+    </div>
+
+    <!-- 6 -->
+    <div class="section" id="seguranca">
+      <h2><span class="icon">🛡️</span> 6. Segurança</h2>
+      <p>Adotamos as seguintes medidas técnicas de proteção:</p>
+      <ul>
+        <li>Senhas armazenadas exclusivamente como hash bcrypt (nunca em texto plano).</li>
+        <li>Autenticação via JWT com expiração de 24 horas e blacklist de tokens ao fazer logout.</li>
+        <li>Rate limiting nos endpoints de login e cadastro para prevenção de força bruta.</li>
+        <li>Conexão com banco de dados via SSL obrigatório.</li>
+        <li>CORS restrito às origens conhecidas da plataforma.</li>
+      </ul>
+    </div>
+
+    <!-- 7 -->
+    <div class="section" id="seus-direitos">
+      <h2><span class="icon">⚖️</span> 7. Seus direitos (LGPD Art. 18)</h2>
+      <p>Você tem os seguintes direitos sobre seus dados pessoais:</p>
+      <div class="rights-grid">
+        <div class="right-card">
+          <div class="right-title">📁 Acesso</div>
+          <p>Solicitar cópia de todos os dados que temos sobre você.</p>
+        </div>
+        <div class="right-card">
+          <div class="right-title">✏️ Correção</div>
+          <p>Corrigir dados incompletos, inexatos ou desatualizados.</p>
+        </div>
+        <div class="right-card">
+          <div class="right-title">🗑️ Exclusão</div>
+          <p>Solicitar a exclusão total dos seus dados (direito ao esquecimento).</p>
+        </div>
+        <div class="right-card">
+          <div class="right-title">🚫 Oposição</div>
+          <p>Opor-se ao tratamento de dados em determinadas situações.</p>
+        </div>
+        <div class="right-card">
+          <div class="right-title">📦 Portabilidade</div>
+          <p>Receber seus dados em formato estruturado e legível.</p>
+        </div>
+        <div class="right-card">
+          <div class="right-title">ℹ️ Informação</div>
+          <p>Saber com quais entidades compartilhamos seus dados.</p>
+        </div>
+      </div>
+      <p style="margin-top:16px;">Para exercer qualquer um desses direitos, acesse seu <a href="/painel.html" style="color:#52b788;">painel</a> ou entre em contato pelo e-mail abaixo.</p>
+    </div>
+
+    <!-- 8 -->
+    <div class="section" id="contato">
+      <h2><span class="icon">📬</span> 8. Contato do DPO</h2>
+      <p>Para dúvidas, solicitações ou exercício dos seus direitos, entre em contato com nosso Encarregado de Proteção de Dados:</p>
+      <div class="highlight-box">
+        <p>📧 <strong>privacidade@trabio.com.br</strong><br />
+        Prazo de resposta: até 15 dias úteis, conforme LGPD Art. 18 §4º.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="page-footer">
+    <p>© 2026 Trabio. Todos os direitos reservados. |
+      <a href="/termos.html">Termos de Uso</a> ·
+      <a href="/privacidade.html">Política de Privacidade</a>
+    </p>
+  </footer>
+
+</body>
+</html>

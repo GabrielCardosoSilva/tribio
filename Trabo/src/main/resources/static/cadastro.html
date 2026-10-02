@@ -148,6 +148,39 @@
 
     .hidden { display: none; }
 
+    /* ── LGPD Checkbox ── */
+    .lgpd-consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-top: 20px;
+      padding: 14px 16px;
+      background: rgba(82, 183, 136, 0.06);
+      border: 1px solid rgba(82, 183, 136, 0.2);
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .lgpd-consent input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      accent-color: #74a57f;
+      cursor: pointer;
+      margin-top: 2px;
+    }
+    .lgpd-consent label {
+      font-size: 0.85rem;
+      color: #c0d8c8;
+      cursor: pointer;
+      line-height: 1.5;
+    }
+    .lgpd-consent label a {
+      color: #74a57f;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    .lgpd-consent label a:hover { color: #52b788; }
+
     .register-link {
       text-align: center;
       margin-top: 20px;
@@ -243,7 +276,17 @@
           </div>
         </div>
 
-        <button type="submit" class="btn-submit">Criar conta</button>
+        <!-- ☑️ LGPD: aceite obrigatório -->
+        <div class="lgpd-consent">
+          <input type="checkbox" id="lgpd-aceite" required />
+          <label for="lgpd-aceite">
+            Li e aceito os <a href="/termos.html" target="_blank">Termos de Uso</a>
+            e a <a href="/privacidade.html" target="_blank">Política de Privacidade</a>
+            do Trabio. Estou ciente de que meus dados serão tratados conforme a LGPD (Lei 13.709/2018).
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btn-criar-conta">Criar conta</button>
       </form>
 
       <div class="register-link">
@@ -254,6 +297,14 @@
 
   <script src="/js/toast.js"></script>
   <script>
+    // ── LGPD: desabilita botão se checkbox não marcado ──
+    const lgpdCheckbox = document.getElementById('lgpd-aceite');
+    const btnCriar = document.getElementById('btn-criar-conta');
+    lgpdCheckbox.addEventListener('change', () => {
+      btnCriar.style.opacity = lgpdCheckbox.checked ? '1' : '0.5';
+    });
+    btnCriar.style.opacity = '0.5';
+
     let isPrestador = false;
     const prestadorFields = document.getElementById('prestador-fields');
 

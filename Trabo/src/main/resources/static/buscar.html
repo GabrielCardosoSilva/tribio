@@ -564,7 +564,8 @@
         if (p.servicos && p.servicos.length > 0) {
           const previews = p.servicos.slice(0, 4).map((s, i) => {
             const fotoHtml = s.fotos && s.fotos.length > 0
-              ? `<img class="service-mini-img" src="${s.fotos[0]}" alt="${s.titulo}" style="display:block;">`
+              ? `<img class="service-mini-img" src="${s.fotos[0]}" alt="${s.titulo}" style="display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                 <div class="service-mini-img" style="display:none;">🛠️</div>`
               : `<div class="service-mini-img">🛠️</div>`;
             // Use price from matching pacote if available
             const pacote = p.pacotesPrecos && p.pacotesPrecos[i];
@@ -597,7 +598,7 @@
           </button>
           <div class="pro-card-body">
             <div class="pro-card-header">
-              <div class="pro-avatar">${p.fotoPerfil ? `<img src="${p.fotoPerfil}" alt="${nome}">` : inicial}</div>
+              <div class="pro-avatar" id="avatar-wrap-${favId}">${p.fotoPerfil ? `<img src="${p.fotoPerfil}" alt="${nome}" onerror="this.remove();document.getElementById('avatar-wrap-${favId}').textContent='${inicial}';">` : inicial}</div>
               <div>
                 <h3 class="pro-name">${nome}</h3>
                 <span class="pro-city">📍 ${p.estado || ''} — ${p.cidade || 'Local não informado'}</span>

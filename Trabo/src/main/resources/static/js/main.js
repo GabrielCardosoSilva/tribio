@@ -75,8 +75,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const btnLogout = document.getElementById('btn-logout');
   if (btnLogout) {
-    btnLogout.addEventListener('click', (e) => {
+    btnLogout.addEventListener('click', async (e) => {
       e.preventDefault();
+      const token = localStorage.getItem('trabio_token');
+      // Invalida o token no servidor (blacklist)
+      if (token) {
+        try {
+          await fetch('/api/auth/logout', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+        } catch (_) { /* falha silenciosa — limpa localStorage de qualquer forma */ }
+      }
       localStorage.removeItem('trabio_token');
       localStorage.removeItem('trabio_role');
       window.location.href = '/';

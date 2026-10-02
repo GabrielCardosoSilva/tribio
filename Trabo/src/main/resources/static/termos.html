@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Termos de Uso — Trabio</title>
+  <meta name="description" content="Termos de Uso do Trabio — leia as regras e condições para usar a plataforma como cliente ou prestador de serviços." />
+  <link rel="icon" type="image/png" href="/images/logo-trabio.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #0f1f17;
+      color: #d4e8db;
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    nav {
+      background: #1a3b2b;
+      border-bottom: 1px solid #2b4f3c;
+      padding: 0 40px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+    .nav-logo span { color: #52b788; }
+    .nav-logo img { width: 26px; height: 26px; object-fit: contain; }
+    .nav-back {
+      color: #74a57f;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: #52b788; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3b2b 0%, #0f2419 100%);
+      padding: 60px 40px;
+      text-align: center;
+      border-bottom: 1px solid #2b4f3c;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(82, 183, 136, 0.15);
+      border: 1px solid rgba(82, 183, 136, 0.3);
+      color: #52b788;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+    }
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .hero p { color: #74a57f; font-size: 1rem; max-width: 500px; margin: 0 auto; }
+
+    .content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 40px 80px;
+    }
+
+    .toc {
+      background: #1a3b2b;
+      border: 1px solid #2b4f3c;
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 48px;
+    }
+    .toc h3 {
+      color: #52b788;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .toc ol { padding-left: 20px; }
+    .toc ol li { margin-bottom: 8px; }
+    .toc ol li a {
+      color: #a8d5b8;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    .toc ol li a:hover { color: #52b788; }
+
+    .section {
+      margin-bottom: 48px;
+      scroll-margin-top: 80px;
+    }
+    .section h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #2b4f3c;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section h2 .icon {
+      width: 32px;
+      height: 32px;
+      background: rgba(82, 183, 136, 0.15);
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .section p { color: #a8d5b8; margin-bottom: 12px; font-size: 0.97rem; }
+    .section ul, .section ol { padding-left: 20px; color: #a8d5b8; font-size: 0.97rem; }
+    .section ul li, .section ol li { margin-bottom: 8px; }
+
+    .highlight-box {
+      background: rgba(82, 183, 136, 0.08);
+      border-left: 3px solid #52b788;
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+    .highlight-box p { color: #c0e0cc; margin: 0; }
+
+    .warn-box {
+      background: rgba(255, 170, 0, 0.08);
+      border-left: 3px solid #f0a500;
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+    .warn-box p { color: #e0c070; margin: 0; }
+
+    .page-footer {
+      background: #1a3b2b;
+      border-top: 1px solid #2b4f3c;
+      text-align: center;
+      padding: 32px 40px;
+      color: #74a57f;
+      font-size: 0.85rem;
+    }
+    .page-footer a { color: #52b788; text-decoration: none; }
+    .page-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 1.8rem; }
+      .content { padding: 40px 20px 60px; }
+      nav { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">
+      <img src="/images/logo-trabio.png" alt="Trabio" />
+      TRABIO<span>.</span>
+    </a>
+    <a href="/" class="nav-back">← Voltar ao início</a>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-badge">📄 Contrato entre você e o Trabio</div>
+    <h1>Termos de Uso</h1>
+    <p>Última atualização: outubro de 2026 · Leia com atenção antes de usar a plataforma</p>
+  </div>
+
+  <div class="content">
+
+    <div class="toc">
+      <h3>Índice</h3>
+      <ol>
+        <li><a href="#aceitacao">Aceitação dos Termos</a></li>
+        <li><a href="#servico">O que é o Trabio</a></li>
+        <li><a href="#cadastro">Cadastro e conta</a></li>
+        <li><a href="#clientes">Regras para clientes</a></li>
+        <li><a href="#prestadores">Regras para prestadores</a></li>
+        <li><a href="#proibicoes">O que é proibido</a></li>
+        <li><a href="#responsabilidade">Limitação de responsabilidade</a></li>
+        <li><a href="#encerramento">Encerramento de conta</a></li>
+        <li><a href="#alteracoes">Alterações nos termos</a></li>
+        <li><a href="#foro">Foro</a></li>
+      </ol>
+    </div>
+
+    <div class="section" id="aceitacao">
+      <h2><span class="icon">✅</span> 1. Aceitação dos Termos</h2>
+      <p>
+        Ao criar uma conta ou utilizar o Trabio, você declara que <strong style="color:#fff;">leu, compreendeu e concorda</strong> com estes Termos de Uso e com a nossa <a href="/privacidade.html" style="color:#52b788;">Política de Privacidade</a>.
+      </p>
+      <p>Se não concordar com alguma condição, não utilize a plataforma.</p>
+    </div>
+
+    <div class="section" id="servico">
+      <h2><span class="icon">🔧</span> 2. O que é o Trabio</h2>
+      <p>
+        O Trabio é uma <strong style="color:#fff;">plataforma de intermediação</strong> que conecta pessoas que precisam de serviços (clientes) a profissionais autônomos ou empresas (prestadores).
+      </p>
+      <div class="warn-box">
+        <p>⚠️ <strong>Importante:</strong> O Trabio não é empregador, agência de empregos, nem parte nos contratos de serviço firmados entre clientes e prestadores. Somos apenas o meio de conexão.</p>
+      </div>
+    </div>
+
+    <div class="section" id="cadastro">
+      <h2><span class="icon">👤</span> 3. Cadastro e conta</h2>
+      <ul>
+        <li>Você deve ter pelo menos <strong>18 anos</strong> para criar uma conta.</li>
+        <li>As informações fornecidas no cadastro devem ser <strong>verdadeiras e atualizadas</strong>.</li>
+        <li>Você é responsável por manter a <strong>confidencialidade da sua senha</strong>.</li>
+        <li>É proibido criar múltiplas contas para a mesma pessoa ou empresa.</li>
+        <li>O Trabio pode solicitar verificação de identidade a qualquer momento.</li>
+      </ul>
+    </div>
+
+    <div class="section" id="clientes">
+      <h2><span class="icon">🧑</span> 4. Regras para clientes</h2>
+      <ul>
+        <li>As avaliações devem ser <strong>honestas e baseadas em experiências reais</strong>.</li>
+        <li>É proibido publicar avaliações falsas, difamatórias ou com conteúdo inapropriado.</li>
+        <li>O contato com prestadores deve ser feito com respeito e boa-fé.</li>
+        <li>Negociações de pagamento são realizadas diretamente entre cliente e prestador — o Trabio não processa pagamentos.</li>
+      </ul>
+    </div>
+
+    <div class="section" id="prestadores">
+      <h2><span class="icon">🛠️</span> 5. Regras para prestadores</h2>
+      <ul>
+        <li>Todas as informações do perfil (cidade, serviços, foto) devem ser <strong>verídicas</strong>.</li>
+        <li>É responsabilidade do prestador possuir as <strong>habilitações e registros profissionais</strong> exigidos pela legislação para o serviço oferecido.</li>
+        <li>O prestador se compromete a cumprir os serviços anunciados com qualidade e dentro do prazo acordado.</li>
+        <li>Imagens de portfólio enviadas devem ser de trabalhos <strong>próprios e reais</strong>.</li>
+        <li>O Trabio pode desativar perfis que recebam avaliações negativas recorrentes ou violem estes termos.</li>
+      </ul>
+    </div>
+
+    <div class="section" id="proibicoes">
+      <h2><span class="icon">🚫</span> 6. O que é proibido</h2>
+      <ul>
+        <li>Usar a plataforma para fins ilegais ou fraudulentos.</li>
+        <li>Assediar, ameaçar ou ofender outros usuários.</li>
+        <li>Tentar acessar contas de outros usuários.</li>
+        <li>Realizar ataques de força bruta, scraping ou sobrecarga no sistema.</li>
+        <li>Anunciar serviços proibidos por lei.</li>
+        <li>Criar contas falsas ou usar informações de terceiros sem autorização.</li>
+      </ul>
+      <div class="warn-box">
+        <p>⚠️ Violações podem resultar em suspensão imediata e permanente da conta, sem direito a reembolso de planos pagos.</p>
+      </div>
+    </div>
+
+    <div class="section" id="responsabilidade">
+      <h2><span class="icon">⚖️</span> 7. Limitação de responsabilidade</h2>
+      <p>O Trabio não se responsabiliza por:</p>
+      <ul>
+        <li>Qualidade ou resultado dos serviços prestados por profissionais cadastrados.</li>
+        <li>Danos causados por prestadores ou clientes durante ou após a contratação de serviços.</li>
+        <li>Indisponibilidade temporária da plataforma por manutenção ou falha técnica.</li>
+        <li>Perdas decorrentes do uso indevido da plataforma por terceiros.</li>
+      </ul>
+      <p>Recomendamos sempre verificar referências e formalizar contratos antes de iniciar qualquer serviço.</p>
+    </div>
+
+    <div class="section" id="encerramento">
+      <h2><span class="icon">🗑️</span> 8. Encerramento de conta</h2>
+      <p>Você pode solicitar a exclusão da sua conta a qualquer momento através do seu painel ou pelo e-mail de contato.</p>
+      <div class="highlight-box">
+        <p>📋 Após a exclusão, seus dados pessoais serão removidos em até 30 dias, conforme descrito na nossa <a href="/privacidade.html" style="color:#52b788;">Política de Privacidade</a>.</p>
+      </div>
+      <p>O Trabio reserva-se o direito de encerrar contas que violem estes Termos, com ou sem aviso prévio.</p>
+    </div>
+
+    <div class="section" id="alteracoes">
+      <h2><span class="icon">🔄</span> 9. Alterações nos termos</h2>
+      <p>
+        O Trabio pode atualizar estes Termos a qualquer momento. Alterações significativas serão comunicadas por e-mail ou notificação na plataforma com pelo menos <strong>15 dias de antecedência</strong>.
+      </p>
+      <p>O uso continuado da plataforma após a vigência das mudanças indica aceitação dos novos termos.</p>
+    </div>
+
+    <div class="section" id="foro">
+      <h2><span class="icon">🏛️</span> 10. Foro</h2>
+      <p>
+        Estes Termos são regidos pelas leis da República Federativa do Brasil. Fica eleito o foro da comarca de <strong>São Paulo/SP</strong> para dirimir quaisquer conflitos decorrentes deste instrumento, com renúncia a qualquer outro, por mais privilegiado que seja.
+      </p>
+    </div>
+
+  </div>
+
+  <footer class="page-footer">
+    <p>© 2026 Trabio. Todos os direitos reservados. |
+      <a href="/termos.html">Termos de Uso</a> ·
+      <a href="/privacidade.html">Política de Privacidade</a>
+    </p>
+  </footer>
+
+</body>
+</html>

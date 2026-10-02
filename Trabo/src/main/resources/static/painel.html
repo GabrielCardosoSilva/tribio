@@ -1304,7 +1304,16 @@
       }
     }
 
-    function logout() {
+    async function logout() {
+      const token = localStorage.getItem('trabio_token');
+      if (token) {
+        try {
+          await fetch('/api/auth/logout', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+        } catch (_) { /* falha silenciosa */ }
+      }
       localStorage.removeItem('trabio_token');
       localStorage.removeItem('trabio_role');
       window.location.href = '/login.html';
