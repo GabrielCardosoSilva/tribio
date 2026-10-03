@@ -280,11 +280,12 @@
         <div class="lgpd-consent">
           <input type="checkbox" id="lgpd-aceite" required />
           <label for="lgpd-aceite">
-            Li e aceito os <a href="/termos.html" target="_blank">Termos de Uso</a>
-            e a <a href="/privacidade.html" target="_blank">Política de Privacidade</a>
+            Li e aceito os <a href="/termos.html" target="_blank" onclick="event.stopPropagation()">Termos de Uso</a>
+            e a <a href="/privacidade.html" target="_blank" onclick="event.stopPropagation()">Política de Privacidade</a>
             do Trabio. Estou ciente de que meus dados serão tratados conforme a LGPD (Lei 13.709/2018).
           </label>
         </div>
+
 
         <button type="submit" class="btn-submit" id="btn-criar-conta">Criar conta</button>
       </form>
