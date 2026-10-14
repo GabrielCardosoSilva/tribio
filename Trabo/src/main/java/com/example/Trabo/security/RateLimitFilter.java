@@ -6,6 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,12 +20,20 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RateLimitFilter extends OncePerRequestFilter {
 
     private final Map<String, Bucket> cache = new ConcurrentHashMap<>();
+    private final SecurityErrorHandler errorHandler;
+    private final int capacity;
+
+    public RateLimitFilter(SecurityErrorHandler errorHandler,
+                           @Value("${app.rate-limit.capacity:10}") int capacity) {
+        this.errorHandler = errorHandler;
+        this.capacity = capacity;
+    }
 
     private Bucket createNewBucket() {
-        // Limita a 10 requisições por minuto por IP para as rotas sensíveis
+        // Limita a N requisições por minuto por IP para as rotas sensíveis (padrão: 10)
         Bandwidth limit = Bandwidth.builder()
-                .capacity(10)
-                .refillGreedy(10, Duration.ofMinutes(1))
+                .capacity(capacity)
+                .refillGreedy(capacity, Duration.ofMinutes(1))
                 .build();
         return Bucket.builder().addLimit(limit).build();
     }
@@ -41,8 +50,8 @@ public class RateLimitFilter extends OncePerRequestFilter {
             Bucket bucket = cache.computeIfAbsent(ip, k -> createNewBucket());
 
             if (!bucket.tryConsume(1)) {
-                response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
-                response.getWriter().write("Too many requests - Rate limit exceeded. Try again later.");
+                errorHandler.write(response, request, HttpStatus.TOO_MANY_REQUESTS,
+                        "Muitas tentativas. Aguarde um minuto e tente novamente.");
                 return;
             }
         }

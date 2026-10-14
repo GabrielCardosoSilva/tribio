@@ -3,6 +3,7 @@ package com.example.Trabo.config;
 import com.example.Trabo.security.JwtAuthenticationFilter;
 import com.example.Trabo.security.CustomUserDetailsService;
 import com.example.Trabo.security.RateLimitFilter;
+import com.example.Trabo.security.SecurityErrorHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -32,11 +33,14 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtFilter;
     private final CustomUserDetailsService userDetailsService;
     private final RateLimitFilter rateLimitFilter;
+    private final SecurityErrorHandler securityErrorHandler;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtFilter, CustomUserDetailsService userDetailsService, RateLimitFilter rateLimitFilter) {
+    public SecurityConfig(JwtAuthenticationFilter jwtFilter, CustomUserDetailsService userDetailsService,
+                          RateLimitFilter rateLimitFilter, SecurityErrorHandler securityErrorHandler) {
         this.jwtFilter = jwtFilter;
         this.userDetailsService = userDetailsService;
         this.rateLimitFilter = rateLimitFilter;
+        this.securityErrorHandler = securityErrorHandler;
     }
 
     @Bean
@@ -63,14 +67,20 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(securityErrorHandler)
+                .accessDeniedHandler(securityErrorHandler))
             .authorizeHttpRequests(auth -> auth
+                // Erros do servlet container (evita mascarar erros reais como 401)
+                .requestMatchers("/error").permitAll()
                 // Públicos
                 .requestMatchers("/", "/index.html", "/login.html", "/cadastro.html", "/buscar.html", "/profissional.html", "/painel.html", "/erro.html", "/termos.html", "/privacidade.html", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
-                .requestMatchers("/api/auth/**", "/api/arquivos/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/arquivos/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/prestadores/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/categorias").permitAll()
                 // Swagger
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 // H2 console (dev)
                 .requestMatchers("/h2-console/**").permitAll()
                 // Admin

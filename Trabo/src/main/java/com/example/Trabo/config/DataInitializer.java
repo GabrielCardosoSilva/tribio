@@ -9,9 +9,15 @@ import com.example.Trabo.model.entity.Servico;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * Popula o banco com dados de exemplo — somente no perfil "dev" (H2).
+ * Em staging/prod as contas de teste com senhas fracas NÃO são criadas.
+ */
 @Configuration
+@Profile("dev")
 public class DataInitializer {
 
     @Bean

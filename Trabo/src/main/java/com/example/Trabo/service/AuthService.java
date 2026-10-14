@@ -4,6 +4,7 @@ import com.example.Trabo.dto.request.LoginRequest;
 import com.example.Trabo.dto.request.RegistroPrestadorRequest;
 import com.example.Trabo.dto.request.RegistroUsuarioRequest;
 import com.example.Trabo.dto.response.JwtResponse;
+import com.example.Trabo.exception.BadRequestException;
 import com.example.Trabo.exception.BusinessException;
 import com.example.Trabo.model.entity.Prestador;
 import com.example.Trabo.model.entity.Usuario;
@@ -11,12 +12,14 @@ import com.example.Trabo.model.enums.Role;
 import com.example.Trabo.repository.PrestadorRepository;
 import com.example.Trabo.repository.UsuarioRepository;
 import com.example.Trabo.security.JwtTokenProvider;
+import com.example.Trabo.security.TokenBlacklist;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 public class AuthService {
@@ -26,17 +29,20 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
+    private final TokenBlacklist tokenBlacklist;
 
     public AuthService(UsuarioRepository usuarioRepository,
                        PrestadorRepository prestadorRepository,
                        PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager,
-                       JwtTokenProvider tokenProvider) {
+                       JwtTokenProvider tokenProvider,
+                       TokenBlacklist tokenBlacklist) {
         this.usuarioRepository = usuarioRepository;
         this.prestadorRepository = prestadorRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
+        this.tokenBlacklist = tokenBlacklist;
     }
 
     @Transactional
@@ -88,5 +94,14 @@ public class AuthService {
         String token = tokenProvider.generateToken(authentication);
         Usuario usuario = usuarioRepository.findByEmail(request.email()).orElseThrow();
         return new JwtResponse(token, usuario.getNome(), usuario.getRole().name());
+    }
+
+    public void logout(String bearerToken) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            String token = bearerToken.substring(7);
+            tokenBlacklist.blacklist(token);
+        } else {
+            throw new BadRequestException("Token de autenticação não fornecido");
+        }
     }
 }

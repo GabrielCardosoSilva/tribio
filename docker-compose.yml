@@ -7,6 +7,7 @@ services:
     ports:
       - "8080:8080"
     environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
       SPRING_DATASOURCE_URL: ${DB_URL}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
@@ -14,8 +15,5 @@ services:
       APP_JWT_SECRET: ${JWT_SECRET}
       APP_JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000}
     volumes:
-      - trabio-uploads:/app/uploads
+      - ./Trabo/uploads:/app/uploads
     restart: unless-stopped
-
-volumes:
-  trabio-uploads:

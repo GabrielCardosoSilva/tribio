@@ -79,6 +79,8 @@ public class Usuario {
         private LocalDateTime createdAt = LocalDateTime.now();
         private String fotoPerfil;
 
+        private Set<Prestador> favoritos = new HashSet<>();
+
         public Builder id(Long id)                   { this.id = id; return this; }
         public Builder nome(String nome)             { this.nome = nome; return this; }
         public Builder email(String email)           { this.email = email; return this; }
@@ -87,6 +89,7 @@ public class Usuario {
         public Builder ativo(boolean ativo)          { this.ativo = ativo; return this; }
         public Builder createdAt(LocalDateTime t)    { this.createdAt = t; return this; }
         public Builder fotoPerfil(String f)          { this.fotoPerfil = f; return this; }
+        public Builder favoritos(Set<Prestador> fav) { this.favoritos = fav; return this; }
 
         public Usuario build() {
             Usuario u = new Usuario();
@@ -98,6 +101,7 @@ public class Usuario {
             u.ativo = this.ativo;
             u.createdAt = this.createdAt;
             u.fotoPerfil = this.fotoPerfil;
+            u.favoritos = this.favoritos != null ? this.favoritos : new HashSet<>();
             return u;
         }
     }

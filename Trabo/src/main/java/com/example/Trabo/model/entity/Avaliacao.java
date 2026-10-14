@@ -42,11 +42,13 @@ public class Avaliacao {
     public static Builder builder() { return new Builder(); }
 
     public static class Builder {
+        private Long id;
         private Prestador prestador;
         private Usuario usuario;
         private Integer nota;
         private String comentario;
 
+        public Builder id(Long id)               { this.id = id; return this; }
         public Builder prestador(Prestador p)    { this.prestador = p; return this; }
         public Builder usuario(Usuario u)        { this.usuario = u; return this; }
         public Builder nota(Integer n)           { this.nota = n; return this; }
@@ -54,6 +56,7 @@ public class Avaliacao {
 
         public Avaliacao build() {
             Avaliacao a = new Avaliacao();
+            a.id = this.id;
             a.prestador = this.prestador;
             a.usuario = this.usuario;
             a.nota = this.nota;

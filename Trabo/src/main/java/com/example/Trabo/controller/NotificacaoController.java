@@ -1,52 +1,56 @@
 package com.example.Trabo.controller;
 
-import com.example.Trabo.model.entity.Notificacao;
-import com.example.Trabo.model.entity.Usuario;
-import com.example.Trabo.repository.NotificacaoRepository;
-import com.example.Trabo.repository.UsuarioRepository;
+import com.example.Trabo.dto.response.ErrorResponse;
+import com.example.Trabo.dto.response.NotificacaoResponse;
+import com.example.Trabo.service.NotificacaoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/notificacoes")
-@Tag(name = "Notificações")
+@Tag(name = "Notificações", description = "Endpoints de consulta e atualização de notificações do usuário autenticado")
 @PreAuthorize("isAuthenticated()")
 @SecurityRequirement(name = "bearerAuth")
 public class NotificacaoController {
 
-    private final NotificacaoRepository notificacaoRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final NotificacaoService notificacaoService;
 
-    public NotificacaoController(NotificacaoRepository notificacaoRepository, UsuarioRepository usuarioRepository) {
-        this.notificacaoRepository = notificacaoRepository;
-        this.usuarioRepository = usuarioRepository;
+    public NotificacaoController(NotificacaoService notificacaoService) {
+        this.notificacaoService = notificacaoService;
     }
 
     @GetMapping
-    @Operation(summary = "Lista as notificações do usuário logado")
-    public ResponseEntity<List<Notificacao>> listar() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow();
-        return ResponseEntity.ok(notificacaoRepository.findByUsuarioIdOrderByCreatedAtDesc(usuario.getId()));
+    @Operation(summary = "Lista as notificações do usuário logado", description = "Retorna o histórico de notificações em ordem cronológica decrescente.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista de notificações recuperada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = NotificacaoResponse.class)))),
+            @ApiResponse(responseCode = "401", description = "Não autenticado",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public ResponseEntity<List<NotificacaoResponse>> listar() {
+        return ResponseEntity.ok(notificacaoService.listar());
     }
 
     @PutMapping("/lidas")
     @Operation(summary = "Marca todas as notificações do usuário logado como lidas")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Notificações marcadas como lidas"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     public ResponseEntity<Void> marcarComoLidas() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow();
-        List<Notificacao> naoLidas = notificacaoRepository.findByUsuarioIdOrderByCreatedAtDesc(usuario.getId())
-                .stream().filter(n -> !n.isLida()).toList();
-        
-        naoLidas.forEach(n -> n.setLida(true));
-        notificacaoRepository.saveAll(naoLidas);
-        return ResponseEntity.ok().build();
+        notificacaoService.marcarComoLidas();
+        return ResponseEntity.noContent().build();
     }
 }

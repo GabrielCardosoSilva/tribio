@@ -1,14 +1,11 @@
 package com.example.Trabo.service;
 
-
 import com.example.Trabo.dto.request.PortfolioRequest;
 import com.example.Trabo.dto.response.CategoriaResponse;
 import com.example.Trabo.dto.response.PacotePrecoResponse;
 import com.example.Trabo.dto.response.PrestadorResponse;
 import com.example.Trabo.dto.response.ServicoResponse;
-import com.example.Trabo.exception.BusinessException;
 import com.example.Trabo.exception.NotFoundException;
-import com.example.Trabo.model.entity.Categoria;
 import com.example.Trabo.model.entity.Notificacao;
 import com.example.Trabo.model.entity.PacotePreco;
 import com.example.Trabo.model.entity.Prestador;
@@ -18,13 +15,12 @@ import com.example.Trabo.repository.CategoriaRepository;
 import com.example.Trabo.repository.NotificacaoRepository;
 import com.example.Trabo.repository.PrestadorRepository;
 import com.example.Trabo.repository.UsuarioRepository;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PrestadorService {
@@ -33,15 +29,18 @@ public class PrestadorService {
     private final CategoriaRepository categoriaRepository;
     private final UsuarioRepository usuarioRepository;
     private final NotificacaoRepository notificacaoRepository;
+    private final UsuarioAutenticadoService usuarioAutenticadoService;
 
     public PrestadorService(PrestadorRepository prestadorRepository,
                             CategoriaRepository categoriaRepository,
                             UsuarioRepository usuarioRepository,
-                            NotificacaoRepository notificacaoRepository) {
+                            NotificacaoRepository notificacaoRepository,
+                            UsuarioAutenticadoService usuarioAutenticadoService) {
         this.prestadorRepository = prestadorRepository;
         this.categoriaRepository = categoriaRepository;
         this.usuarioRepository = usuarioRepository;
         this.notificacaoRepository = notificacaoRepository;
+        this.usuarioAutenticadoService = usuarioAutenticadoService;
     }
 
     public List<PrestadorResponse> buscarPublico(Long categoriaId, String cidade, String estado, String texto) {
@@ -53,21 +52,17 @@ public class PrestadorService {
         Prestador p = prestadorRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Prestador não encontrado: " + id));
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String visitante = "Alguém";
+        Optional<Usuario> visitanteOpt = usuarioAutenticadoService.getUsuarioOpcional();
         boolean isOwner = false;
+        String visitante = "Alguém";
 
-        if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
-            try {
-                Usuario u = usuarioRepository.findByEmail(auth.getName()).orElse(null);
-                if (u != null) {
-                    if (u.getId().equals(p.getUsuario().getId())) {
-                        isOwner = true;
-                    } else {
-                        visitante = u.getNome();
-                    }
-                }
-            } catch (Exception e) {}
+        if (visitanteOpt.isPresent()) {
+            Usuario u = visitanteOpt.get();
+            if (u.getId().equals(p.getUsuario().getId())) {
+                isOwner = true;
+            } else {
+                visitante = u.getNome();
+            }
         }
 
         if (!isOwner) {
@@ -79,9 +74,7 @@ public class PrestadorService {
 
     @Transactional
     public void favoritar(Long prestadorId) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Usuario usuarioLogado = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+        Usuario usuarioLogado = usuarioAutenticadoService.getUsuario();
         Prestador prestador = prestadorRepository.findById(prestadorId)
                 .orElseThrow(() -> new NotFoundException("Prestador não encontrado"));
 
@@ -90,21 +83,17 @@ public class PrestadorService {
         } else {
             usuarioLogado.getFavoritos().add(prestador);
             notificacaoRepository.save(new Notificacao(
-                    prestador.getUsuario(), 
-                    usuarioLogado.getNome() + " curtiu seu perfil", 
+                    prestador.getUsuario(),
+                    usuarioLogado.getNome() + " curtiu seu perfil",
                     "LIKE"
             ));
         }
         usuarioRepository.save(usuarioLogado);
     }
 
-
-
-    @Transactional
+    @Transactional(readOnly = true)
     public PrestadorResponse buscarMeuPerfil() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+        Usuario usuario = usuarioAutenticadoService.getUsuario();
         Prestador prestador = prestadorRepository.findByUsuarioId(usuario.getId())
                 .orElseThrow(() -> new NotFoundException("Perfil de prestador não encontrado"));
         return toResponse(prestador);
@@ -112,9 +101,7 @@ public class PrestadorService {
 
     @Transactional
     public PrestadorResponse atualizarPortfolio(PortfolioRequest request) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+        Usuario usuario = usuarioAutenticadoService.getUsuario();
         Prestador prestador = prestadorRepository.findByUsuarioId(usuario.getId())
                 .orElseThrow(() -> new NotFoundException("Perfil de prestador não encontrado"));
 
@@ -143,7 +130,7 @@ public class PrestadorService {
         if (request.galeria() != null) {
             prestador.getGaleria().addAll(request.galeria());
         }
-        
+
         prestador.setAprovado(true);
         prestador.setVisivel(request.visivel() != null ? request.visivel() : true);
         if (request.corPerfil() != null && !request.corPerfil().isBlank()) {
@@ -170,7 +157,7 @@ public class PrestadorService {
                 p.isAprovado(),
                 p.getMediaAvaliacoes(),
                 p.getAvaliacoes() != null ? p.getAvaliacoes().size() : 0,
-                p.getCategorias().stream().map(c -> new CategoriaResponse(c.getId(), c.getNome(), c.getIcone(), c.getDescricao())).toList(),
+                p.getCategorias() != null ? p.getCategorias().stream().map(c -> new CategoriaResponse(c.getId(), c.getNome(), c.getIcone(), c.getDescricao())).toList() : List.of(),
                 p.getGaleria() != null ? p.getGaleria() : new ArrayList<>(),
                 p.getServicos() != null ? p.getServicos().stream().map(s -> new ServicoResponse(s.getId(), s.getTitulo(), s.getDescricao())).toList() : List.of(),
                 p.getPacotesPrecos() != null ? p.getPacotesPrecos().stream().map(pp -> new PacotePrecoResponse(pp.getId(), pp.getPacote(), pp.getPreco(), pp.getDias(), pp.getHorario())).toList() : List.of(),

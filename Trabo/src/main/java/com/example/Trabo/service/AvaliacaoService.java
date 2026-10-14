@@ -9,8 +9,6 @@ import com.example.Trabo.model.entity.Prestador;
 import com.example.Trabo.model.entity.Usuario;
 import com.example.Trabo.repository.AvaliacaoRepository;
 import com.example.Trabo.repository.PrestadorRepository;
-import com.example.Trabo.repository.UsuarioRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,21 +19,19 @@ public class AvaliacaoService {
 
     private final AvaliacaoRepository avaliacaoRepository;
     private final PrestadorRepository prestadorRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final UsuarioAutenticadoService usuarioAutenticadoService;
 
     public AvaliacaoService(AvaliacaoRepository avaliacaoRepository,
                             PrestadorRepository prestadorRepository,
-                            UsuarioRepository usuarioRepository) {
+                            UsuarioAutenticadoService usuarioAutenticadoService) {
         this.avaliacaoRepository = avaliacaoRepository;
         this.prestadorRepository = prestadorRepository;
-        this.usuarioRepository = usuarioRepository;
+        this.usuarioAutenticadoService = usuarioAutenticadoService;
     }
 
     @Transactional
     public AvaliacaoResponse avaliar(Long prestadorId, AvaliacaoRequest request) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+        Usuario usuario = usuarioAutenticadoService.getUsuario();
 
         Prestador prestador = prestadorRepository.findById(prestadorId)
                 .orElseThrow(() -> new NotFoundException("Prestador não encontrado: " + prestadorId));
@@ -56,6 +52,9 @@ public class AvaliacaoService {
     }
 
     public List<AvaliacaoResponse> listarPorPrestador(Long prestadorId) {
+        if (!prestadorRepository.existsById(prestadorId)) {
+            throw new NotFoundException("Prestador não encontrado: " + prestadorId);
+        }
         return avaliacaoRepository.findByPrestadorId(prestadorId)
                 .stream().map(this::toResponse).toList();
     }

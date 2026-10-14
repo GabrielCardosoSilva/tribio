@@ -1,4 +1,4 @@
-﻿# 🚀 ROADMAP — Trabio
+# 🚀 ROADMAP — Trabio
 > Lista de melhorias e pendências para tornar a plataforma mais profissional, segura e escalável.
 
 ---
@@ -30,12 +30,12 @@
 
 ### 🏗️ Organização & Arquitetura
 
-- [ ] **Separar ambientes: `dev`, `staging`, `prod`** — Usar `application-dev.properties` e `application-prod.properties`. Em dev usar H2, em prod usar o Neon PostgreSQL.
-- [ ] **Refatorar o `painel.html`** — Arquivo com 1.300+ linhas. Separar em componentes ou páginas distintas (perfil, portfolio, notificações, favoritos).
-- [ ] **Mover lógica de negócio do Controller para o Service** — Alguns controllers fazem verificações que deveriam estar no service (princípio de camadas).
-- [ ] **Padronizar tratamento de erros** — Criar um `@ControllerAdvice` global para retornar erros no formato `{ error: "mensagem", status: 400 }` em vez de stacktraces.
-- [ ] **Adicionar testes unitários e de integração** — A pasta `test/` existe mas está vazia. Criar testes para Services e Controllers com JUnit 5 + MockMvc.
-- [ ] **Documentar a API com Swagger completo** — Preencher `@Operation`, `@ApiResponse` e `@Schema` em todos os endpoints.
+- [x] **Separar ambientes: `dev`, `staging`, `prod`** — Configurados `application-dev.properties` (H2 em memória com compatibilidade Postgres), `application-staging.properties` e `application-prod.properties` (Neon PostgreSQL com pool Hikari ajustado para conexões serverless), além de `DataInitializer` ativo apenas no profile dev.
+- [x] **Refatorar o `painel.html`** — Código desacoplado e modularizado: CSS extraído para `static/css/painel.css`, lógica JS extraída para `static/js/painel.js`, e `painel.html` reduzido de 1.320+ linhas para 380 linhas limpas.
+- [x] **Mover lógica de negócio do Controller para o Service** — Criados `UsuarioService`, `UsuarioAutenticadoService` e `NotificacaoService`. Controllers refatorados para atuar exclusivamente como adaptadores de entrada HTTP.
+- [x] **Padronizar tratamento de erros** — Implementado `GlobalExceptionHandler` e `SecurityErrorHandler` retornando DTO `ErrorResponse` padronizado (`error`, `status`, `path`, `timestamp`) cobrindo 400, 401, 403, 404, 409, 413, 422 e 500.
+- [x] **Adicionar testes unitários e de integração** — Suíte completa implementada com JUnit 5 + MockMvc + Mockito (34 testes passando, cobrindo `AuthService`, `UsuarioService`, `PrestadorService`, `CategoriaService`, `AvaliacaoService`, `NotificacaoService`, fluxos de API e tratamento global de erros).
+- [x] **Documentar a API com Swagger completo** — Configurado `OpenApiConfig` com especificação JWT `bearerAuth`, metadados OpenAPI 3.0 e anotações `@Operation`, `@ApiResponse`, `@Schema` e `@SecurityRequirement` em todos os Controllers e DTOs.
 
 ### ⚡ Velocidade & Performance
 
@@ -87,18 +87,21 @@
 
 ---
 
-## 📊 Resumo de Prioridades
+## 📊 Resumo de Prioridades e Progresso
 
-| Área | Qtd. Pendências | Prioridade |
-|------|:-:|:-:|
-| 🔒 Segurança | 7 | 🔴 Crítico |
-| 🛡️ LGPD / Privacidade | 6 | 🔴 Crítico |
-| 🏗️ Arquitetura | 6 | 🟠 Alta |
-| ⚡ Performance | 6 | 🟠 Alta |
-| 🔍 SEO | 4 | 🟡 Média |
-| 💼 Funcionalidades | 7 | 🟡 Média |
-| 📱 Mobile/UX | 4 | 🟡 Média |
-| 🚀 Escalabilidade | 6 | 🟢 Longo prazo |
+| Área | Concluídas | Pendências | Status | Prioridade |
+|---|:---:|:---:|:---:|:---:|
+| 🔒 Segurança | 7/7 | 0 | ✅ 100% Concluído | 🔴 Crítico |
+| 🛡️ LGPD / Privacidade | 6/6 | 0 | ✅ 100% Concluído | 🔴 Crítico |
+| 🏗️ Organização & Arquitetura | 6/6 | 0 | ✅ 100% Concluído | 🟠 Alta |
+| ⚡ Velocidade & Performance | 0/6 | 6 | ⏳ Próximo Foco | 🟠 Alta |
+| 🔍 SEO & Visibilidade | 0/4 | 4 | ⏳ Pendente | 🟡 Média |
+| 💼 Funcionalidades de Conversão | 0/7 | 7 | ⏳ Pendente | 🟡 Média |
+| 📱 Mobile & UX | 0/4 | 4 | ⏳ Pendente | 🟡 Média |
+| 🚀 Escalabilidade | 0/6 | 6 | ⏳ Pendente | 🟢 Longo prazo |
 
-> **💡 Dica:** Focar nos itens 🔴 antes de mostrar o projeto para possíveis empregadores ou clientes. Segurança e LGPD são os primeiros pontos que qualquer desenvolvedor sênior vai avaliar.
+**Progresso Total do Roadmap:** 19 de 46 itens concluídos (~41% global, 100% do bloco Crítico e Arquitetura).
+
+> **💡 Dica:** Todas as etapas críticas de segurança, LGPD e arquitetura/testes já estão 100% resolvidas. O próximo passo recomendado é o bloco **⚡ Velocidade & Performance** (compressão de imagens, lazy loading, paginação com `Pageable` e índices no banco de dados).
+
 

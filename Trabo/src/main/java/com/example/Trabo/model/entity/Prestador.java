@@ -83,34 +83,61 @@ public class Prestador {
     public static Builder builder() { return new Builder(); }
 
     public static class Builder {
+        private Long id;
         private Usuario usuario;
         private String cidade;
         private String estado;
         private String bairro;
+        private String enderecoCompleto;
         private String descricao;
         private String telefone;
         private String whatsapp;
+        private String emailContato;
         private boolean aprovado = false;
+        private boolean visivel = true;
+        private String corPerfil = "#2D6A4F";
+        private List<Categoria> categorias = new ArrayList<>();
+        private List<Servico> servicos = new ArrayList<>();
+        private List<PacotePreco> pacotesPrecos = new ArrayList<>();
+        private List<String> galeria = new ArrayList<>();
 
-        public Builder usuario(Usuario u)        { this.usuario = u; return this; }
-        public Builder cidade(String c)          { this.cidade = c; return this; }
-        public Builder estado(String e)          { this.estado = e; return this; }
-        public Builder bairro(String b)          { this.bairro = b; return this; }
-        public Builder descricao(String d)       { this.descricao = d; return this; }
-        public Builder telefone(String t)        { this.telefone = t; return this; }
-        public Builder whatsapp(String w)        { this.whatsapp = w; return this; }
-        public Builder aprovado(boolean a)       { this.aprovado = a; return this; }
+        public Builder id(Long id)                                 { this.id = id; return this; }
+        public Builder usuario(Usuario u)                          { this.usuario = u; return this; }
+        public Builder cidade(String c)                            { this.cidade = c; return this; }
+        public Builder estado(String e)                            { this.estado = e; return this; }
+        public Builder bairro(String b)                            { this.bairro = b; return this; }
+        public Builder enderecoCompleto(String end)                { this.enderecoCompleto = end; return this; }
+        public Builder descricao(String d)                         { this.descricao = d; return this; }
+        public Builder telefone(String t)                          { this.telefone = t; return this; }
+        public Builder whatsapp(String w)                          { this.whatsapp = w; return this; }
+        public Builder emailContato(String ec)                     { this.emailContato = ec; return this; }
+        public Builder aprovado(boolean a)                         { this.aprovado = a; return this; }
+        public Builder visivel(boolean v)                          { this.visivel = v; return this; }
+        public Builder corPerfil(String cp)                        { this.corPerfil = cp; return this; }
+        public Builder categorias(List<Categoria> cats)            { this.categorias = cats; return this; }
+        public Builder servicos(List<Servico> servs)               { this.servicos = servs; return this; }
+        public Builder pacotesPrecos(List<PacotePreco> pacs)       { this.pacotesPrecos = pacs; return this; }
+        public Builder galeria(List<String> gal)                   { this.galeria = gal; return this; }
 
         public Prestador build() {
             Prestador p = new Prestador();
+            p.id = this.id;
             p.usuario = this.usuario;
             p.cidade = this.cidade;
             p.estado = this.estado;
             p.bairro = this.bairro;
+            p.enderecoCompleto = this.enderecoCompleto;
             p.descricao = this.descricao;
             p.telefone = this.telefone;
             p.whatsapp = this.whatsapp;
+            p.emailContato = this.emailContato;
             p.aprovado = this.aprovado;
+            p.visivel = this.visivel;
+            p.corPerfil = this.corPerfil;
+            p.categorias = this.categorias != null ? this.categorias : new ArrayList<>();
+            p.servicos = this.servicos != null ? this.servicos : new ArrayList<>();
+            p.pacotesPrecos = this.pacotesPrecos != null ? this.pacotesPrecos : new ArrayList<>();
+            p.galeria = this.galeria != null ? this.galeria : new ArrayList<>();
             return p;
         }
     }
